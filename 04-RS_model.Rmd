@@ -1,6 +1,6 @@
 # Rating Scale Model {#RS_model}
 
-## Rasch Rating Scale Model
+## Rasch Rating Scale Model 
 
 The Rasch Rating Scale Model (RSM; sometimes also called the Polytomous Rasch model) was developed by [Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814) for polytomous data (data with >= 2 ordinal categories). It provides estimates of a; *Person locations*, b; *Item Difficulties* and c; *An overall set of thresholds (fixed across items)*.
 
