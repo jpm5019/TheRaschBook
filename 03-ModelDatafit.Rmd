@@ -10,7 +10,7 @@ We encourage readers to note that model-data fit analysis in modern measurement 
 
 When researchers evaluate model-data fit for Rasch models, they do so for the purpose of evaluating the psychometric quality of assessment procedures. In other modeling approaches, such analyses often include analyses related to issues of reliability, validity, and fairness. At the end of this chapter, we demonstrate techniques for calculating reliability indices using a Rasch approach. For additional discussions about these topics and demonstrations of how Rasch measurement indicators align with these foundational areas for evaluating psychometric procedures, we refer readers to the following resources:
 
-    Engelhard, G., & Wind, S. A. (2018). Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments. Taylor & Francis.
+    Engelhard,George.and Stanfanie A.Wind. "Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments." Taylor & Francis, 2018.
     
     Wolfe, E. W., & Smith, E. V. (2007a). Instrument development tools and activities for measure validation using Rasch models: Part I - instrument development tools. Journal of Applied Measurement, 8(1), 97–123.
     

@@ -2,15 +2,15 @@
 
 This chapter provides a basic overview of the dichotomous Rasch model, along with guidance for analyzing data with the dichotomous Rasch model using R. We use a dataset from a transitive reasoning assessment presented by Sijtsma and Molenaar (2002) to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE). After the analyses are complete, we present an example description of the results in APA format. The chapter concludes with a challenge exercise and resources for further study.
 
-## Dichotomous Rasch Model
+## Dichotomous Rasch Model 
 
 The **dichotomous Rasch model** (Rasch, 1960) is the simplest model in the Rasch family of models (Wright & Mok, 2004). It was designed for use with ordinal data that are scored in two categories (usually 0 or 1). The dichotomous Rasch model uses sum scores from these ordinal responses to calculate interval-level estimates that represent person locations (i.e., person ability or person achievement) and item locations (i.e., the difficulty to provide a correct or positive response) on a linear scale that represents the latent variable (the log-odds or "logit" scale). The difference between person and item locations can be used to calculate the probability for a correct or positive response (x = 1), rather than an incorrect or negative response (x = 0).
 
-### Model Equation
+### Model Equation 
 
 The equation for the dichotomous Rasch model can be expressed in log-odds form as follows:
   
-  $$\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}$$
+  $$\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}$$ 
 
 The Rasch model predicts the probability of person *n* on item *i* providing a correct or positive (x = 1), rather than an incorrect or negative (x = 0) response, given person locations (i.e., ability, achievement, *θn*) and item locations (i.e., difficulty, *δi*), as expressed on the logit scale.
 
@@ -21,7 +21,7 @@ Estimates that are calculated using the dichotomous Rasch model can only be mean
   * **Unidimensionality**: A single latent variable is sufficient to explain most of the variation in item responses
   * **Local independence**: After controlling for the latent variable, there is no substantial association between the responses to individual items
   * **Person-invariant item estimates**: Item locations do not depend on (i.e., are independent from) the persons whose responses are used to estimate them
-  * **Item-invariant person estimates**: Person locations  do not depend on (i.e., are independent from) the items used to estimate them
+  * **Item-invariant person estimates**: Person locations do not depend on (i.e., are independent from) the items used to estimate them
 
 Evidence that data approximate these requirements provides support for the meaningful interpretation and use of item and person estimates on the logit scale as indicators of item and person locations on the latent variable. In practice, many analysts evaluate some or all of these requirements using various indicators of model-data fit for the facets in a Rasch model (in this case, items and persons). In the current chapter, we provide some basic code for calculating some popular residual-based fit indices for items and persons. We explore issues related to model requirements and evaluating model-data fit in more detail in Chapter 3.
 

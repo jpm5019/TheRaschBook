@@ -58,7 +58,7 @@ Wright Map or Variable Map
 ```{r}
 # Plot the Variable Map
 graphics.off() # In case you can not run the plot correctly
-IRT.WrightMap(rs_model,show.thr.lab=TRUE) 
+IRT.WrightMap(rs_model,show.thr.lab=TRUE)  
 ```
 
 Expected Response Curves
@@ -123,7 +123,8 @@ rs_model <- RSM(rsmdat)
 ```
 
 
-### Examine item difficulty and threshold SEs
+### Examine item difficulty and threshold SE
+
 
 ```{r}
 ### Examine item difficulty values:
