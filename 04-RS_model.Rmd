@@ -1,76 +1,409 @@
 # Rating Scale Model {#RS_model}
 
+This chapter provides a basic overview of the Rasch Rating Scale Model (RSM;[Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814), along with guidance for analyzing data with the RSM using R. We use an example dataset that includes participant responses to an attitude survey to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE). After the analyses are complete, we present an example description of the results in APA format. The chapter concludes with a challenge exercise and resources for further study.
+
 ## Rasch Rating Scale Model 
 
-The Rasch Rating Scale Model (RSM; sometimes also called the Polytomous Rasch model) was developed by [Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814) for polytomous data (data with >= 2 ordinal categories). It provides estimates of a; *Person locations*, b; *Item Difficulties* and c; *An overall set of thresholds (fixed across items)*.
+Andrich (1978) proposed the RSM (sometimes also called the Polytomous Rasch model) as an extension of the dichotomous Rasch model (see Chapter 2) for use with ordinal item responses that are scored in more than two categories (e.g., data from attitude scales or performance assessments). Like the dichotomous Rasch model, the RSM provides estimates of *person locations* and *item locations* on a log-odds scale that represents the latent variable. The RSM also provides estimates of *rating scale category thresholds* that reflect the difficulty associated with each pair of adjacent categories in the rating scale. Specifically, the RSM specifies the probability for a rating in category *k* rather than in category *k* - 1 as a function of the difference between person locations, item locations, and the location of the rating scale category threshold for category *k* on the logit scale.
 
-Rating Scale Model Equation
+The RSM can be stated in log-odds form as follows:
 
-$$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
-Where $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the thresholds which are estimated empirically for the whole set of items. The RSM assumes that the **threshold structure** is fixed across items. The relative distance between thresholds is the same across items, but items still have different difficulties. The thresholds just move up or down the logit scale.
- 
-## R-Lab: Rasch Rating Scale Model with "eRm" package
+Equation 4.1 $$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
 
-### Load the packages that required for the Rasch Rating Scale Analysis
-```{r message=FALSE, warning=FALSE}
-library(readr) # For import the data
-library(TAM) # For running the Rating Scale Rasch Model
-library(plyr) # For plot the Item characteristic curves
-library(WrightMap)# For plot the variable map
-library(eRm) # For another example
-```
+Where $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. 
 
-### Information about the data
-We are going to practice running the Rating Scale (RS) model using the "TAM" package. Specifically, we will be working with data from a writing assessment in which students received polytomous ratings on essays. Several researchers have used this dataset in published studies, and it is considered a classic example of rating data. 
+The RSM produces one common set of rating scale category thresholds that apply to all of the items in the analysis. As a result, the RSM requires that the responses to all of the items include the same number of categories. In addition, this common set of thresholds implies that the rating scale categories have a consistent interpretation across items. For example, for items with a four-category rating scale where 0 = *Strongly Disagree*, 1 = *Disagree*, 2 = *Agree*, and 3 = *Strongly Agree*, the RSM would produce a common set of three thresholds for all of the items. This common set of thresholds implies that the difference in the level of the latent variable required to provide a rating of *Strongly Agree* and *Agree* is the same for all of the items included in the analysis.
 
-The original data collection design is described by [Braun(1988)](https://onlinelibrary.wiley.com/doi/epdf/10.1002/j.2330-8516.1988.tb00281.x). The original dataset includes ratings for 32 students by 12 raters on three separate essay compositions. For this lab, we will look at the data from Essay 1. For ease of interpretation, the essay ratings from the original dataset have been recoded from nine categories to three categories (1 = low achievement, 2 = middle achievement; 3 = high achievement).
+## Model Requirements
+Because it is a Rasch model, the RSM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. Evidence that rating scale responses approximate these requirements provides support for the meaningful interpretation and use of person, item, and threshold estimates on the logit scale as indicators of their respective on the latent variable. In practice, many analysts evaluate some or all of these requirements using various indicators of model-data fit. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons. Readers can use the same techniques that we considered in Chapter 3 to evaluate fit to the RSM. In addition, readers can use rating scale analysis techniques to consider additional issues related to rating scale functioning; we discuss these methods in detail in Chapter X.
 
-In our analysis, we will treat the 12 raters as 12 polytomous “items” that share the three-category rating scale structure. Raters with high “difficulty” calibrations can be interpreted as severe – these raters assign low scores more often. Raters with low “difficulty” calibrations can be interpreted as lenient – these raters assign high scores more often.
+## Running the Rasch Rating Scale Model in R
 
-### Get Data Prepared
-we will try running a polytomous Rasch model using some of the example data that is provided with the TAM package.
+In the next section, we provide a step-by-step demonstration of a RSM analysis using R. We encourage readers to use the example dataset that is provided in the online supplement to conduct the analysis along with us.
 
-***Note** If you want to use the "eRm" package to run the Rating Scale model, you need to make sure that each item has responses in the same categories as each of the other items. 
+### Example Data: Liking for Science
+(SW will add description here!)
 
-```{r message=FALSE}
-# Load the data
-braun_data <- read.csv("braun data.csv")
-head(braun_data)
-# Get a quick overview of the data with the summary() function
-summary(braun_data)
-# Trim the student id variable from the dataframe because the TAM package only needs response matrix.
-rs_data <- braun_data[,-1]
-```
 
-### Run the Rating Scale Model 
-```{r message=FALSE, results='hide'}
-# Run the Rating Scale Model
-rs_model <- TAM::tam.mml(rs_data, irtmodel="RSM") 
-```
+### Prepare for the Analyses: Install and Load Packages
+We will use the *Extended Rasch Modeling*, or *eRm* package (XXXX) as the first package with which we demonstrate RSM analyses in this chapter. We selected eRm for the first illustrations in the current chapter because it includes functions for applying the RSM that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. At the end of this chapter, we have included an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (XXXX) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (XXXX) and Facets (XXXX). 
+
+To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 
 ```{r}
-# Check the model summary
-summary(rs_model)
+citation("eRm")
+# install.packages("eRm")
+#install.packages("eRm")
+library("eRm")
 ```
 
-### Wright Map & Expected Response Curves & Item characteristic curves 
-Wright Map or Variable Map
+### Getting Started
+
+Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function *read.csv()* to import the comma-separated values (.csv) file that contains the Liking for Science survey data. We encourage readers to use their preferred method for importing data files into R or R Studio.
+
+Please note that if you use *read.csv()* you will need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
+
+First, we will import the data using *read.csv()* and store it in an object called *science*:
+
 ```{r}
+science <- read.csv("liking_for_science.csv")
+```
+
+Next, we will explore the data using descriptive statistics using the *summary()* function:
+
+```{r}
+summary(science)
+```
+From the summary of *science*, we can see there are no missing data. We can also get a general sense of the scales, range, and distribution of each variable in the data set.
+
+We can see that Student ID numbers range from 1 to 75, and that the maximum rating on the items was *x* = 2. Importantly, we can see that for item 12, the minimum rating was *x* = 1, and no ratings in the first category (*x* = 0) were observed in our sample. In order to use the RSM to analyze the Liking for Science data, we will need to omit item 12 from our analysis.
+
+We will create a new object called *science_drop_i12* that includes the Liking for Science data without item 12:
+
+```{r}
+science_drop_i12 <- subset(science, select = -i12)
+```
+
+### Run the Rating Scale Model
+
+To run the RSM using the eRm package, need to isolate the item response matrix from the descriptive variables in the data (in this case, student IDs). To do this, we will create an object made up of only the item responses by removing the first variable (*student*) from the data:
+
+```{r}
+# Remove the Student ID variable:
+science.responses <- subset(science_drop_i12, select = -student)
+```
+
+Next, we will use *summary()* to calculate descriptive statistics for the *science.responses* object to check our work and ensure that the responses are ready for analysis:
+
+```{r}
+# Check descriptive statistics:
+summary(science.responses)
+```
+
+Now, we are ready to run the RSM on the Liking for Science response data. We will use the *RSM()* function to run the model and store the results in an object called *RSM.science*. Then, we will request a summary of the model results using the *summary()* function:
+```{r}
+RSM.science <- RSM(science.responses, se = TRUE)
+summary(RSM.science)
+```
+
+The summary of the RSM output includes the Conditional Log-likelihood statistic, details about the number of iterations and model parameters, and a table with item parameters, their standard errors, and confidence intervals. It is important to note that the item parameters included in this preliminary output are *item easiness* parameters--*not* item difficulty parameters. We will examine item difficulty parameters in detail later in our analysis.
+
+### Plot a Wright Map to visualize item and person locations:
+
+Next, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the eRm package function *plotPImap* on the model object (*RSM.science*). 
+```{r}
+plotPImap(RSM.science, main = "Liking for Science Rating Scale Model Wright Map")
+```
+
+[SW - continue to edit description of the figure]
+
+In this *Wright Map* display, the results from the RSM analysis of the Liking for Science data are summarized graphically. The figure is organized as follows:
+
+The horizontal axis shown at the bottom of the figure (labeled *Latent Dimension*) is the logit scale that represents the latent variable. 
+
+The lower panel of the plot shows item difficulty locations with rating scale category thresholds.
+
+The upper panel shows a histogram of respondent (person) locations. 
+
+
+### Examine item parameters
+
+Next, we will examine the item difficulty location and rating scale category threshold estimates. The eRm package provides several options with which analysts can find and examine item and threshold parameters. For example, one way to obtain the overall item location parameters ($\delta$) is to extract the *eta parameters* from the model object using the $ operator. We extract these parameters and calculate summary statistics for them with the following code:
+
+```{r}
+item.locations <- RSM.science$etapar
+item.locations
+summary(item.locations)
+```
+
+Because of the nature of the estimation process used in eRm, the item.locations object that we just created does not include the location estimate for the first item. In addition, the eta parameters from the RSM object include *cumulative* rating scale category thresholds, printed after the final item location estimate. In our example, this value is labeled "Cat 2". Cumulative thresholds are not typically used in Rasch model applications. One can calculate the location for item 1 by subtracting the sum of the item locations from zero. In the following code, we find the location for item 1, and then create a new object with all 24 item locations:
+```{r}
+i1 <- 0 - sum(items[1:23])
+item.locations.all <- c(i1, item.locations[c(1:23)])
+item.locations.all
+```
+
+Alternatively, one can apply the *thresholds()* function to the model object in order to find the item locations from the RSM. This procedure provides item location estimates ($\delta\) as well as estimates of the item location combined with rating scale category thresholds ($\delta\ + $\tau\). However, the values produced with this function are not centered at zero logits, so a little manipulation is required to obtain the centered values. In the following code chunk, we apply the *thresholds()* function to obtain the uncentered item location estimates and then calculate centered item locations:
+
+```{r}
+# Apply thresholds() function to the model object in order to obtain item locations (not centered at zero logits):
+items.and.taus <- thresholds(RSM.science)
+items.and.taus.table <- as.data.frame(items.and.taus$threshtable)
+uncentered.item.locations <- items.and.taus.table$X1.Location
+
+# set the mean of the item locations to zero logits:
+centered.item.locations <- scale(uncentered.item.locations, scale = FALSE)
+summary(centered.item.locations)
+```
+
+Next, we will calculate the values of the rating scale category thresholds using the results from the *thresholds()* function. This function produced estimates of the rating scale category thresholds combined with item difficulty parameter estimates. We can subtract these values from the item locations to find the values of each threshold.
+
+In our example, we have a rating scale with three categories, so we have two rating scale category thresholds. In the following code chunk, we create an empty object in which to store the threshold estimates (*tau.estimates*), and then we use a for-loop to calculate the estimates and store them in our object. Because the thresholds are the same for all of the items, we will save the first value from vector of differences between the item+threshold locations and the overall locations. 
+
+```{r}
+# Specify the number of thresholds as the maximum observed score in the response matrix (be sure the responses begin at category 0):
+n.thresholds <- max(science.responses)
+
+# Calculate adjacent-category threshold values:
+tau.estimates <- NULL
+
+for(tau in 1:n.thresholds){
+  tau.estimates[tau] <- (items.and.taus.table[, (1+tau)] - items.and.taus.table[,1])[1]
+}
+```
+
+Next, we will calculate standard errors for each item and threshold location:
+
+```{r}
+#SE for items + thresholds:
+delta.tau.se <- RSM_thresholds$se.thresh
+
+# SE for overall item:
+delta.se <- RSM.science$se.eta
+```
+
+In the eRm package, it is necessary to calculate person parameters before item fit statistics can be calculated. Accordingly, we will proceed with a brief examination of person parameters before we conduct item fit analyses.
+
+[add category plots]
+
+```{r}
+
+```
+
+
+### Examine person parameters
+The next step in our analysis is to examine person location parameters (i.e., person achievement or ability estimates). With the CMLE method that is used in eRm, person parameters are calculated after the item locations are estimated.
+
+In the following code, we calculate person locations that correspond to our model using the *person.parameter()* function with the RSM model object (*RSM.science*). This function also produces standard errors for the person locations. We stored the person location estimates and their standard errors in a new data frame called *person.locations*, and then requested a summary of the estimation results using *summary()*:
+
+```{r}
+# Calculate person parameters:
+person.locations.estimate <- person.parameter(RSM.science)
+
+# Store person parameters and their standard errors in a dataframe object:
+person.locations <- cbind.data.frame(person.locations.estimate$thetapar,
+                                     person.locations.estimate$se.theta)
+names(person.locations) <- c("theta", "SE")
+
+# View summary statistics for person parameters:
+summary(person.locations)
+```
+
+[note about extrapolation]
+
+
+## Item Fit Statistics
+Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the same procedures in that chapter to examine item fit in detail for the RSM.
+
+To calculate numeric item fit statistics, we will use the function *itemfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called *item.fit*, and then format this object as a dataframe for easy manipulation and exporting:
+```{r}
+item.fit.results <- itemfit(person.locations.estimate)
+item.fit <- cbind.data.frame(item.fit.results$i.infitMSQ,
+                             item.fit.results$i.outfitMSQ,
+                             item.fit.results$i.infitZ,
+                             item.fit.results$i.outfitZ)
+names(item.fit) <- c("infit_MSE", "outfit_MSE", "std_infit", "std_outfit")
+```
+
+Next, we will request a summary of the numeric item fit statistics using the *summary()* function:
+```{r}
+summary(item.fit)
+```
+
+The *item.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each item.These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of item fit.
+
+### Person Fit Statistics
+Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a dataframe for easy manipulation and exporting:
+```{r}
+person.fit.results <- personfit(person.locations.estimate)
+person.fit <- cbind.data.frame(person.fit.results$p.infitMSQ,
+                             person.fit.results$p.outfitMSQ,
+                             person.fit.results$p.infitZ,
+                             person.fit.results$p.outfitZ)
+names(person.fit) <- c("infit_MSE", "outfit_MSE", "std_infit", "std_outfit")
+```
+
+Next, we will request a summary of the numeric person fit statistics using the *summary()* function:
+```{r}
+summary(person.fit)
+```
+
+The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person.These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of person fit.
+
+
+### RSM Application with Marginal Maximum Likelihood Estimation in TAM
+The next section of this chapter includes an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (XXXX) with Marginal Maximum Likelihood Estimation (MMLE). After this illustration, we also demonstrate the use of TAM to estimate the RSM with Joint Maximum Likelihood Estimation (JMLE). These illustrations use the Liking for Science data that we described earlier in this chapter.
+
+Except where there are significant differences between the eRm and TAM procedures, we provide fewer details about the analysis procedures and interpretations in this section compared to the first illustration.
+
+### Getting Started
+
+To get started with the TAM package, view the citation information, and then install and load it into your R environment using the following code:
+
+```{r}
+citation("TAM")
+# install.packages("TAM")
+#install.packages("TAM")
+library("TAM")
+```
+
+To facilitate the example analysis, we will also use the *WrightMap* package (Torres Irribarra & Freund, 2014):
+  
+WrightMap:
+```{r}
+citation("WrightMap")
+# install.packages("WrightMap")
+library("WrightMap") 
+```
+
+## Prepare the data for analysis
+
+If you have not already imported the Liking for Science data and prepared it for analysis as described earlier in this chapter by dropping item 12 and isolating the response matrix, please do so before continuing with the TAM analyses.  
+
+### Run the Rating Scale Model
+
+We will use the *RSM()* function to run the model and store the results in an object called *RSM.science_MMLE*. In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds), we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*:
+```{r}
+design.matrix <- designMatrices(resp=science.responses, modeltype="RSM", constraint = "items")$A
+```
+
+Now we can run the RSM and specify our design matrix. After we run the model, we will request a summary of the model results using the *summary()* function:
+```{r}
+#[Cheng - you can omit the output]
+RSM.science_MMLE <- tam.mml(science.responses, irtmodel="RSM", A = design.matrix, constraint = "items") 
+
+summary(RSM.science_MMLE)
+```
+
+The summary of the RSM output includes details about the number of iterations, global model fit statistics, a summary of the model parameters, and several other statistics. 
+
+### Examine item parameters
+
+Next, we will examine the item difficulty location and rating scale category threshold estimates. As of this writing, the TAM package does not provide centered item estimates (mean set to zero logits) with the Rasch-Andrich (adjacent-categories) rating scale category thresholds design matrix that we specified in our analysis. As a result, we need to manually center the item locations at zero logits for ease in interpretation. We will use the same procedure that we used earlier to do the centering.
+
+First, we need to extract the item location estimates from the model object (*RSM.science_MMLE*). The item locations are labeled as *xsi* parameters, and they include rating scale category thresholds after the overall item parameters are given. We will save the overall item location parameter estimates and their standard errors for our 24 Liking for Science Items by selecting the first 24 rows of the xsi results in an object called *items_MMLE*.
+
+```{r}
+items_MMLE <- RSM.science_MMLE$xsi[1:(ncol(science.responses)),]
+```
+
+Next, we will center the item parameter estimates that are stored in *items_MMLE* at zero logits, and request summary statistics for the estimates to check our work:
+
+```{r}
+uncentered.item.locations_MMLE <- items_MMLE$xsi
+centered.item.locations_MMLE <- scale(uncentered.item.locations_MMLE, scale = FALSE)
+summary(centered.item.locations_MMLE)
+```
+
+We need to find the rating scale category threshold parameter estimates for our rating scale. In our example with the Liking for Science data, our rating scale has three categories, so there are two threshold parameters. The first threshold parameter is labeled *Cat1* in the *xsi* parameters within the model object. It appears after the final overall item location parameter. You can find these values by printing the xsi parameters from the model object to the console:
+
+```{r}
+RSM.science_MMLE$xsi
+```
+
+Importantly, with the design matrix that we specified in TAM, the highest threshold parameter is not reported and must be calculated manually. In our example, this is the second threshold. The following code calculates the adjacent-categories threshold parameters and stores them in an object called *tau.estimates_MMLE*:
+```{r}
+# Specify the number of thresholds as the maximum observed score in the response matrix (be sure the responses begin at category 0):
+n.thresholds <- max(science.responses)
+
+## Calculate adjacent-category threshold values:
+tau.estimates_MMLE <- NULL
+
+# Find all but the final threshold estimate:
+for(tau in 1: (n.thresholds - 1)){
+  tau.estimates_MMLE[tau] <- RSM.science_MMLE$xsi[ncol(science.responses) + tau , 1]
+}
+
+# Calculate the final threshold estimate:
+tau.estimates_MMLE[n.thresholds] <- -(sum(tau.estimates_MMLE)) 
+  
+# Print adjacent-categories threshold estimates to the console:
+tau.estimates
+```
+
+## Evaluate item fit
+Next, we will examine numeric and graphical item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
+
+```{r}
+#Cheng, you can omit this output 
+fit <- tam.fit(RSM.science_MMLE)
+
+item.fit_MMLE <- fit$itemfit
+summary(item.fit_MMLE)
+```
+
+As in the dichotomous Rasch model analysis with TAM (see Chapter 2), the *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. The *Outfit* and *Infit* statistics are the *MSE* versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics. TAM also reports a *p* value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*). Please see Chapter 3 for a detailed consideration of procedures for evaluating item fit in detail.
+
+### Examine person parameters
+
+Note - subtract uncentered item mean, save these and then input them into the WrightMap function manually for clearer interpretation.
+
+Now we will examine person parameter estimates. With the MMLE procedure in TAM, person parameters are calculated after the item estimates using the *tam.wle()* function. The following code calculates person parameter estimates and saves them in an object called person.locations_MMLE.
+
+```{r}
+# Use the tam.wle function to calculate person location parameters:
+person.locations.estimate_MMLE <- tam.wle(RSM.science_MMLE)
+
+# Store person parameters and their standard errors in a dataframe object:
+person.locations_MMLE <- cbind.data.frame(person.locations.estimate_MMLE$theta,
+                                     person.locations.estimate_MMLE$error)
+
+names(person.locations_MMLE) <- c("theta", "SE")
+
+# View summary statistics for person parameters:
+summary(person.locations_MMLE)
+```
+
+Because we centered the item location estimates at zero logits, we need to adjust the person location estimates so that they can be compared to the centered item locations. We will do this by subtracting the original (uncentered) item mean from the person locations:
+
+```{r}
+# Subtract the original (uncentered) item mean location from the person locations:
+person.locations_MMLE$theta_adjusted <- person.locations_MMLE$theta - mean(uncentered.item.locations_MMLE)
+
+summary(person.locations_MMLE)
+
+```
+
+### Wright Map:
+
+Next, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the WrightMap package function *IRT.WrightMap* on the model object (*RSM.science_MMLE*). 
+
+For ease in interpretation, we will use the centered item and person locations that we calculated in this analysis. We need to specify these modified parameter estimates in the WrightMap function. The following code prepares the parameter estimates and plots the Wright Map using them.
+
+```{r}
+# Combine centered item estimates with thresholds:
+
+thresholds_MMLE <- data.frame(
+  τ1 = centered.item.locations_MMLE + tau.estimates_MMLE[1],
+  τ2 = centered.item.locations_MMLE + tau.estimates_MMLE[2])
+
+thetas_MMLE <- person.locations_MMLE$theta_adjusted
+
 # Plot the Variable Map
-graphics.off() # In case you can not run the plot correctly
-IRT.WrightMap(rs_model,show.thr.lab=TRUE)  
+wrightMap(thetas = thetas_MMLE,
+        thresholds = thresholds_MMLE,
+         main.title = "Liking for Science Rating Scale Model Wright Map",
+        show.thr.lab	= TRUE, dim.names = "",
+        label.items.rows= 2)
+
 ```
+[SW - continue to edit description of the figure]
+
+In this *Wright Map* display, the results from the RSM analysis of the Liking for Science data are summarized graphically. The figure is organized as follows:
+
+
+
+
 
 Expected Response Curves
 ```{r}
 # Plot expected response curves 
-plot(rs_model,ask=FALSE)
+plot(RSM.science_MMLE,ask=FALSE)
 ```
 
-Item characteristic curves (but now as thresholds)
+Category probability curves:
 ```{r}
-graphics.off()
-plot(rs_model, type="items")
+plot(RSM.science_MMLE, type="items")
 ```
 
 ### Item estimates and fit Statistics
@@ -85,9 +418,6 @@ tam.fit(rs_model)
 rs_threshold <- tam.threshold(rs_model)
 rs_threshold # This provides the detail logit location for each categories for each rater.
 ```
-**Note** The tam.threshold() function is actually calculating Thurstonian thresholds, whereas the tau estimates are [Andrich thresholds](https://www.winsteps.com/winman/disorder.htm). These are different parameters. 
-
-The Thurstonian thresholds are cumulative, meaning that they reflect the probability for responding in a category of interest or any higher category. The Andrich thresholds are adjacent-categories thresholds, which reflect the point on the logit scale at which there is an equal probability for a rating in a category of interest or the category just below it. You can check [here](https://www.winsteps.com/winman/ratingscale.htm) for more information.
 
 ### Person estimates and fit Statistics
 ```{r}
@@ -99,99 +429,6 @@ rs_personfit <- tam.personfit(rs_model)
 # Check the first 6 students' person fit statistics
 head(rs_personfit)
 ```
-
-## Another Example with "eRm" package
-
-The "eRm" package also provide the function to run a polytomous Rasch model. In this example, we will use a build-in data set in "eRm" package as an example.
-
-### Load the example data
-
-```{r}
-### Load the example data:
-data("rsmdat")
-# These data include 20 participants’ responses to six items that included four ordered categories (0, 1, 2, and 3).
-summary(rsmdat)
-```
-
-**Important!**
-Note that in the summary of the "rsmdat" object, there are responses in all 4 categories for all items. This means that it is possible to run the Rating Scale model on these item responses. If participants did not use all of the categories on all of the items, then we would need to run the Partial Credit model instead. 
-
-### Run the Rating Scale model on the data 
-
-```{r}
-rs_model <- RSM(rsmdat)
-```
-
-
-### Examine item difficulty and threshold SE
-
-
-```{r}
-### Examine item difficulty values:
-item.estimates <- thresholds(rs_model)
-item.estimates
-## Get threshold SEs values:
-item.se <- item.estimates$se.thresh
-item.se
-```
-
-### Examine Person locations (theta) and SEs
-```{r}
-# Standard errors for theta estimates:
-person.locations.estimate <- person.parameter(rs_model)
-summary(person.locations.estimate)
-```
-
-### Exam the item and person fit statistics
-```{r}
-item.fit <- itemfit(person.locations.estimate)
-item.fit
-pfit <- personfit(person.locations.estimate)
-pfit
-```
-
-**Note:** This procedure will give us information about the infit and outfit statistics for each item. Please review our lecture materials for details about the interpretation of these values, noting that we generally expect these statistics to be around 1.00.
-
-### Graphic Information
-
-#### Plot the Person-Item Map
-```{r}
-plotPImap(rs_model, sorted = TRUE)
-```
-
-In this plot, we should consider the degree to which there is evidence of overlap between item and person locations (targeting).
-
-We can also examine the individual items’ ordering on the logit scale with reference to our theory about the expected ordering.
-
-#### Plot the Standardized Residuals
-```{r}
-stresid <- item.fit$st.res
-
-# before constructing the plots, find the max & min residuals:
-max.resid <- ceiling(max(stresid))
-min.resid <- ceiling(min(stresid))
-
-for(item.number in 1:ncol(stresid)){
-  plot(stresid[, item.number], ylim = c(min.resid, max.resid),
-       main = paste("Standardized Residuals for Item ", item.number, sep = ""),
-       ylab = "Standardized Residual", xlab = "Person Index")
-  abline(h = 0, col = "blue")
-  abline(h=2, lty = 2, col = "red")
-  abline(h=-2, lty = 2, col = "red")
-  legend("topright", c("Std. Residual", "Observed = Expected", "+/- 2 SD"), pch = c(1, NA, NA), 
-         lty = c(NA, 1, 2),
-         col = c("black", "blue", "red"), cex = .8)
-}
-
-```
-
-#### Plot the empirical IRFs
-```{r}
-for(item.number in 1:ncol(stresid)){
-  plotICC(rs_model, item.subset = item.number, empICC = list("raw"), empCI = list())
-}
-```
-
 
 
 ## Supplmentary Learning Materials 
