@@ -38,7 +38,7 @@ In addition, readers should note that our descriptions of the R code generally a
 
 ## Overview of Rasch Measurement Theory
 
-Georg Rasch was a Danish psychometrician who introduced a theory and approach to social science measurement in his classic text entitled Probabilistic Models for Some Intelligence and Attainment Tests (Rasch, 1960). This approach to measurement involves transforming ordinal item response data, such as the data that are collected in a multiple-choice educational assessment of middle school students’ understanding of engineering design (Alemdar et al., 2017), a survey designed to measure self-efficacy for making career decisions (Nam et al., 2011), or a diagnostic scale used to identify individuals with depression (Shea et al., 2009). Now called Rasch measurement theory, this approach is based on principles and requirements that reflect measurement in the physical sciences. 
+Georg Rasch was a Danish psychometrician who introduced a theory and approach to social science measurement in his classic text entitled Probabilistic Models for Some Intelligence and Attainment Tests (Rasch 1960). This approach to measurement involves transforming ordinal item response data, such as the data that are collected in a multiple-choice educational assessment of middle school students’ understanding of engineering design (Alemdar et al. 2017), a survey designed to measure self-efficacy for making career decisions (Nam et al. 2011), or a diagnostic scale used to identify individuals with depression (Shea et al. 2009). Now called Rasch measurement theory, this approach is based on principles and requirements that reflect measurement in the physical sciences. 
 
   Chief among the defining features of Rasch measurement theory is the emphasis on invariance in measurement. In the context of Rasch measurement theory, invariance occurs when the following properties are observed in item response data: 
 
@@ -49,9 +49,9 @@ Georg Rasch was a Danish psychometrician who introduced a theory and approach to
 •	Symmetrically, a comparison between two individuals should be independent of which particular stimuli with the class considered were instrumental for the comparison; 
 
 •	and it should also be independent of which other individuals were also compared on the same or on some other occasion 
-(Rasch, 1961, pp. 331-332)
+(Rasch 1961, pp. 331-332)
 
-  Rasch used the term specific objectivity (Rasch, 1977) to describe the importance of identifying specific situations in which the requirements for invariant measurement are approximated. In emphasizing invariance, Rasch noted that meaningful interpretation and use of social science measurement instruments is not possible unless invariance is approximated.
+  Rasch used the term specific objectivity (Rasch 1977) to describe the importance of identifying specific situations in which the requirements for invariant measurement are approximated. In emphasizing invariance, Rasch noted that meaningful interpretation and use of social science measurement instruments is not possible unless invariance is approximated.
 
   Rather than assuming that data will adhere perfectly to the model requirements, researchers who use Rasch models do so in order to identify deviations from these requirements when they occur. Information about departures from model requirements can help analysts identify areas for additional research, including qualitative investigations of persons and items, as well as guidance for improving the quality of a measurement procedure. This perspective in which the measurement theory (i.e., the model) is emphasized as a guide for understanding the quality of the data by comparing it to strict requirements, is a key distinguishing feature between Rasch measurement theory and other item response theory (IRT) approaches. In typical IRT analyses, analysts attempt to identify a model that is the most accurate representation of the characteristics of the data (Embretson & Reise, 2000). For example, many researchers select the three-parameter logistic model (Birnbaum, 1968) when analyzing responses to multiple-choice educational assessments because the model directly incorporates instances of guessing and differences in item discrimination. However, researchers guided by a Rasch perspective would instead use the Rasch model to identify unexpected observations that could alert them to potential guessing and inconsistent item ordering over examinee achievement levels (as reflected by differences in item discrimination). These unexpected observations could then lead to additional exploration and the improvement of the assessment procedure. Although there are many situations in which reproducing the characteristics of item response data may be useful or necessary, the general perspective that characterizes Rasch measurement theory is that the theory (i.e., the model) provides a framework for evaluating data according to its adherence to fundamental measurement properties. Rasch measurement theory scholars argue that evidence of adherence to model requirements is necessary before data can be used to make inferences about persons and items (e.g., in statistical analyses). As Bond and Fox (XXXX) noted, “researchers should spend more time investigating their scales than investigating with their scales” (p. XXXX). 
 
@@ -75,6 +75,7 @@ Georg Rasch was a Danish psychometrician who introduced a theory and approach to
 | [Rasch Book Online Version](https://bookdown.org/connect/#/apps/5286/access/1060) | Beta 0.2 | shorturl.at/mqrIN |
 | [Source Code for this Book](https://github.com/huacheng1985/TheRaschBook) | Github | shorturl.at/jLPUZ |
 | Data set  | TBD | TBD |
+Table 1.1 Online Resources
 
 ## Bibliography
 
