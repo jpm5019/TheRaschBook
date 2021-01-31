@@ -1,8 +1,8 @@
 # Evaluating the Quality of Measures {#MD_fit}
 
-This chapter provides an overview of several popular analyses that researchers can use to evaluate the quality of Rasch model results. Within the framework of Rasch measurement theory (Rasch, 1960), evaluating the quality of measures primarily involves exploring the degree to which the observed data (e.g., item responses) reflect fundamental measurement properties, as expressed in Rasch model requirements.
+This chapter provides an overview of several popular analyses that researchers can use to evaluate the quality of Rasch model results. Within the framework of Rasch measurement theory (Rasch 1960), evaluating the quality of measures primarily involves exploring the degree to which the observed data (e.g., item responses) reflect fundamental measurement properties, as expressed in Rasch model requirements.
 
-Procedures for evaluating measurement quality from a Rasch measurement perspective mostly include techniques for evaluating *model-data fit*. Accordingly, this chapter begins with a brief overview of model-data fit analysis from the perspective of Rasch measurement theory (Rasch, 1960). Then, we demonstrate tools that analysts can use to evaluate model-data fit for Rasch models using R. As we did in Chapter 2, we use data from a transitive reasoning assessment (Sijtsma & Molenaar, 2002) to illustrate the application and interpretation of numeric and graphical model-data fit indicators The chapter concludes with a challenge exercise and resources for further study.
+Procedures for evaluating measurement quality from a Rasch measurement perspective mostly include techniques for evaluating *model-data fit*. Accordingly, this chapter begins with a brief overview of model-data fit analysis from the perspective of Rasch measurement theory (Rasch 1960). Then, we demonstrate tools that analysts can use to evaluate model-data fit for Rasch models using R. As we did in Chapter 2, we use data from a transitive reasoning assessment (Sijtsma and Molenaar 2002) to illustrate the application and interpretation of numeric and graphical model-data fit indicators The chapter concludes with a challenge exercise and resources for further study.
 
 We encourage readers to note that model-data fit analysis in modern measurement theory in general, as well as in the context of Rasch models in particular, is nuanced. The interpretation and use of model-data fit indices varies along with the individual purpose and consequences of each assessment. As a result, it is critical that analysts consider the unique context in which they are evaluating model-data fit when they interpret the results from model-data fit analyses, rather than relying on previously published critical values or "rules-of-thumb" to interpret the results. In this chapter, we demonstrate techniques that analysts can use to evaluate model-data fit within the Rasch measurement theory framework. Our presentation is not exhaustive and there are many other methods that can be used to supplement those that we demonstrate here. We encourage interested readers to consult the resources listed throughout the chapter, as well as the resource list at the end of this chapter, to learn more about evaluating model-data fit within the context of Rasch measurement theory.
 
@@ -10,16 +10,16 @@ We encourage readers to note that model-data fit analysis in modern measurement 
 
 When researchers evaluate model-data fit for Rasch models, they do so for the purpose of evaluating the psychometric quality of assessment procedures. In other modeling approaches, such analyses often include analyses related to issues of reliability, validity, and fairness. At the end of this chapter, we demonstrate techniques for calculating reliability indices using a Rasch approach. For additional discussions about these topics and demonstrations of how Rasch measurement indicators align with these foundational areas for evaluating psychometric procedures, we refer readers to the following resources:
 
-    Engelhard,George.and Stanfanie A.Wind. "Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments." Taylor & Francis, 2018.
+- Engelhard,George. and Stanfanie A.Wind. "Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments." Taylor & Francis, 2018.
     
-    Wolfe, E. W., & Smith, E. V. (2007a). Instrument development tools and activities for measure validation using Rasch models: Part I - instrument development tools. Journal of Applied Measurement, 8(1), 97–123.
+- Wolfe,Edward W. and Everrett V. Smith Jr. "Instrument development tools and activities for measure validation using Rasch models: Part I - instrument development tools." *Journal of Applied Measurement*, 8(1), 2007a, 97–123.
     
-    Wolfe, E. W., & Smith, E. V. (2007b). Instrument development tools and activities for measure validation using Rasch models: Part II--validation activities. Journal of Applied Measurement, 8(2), 204–234.
+- Wolfe,Edward W. and Everrett V. Smith Jr. "Instrument development tools and activities for measure validation using Rasch models: Part II--validation activities." *Journal of Applied Measurement*, 8(2), 2007b, 204–234.
 
 
 ## Rasch Measurement Theory Perspective on Model-Data Fit
 
-In the context of Rasch measurement theory (Rasch, 1960), model-data fit analyses focus on evaluating the item response patterns associated with individual items, persons, and other elements of an assessment context (e.g., raters) for evidence of adherence to model requirements. This approach to model-data fit analysis helps researchers identify individual elements whose responses deviate from what would be expected given adherence to the Rasch model. Wright and Masters (1982) summarized this perspective as follows:
+In the context of Rasch measurement theory (Rasch 1960), model-data fit analyses focus on evaluating the item response patterns associated with individual items, persons, and other elements of an assessment context (e.g., raters) for evidence of adherence to model requirements. This approach to model-data fit analysis helps researchers identify individual elements whose responses deviate from what would be expected given adherence to the Rasch model. Wright and Masters (1982) summarized this perspective as follows:
 
 "The model is constructed to *govern our use of data* according to the characteristics we require of a measure and to show us, *through the exposure of discrepancies between intention and experience*, where our efforts to measure are threatened." (p. 90, emphasis added)
 
@@ -31,15 +31,17 @@ We focus on residual-based model-data fit indicators that are theoretically alig
 
 Residuals (Yni) are calculated as follows:
 
-	Yni = Xni - Eni,
+Formula 3.1
+	$$Y_{ni} = X{ni} - E{ni}$$
 
-where Xni is the observed response from person n on item i, and Eni is the model-expected value of the response for person n on item i.
+where $X{ni}$ is the observed response from person n on item i, and $E{ni}$ is the model-expected value of the response for person n on item i.
 
-To evaluate the magnitude of residuals, it is often useful to transform them to standardized residuals (Zni) as follows:
+To evaluate the magnitude of residuals, it is often useful to transform them to standardized residuals ($Z{ni}$) as follows:
 
-	Zni = Yni/sqrt(Wni),
+Formula 3.2
+	$$Z{ni} = Y{ni}/\sqrt{W{ni}}$$,
 
-where Wni is the variance of the observed response.
+where $W{ni}$ is the variance of the observed response.
 
 For example, residual analyses could help a researcher identify an item in an attitude survey for which there were many unexpected responses. Further investigation of these responses using residuals could reveal that the unexpected responses occurred when participants who had otherwise generally negative attitudes, as reflected in low locations on the construct, gave higher-than-expected (i.e., more positive) responses to the item than would be expected given their location estimates. This information could reveal a potential issue related to the item content, which might be interpreted differently for participants with low locations on the construct. Alternatively, this information might provide insight into the nature of the construct and highlight a new direction for future research. Likewise, analysis of residuals associated with individual participants could help researchers identify participants who gave frequent or substantial unexpected responses to subsets of items. 
 
@@ -49,7 +51,7 @@ We do not focus on global fit statistics that are typically reported in IRT anal
 We are going to practice evaluating model-data fit using the Transitive Reasoning assessment data that we explored in Chapter 2; these data were originally presented by Sijtsma and Molenaar (2002). Please see Chapter 2 for a detailed description of the data. 
 
 ### Prepare for the Analyses: Install and Load Packages
-We will use the "eRm" package [(Mair & Hatzinger, 2007)](https://cran.r-project.org/web/packages/eRm/eRm.pdf) as the first package with which we demonstrate model-data fit analyses for Rasch models. It is possible to evaluate model-data fit using other R packages, including the other packages that we have included in this book. We selected eRm as the primary package for the analyses in the current chapter because it includes functions for evaluating model-data fit that are relatively straightforward to apply and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods.
+We will use the "eRm" package [(Mair and Hatzinger 2007)](https://cran.r-project.org/web/packages/eRm/eRm.pdf) as the first package with which we demonstrate model-data fit analyses for Rasch models. It is possible to evaluate model-data fit using other R packages, including the other packages that we have included in this book. We selected eRm as the primary package for the analyses in the current chapter because it includes functions for evaluating model-data fit that are relatively straightforward to apply and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods.
 
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 
@@ -85,7 +87,7 @@ In Chapter 2, we provided code to calculate descriptive statistics for the trans
 ### Analyze the data using a Rasch model
 Because model-data fit analyses within the Rasch framework are based on residuals, the first step in the model-data fit analysis is to analyze the data with a Rasch model. These estimates are needed in order to calculate residuals.
 
-The transitive reasoning data in our example are scored responses in two categories (x = 0 or x = 1), and there are two major facets in the assessment system: students and items. Accordingly, we will use the dichotomous Rasch model (Rasch, 1960) to the data to estimate student and item locations on the latent variable. Please refer to Chapter 1 of this book for a detailed discussion of the dichotomous Rasch model.
+The transitive reasoning data in our example are scored responses in two categories (x = 0 or x = 1), and there are two major facets in the assessment system: students and items. Accordingly, we will use the dichotomous Rasch model (Rasch 1960) to the data to estimate student and item locations on the latent variable. Please refer to Chapter 1 of this book for a detailed discussion of the dichotomous Rasch model.
 
 ### Run the Dichotomous Rasch Model
 First, we need to isolate the item response matrix from the other variables in the data (student IDs and grade level) so that we can analyze the responses using the dichotomous Rasch model. To do this, we will create an object made up of only the item responses. To do this, we will remove the first two variables (*Student* and *Grade*) from the *transreas* dataframe object using the *subset()* function with the *select=* option. We will save the resulting response matrix in a new dataframe object called *transreas.responses*:
@@ -143,11 +145,11 @@ resids <- responses.without.extremes - model.prob
 
 Following Linacre (2003), we can calculate the proportion of variance in the responses associated with the Rasch model estimates using the following values:
 
-* Variance of the observations: VO
-* Variance of the residuals: VR
-* Raw variance explained by Rasch measures: (VO - VR)/VO
+* Variance of the observations: $V_O$
+* Variance of the residuals: $V_R$
+* Raw variance explained by Rasch measures: $(V_O - V_R)/V_O$
 
-This procedure reveals the approximate proportion of variance in item responses that can be explained by the Rasch model estimates on the logit scale that represents the construct. This value is an approximation. Many researchers use a critical value of about 20% of variance explained by Rasch measures as evidence of adequate adherence to unidimensionality to support the interpretation of Rasch model results for many practical purposes (Reckase, 1979). We encourage readers to interpret this result as a continuous variable in the context of each unique assessment context.  For more details and considerations on this topic, please see Linacre (2003)
+This procedure reveals the approximate proportion of variance in item responses that can be explained by the Rasch model estimates on the logit scale that represents the construct. This value is an approximation. Many researchers use a critical value of about 20% of variance explained by Rasch measures as evidence of adequate adherence to unidimensionality to support the interpretation of Rasch model results for many practical purposes (Reckase 1979). We encourage readers to interpret this result as a continuous variable in the context of each unique assessment context.  For more details and considerations on this topic, please see Linacre (2003)
 
 The following code calculates these values:
 ```{r}
@@ -171,7 +173,7 @@ Our analysis indicates that approximately 41.16% of the variance in student resp
 
 ### Principal components analysis of standardized residual correlations
 
-It is also somewhat common in Rasch analysis to examine correlations among standardized residuals for evidence of potentially meaningful additional dimensions (i.e., factors, constructs, latent variables) beyond the primary latent variable that may be contributing to variance in responses (Linacre, 1998). When researchers use Rasch measurement theory to guide their analyses, they use these exploratory techniques as a tool for *evaluating* the degree to which the construct of interest can be represented as a unidimensional latent variable (Boorsboom & Mellenbergh, 2004; Maul, 2020; Michell, 1999). Deviations from unidimensionality provide information that is valuable for a variety of purposes. For example, deviations from unidimensionality might indicate that the guiding theory about the construct needs to be reconsidered or revised, that revisions are needed to ensure that the measurement procedure reflects the intended construct as a quantitative unidimensional variable, or both. In other cases, researchers might use dimensionality assessment tools as a method for evaluating a theory that there are multiple distinct constructs related to a particular domain, as reflected in responses to an assessment procedure. 
+It is also somewhat common in Rasch analysis to examine correlations among standardized residuals for evidence of potentially meaningful additional dimensions (i.e., factors, constructs, latent variables) beyond the primary latent variable that may be contributing to variance in responses (Linacre 1998). When researchers use Rasch measurement theory to guide their analyses, they use these exploratory techniques as a tool for *evaluating* the degree to which the construct of interest can be represented as a unidimensional latent variable (Boorsboom and Mellenbergh 2004; Maul 2020; Michell 1999). Deviations from unidimensionality provide information that is valuable for a variety of purposes. For example, deviations from unidimensionality might indicate that the guiding theory about the construct needs to be reconsidered or revised, that revisions are needed to ensure that the measurement procedure reflects the intended construct as a quantitative unidimensional variable, or both. In other cases, researchers might use dimensionality assessment tools as a method for evaluating a theory that there are multiple distinct constructs related to a particular domain, as reflected in responses to an assessment procedure. 
 
 Some researchers evaluate adherence to the Rasch model requirement of unidimensionality using a principal components analysis (PCA) of the correlations among standardized residuals from Rasch model analyses. The basic idea behind this analysis is that if the responses adequately meet the Rasch model requirement of unidimensionality, then there should be no meaningful patterns in the residuals (i.e., the error or unexplained variance). The PCA of residual correlations is a post-hoc analysis conducted after the Rasch model has already been used to estimate person and item locations on the primary latent variable. As a result, the interpretation of the PCA of residual correlations within the framework of Rasch measurement theory is different from a typical interpretation of PCA in statistical analyses. Specifically, the Rasch model residual PCA is conducted for the purpose of *evaluating model requirements*; it is not used as a standalone statistical procedure. 
 
@@ -179,13 +181,13 @@ PCA of residuals is essentially evaluating the degree to which additional latent
 
 Several researchers have conducted simulation and real data studies related to techniques for interpreting the values of contrasts from the standardized residual PCA, including methods that involve identifying empirical critical values using simulation. We refer readers to the following resources to learn more about this method and best practices for interpreting the results:
 
-    Chou, Y.-T., & Wang, W.-C. (2010). Checking Dimensionality in Item Response Models With Principal Component Analysis on Standardized Residuals. Educational and Psychological Measurement, 70(5), 717–731. https://doi.org/10.1177/0013164410379322
+- Chou, Yeh-Tai, and Wen-Chung Wang. "Checking Dimensionality in Item Response Models With Principal Component Analysis on Standardized Residuals." *Educational and Psychological Measurement*, 70(5),2010, 717–731. https://doi.org/10.1177/0013164410379322
 
-    Raiche, G. (2005). Critical eigenvalue sizes in standardized residual principal components analysis. Rasch Measurement Transactions, 19, 1012.
+- Rasch, George. "Critical eigenvalue sizes in standardized residual principal components analysis." *Rasch Measurement Transactions* 19, 2005, 1012.
     
-    Smith Jr., E. V. (2002). Detecting and evaluating the impact of multidimensionality using item fit statistics and principal component analysis of residuals. Journal of Applied Measurement, 3(2), 205–231.
+- Smith Jr., Everett V. "Detecting and evaluating the impact of multidimensionality using item fit statistics and principal component analysis of residuals." *Journal of Applied Measurement*, 3(2),2002, 205–231.
     
-    Smith, R. M. (1996). A comparison of methods for determining dimensionality in Rasch measurement. Structural Equation Modeling, 3(1), 25–40.
+- Smith, Richard M. "A comparison of methods for determining dimensionality in Rasch measurement." *Structural Equation Modeling*, 3(1),1996, 25–40.
 
 In this chapter, we provide some basic guidance for conducting a PCA of standardized residual correlations and interpreting the results. In the manual for the Winsteps software program, which includes this residual PCA procedure, Linacre (2016) provides the following general guidance for interpreting the contrasts:
 
@@ -259,11 +261,11 @@ From these results, we can see that there is some variability in person fit, wit
 
 For discussions on interpreting person fit statistics in the context of Rasch measurement theory, we refer readers to the following resources:
 
-	Smith, R. M. (1986). Person Fit in the Rasch Model. Educational and Psychological Measurement, 46(2), 359–372. https://doi.org/10.1177/001316448604600210
+- Smith, Richard. M. (1986). "Person Fit in the Rasch Model." *Educational and Psychological Measurement*, 46(2), 359–372. https://doi.org/10.1177/001316448604600210
     
-    Walker, A. A., Jennings, J. K., & Engelhard, G. (2018). Using person response functions to investigate areas of person misfit related to item characteristics. Educational Assessment, 23(1), 47–68. https://doi.org/10.1080/10627197.2017.1415143
+- Walker A., Adrienne, Jeremy kyle Jennings and George Engelhard. "Using person response functions to investigate areas of person misfit related to item characteristics." *Educational Assessment*, 23(1), 2018, 47–68. https://doi.org/10.1080/10627197.2017.1415143
     
-    Wolfe, E. W. (2013). A bootstrap approach to evaluating person and item fit to the Rasch model. Journal of Applied Measurement, 14(1), 1–9.
+- Wolfe w., Edward. "A bootstrap approach to evaluating person and item fit to the Rasch model." *Journal of Applied Measurement*, 14(1),2013, 1–9.
 
 ### Graphical Displays for Evaluating Model-Data Fit
 Next, we will use some graphical displays to examine model-data fit in more detail. In this chapter, we focus on graphical displays for evaluating model-data fit specific to individual items. However, it is possible to create similar plots for persons as well as for other facets in an assessment context, such as raters.
@@ -325,20 +327,17 @@ Our transitive reasoning data include two facets: items and persons. Accordingly
 
 #### Reliability of Item Separation
 The reliability of item separation statistic is calculated using a ratio of true (adjusted) variance to observed variance for items:
+formula 3.3
 $$Rel_{I}=\left(SA_{I}^{2}\right) /\left(SD_{I}^{2}\right)$$
 Where:
 	  *SA^2^~I~* : Adjusted item variability;
     Calculated by subtracting error variance for Item from total Item          variance: $$ SA_{I}^{2} = SD_{I}^{2} - SE_{I}^{2}$$
 	  *SD^2^~I~* : Total Item variance
 	  
-	  
-[Cheng - can you add code for calculating reliability of item separation in eRm?]
-
-
 #### Reliability of Person Separation
 The reliability of person separation statistic is calculated using a ratio of true (adjusted) variance to observed variance for persons:
 
-
+formula 3.4
 $$Rel_{p}=\left(SA_{P}^{2}\right) /\left(SD_{P}^{2}\right)$$
 Where:
 	  *SA^2^~P~* : Adjusted person variability;
@@ -475,9 +474,6 @@ Item.MSE <- sum((ItemSE)^2) / length(ItemSE)
 item.separation.reliability <- (SSD.ItemScores-Item.MSE) / SSD.ItemScores
 item.separation.reliability
 ```
-
-
-
 
 
 

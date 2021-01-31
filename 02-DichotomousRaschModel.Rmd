@@ -4,12 +4,13 @@ This chapter provides a basic overview of the dichotomous Rasch model, along wit
 
 ## Dichotomous Rasch Model  
 
-The **dichotomous Rasch model** (Rasch, 1960) is the simplest model in the Rasch family of models (Wright & Mok, 2004). It was designed for use with ordinal data that are scored in two categories (usually 0 or 1). The dichotomous Rasch model uses sum scores from these ordinal responses to calculate interval-level estimates that represent person locations (i.e., person ability or person achievement) and item locations (i.e., the difficulty to provide a correct or positive response) on a linear scale that represents the latent variable (the log-odds or "logit" scale). The difference between person and item locations can be used to calculate the probability for a correct or positive response (x = 1), rather than an incorrect or negative response (x = 0).
+The **dichotomous Rasch model** (Rasch 1960) is the simplest model in the Rasch family of models (Wright and Mok 2004). It was designed for use with ordinal data that are scored in two categories (usually 0 or 1). The dichotomous Rasch model uses sum scores from these ordinal responses to calculate interval-level estimates that represent person locations (i.e., person ability or person achievement) and item locations (i.e., the difficulty to provide a correct or positive response) on a linear scale that represents the latent variable (the log-odds or "logit" scale). The difference between person and item locations can be used to calculate the probability for a correct or positive response (x = 1), rather than an incorrect or negative response (x = 0).
 
 ### Model Equation 
 
 The equation for the dichotomous Rasch model can be expressed in log-odds form as follows:
-  
+
+Formula 2.1
 $$\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}$$ 
 
 The Rasch model predicts the probability of person *n* on item *i* providing a correct or positive (x = 1), rather than an incorrect or negative (x = 0) response, given person locations (i.e., ability, achievement, *θn*) and item locations (i.e., difficulty, *δi*), as expressed on the logit scale.
@@ -55,9 +56,9 @@ The transitive reasoning items varied in terms of the property students were ask
   
 ### The TAM Package
 
-We will use the *"Test Analysis Modules"*, or "TAM" package (Robitzsch, Kiefer, & Wu, 2020) to run the dichotomous Rasch model analyses in this chapter. Although it is possible to use other R packages to conduct dichotomous Rasch model analyses, we have selected TAM for our demonstration in this chapter because it produces results whose interpretation is relatively straightforward and that are relatively easy to work with.
+We will use the *"Test Analysis Modules"*, or "TAM" package (Robitzsch et al. 2020) to run the dichotomous Rasch model analyses in this chapter. Although it is possible to use other R packages to conduct dichotomous Rasch model analyses, we have selected TAM for our demonstration in this chapter because it produces results whose interpretation is relatively straightforward and that are relatively easy to work with.
 
-The TAM package applies marginal maximum likelihood estimation (MMLE) to estimate the dichotomous Rasch model. Please keep this estimation approach in mind when comparing the results between TAM and other R packages or software programs that use other estimation techniques, such as Winsteps (Linacre, 2020a) or Facets (Linacre, 2020b).
+The TAM package applies marginal maximum likelihood estimation (MMLE) to estimate the dichotomous Rasch model. Please keep this estimation approach in mind when comparing the results between TAM and other R packages or software programs that use other estimation techniques, such as Winsteps (Linacre 2020a) or Facets (Linacre 2020b).
 
 ## Install and load the package:
 To get started with the TAM package, install and load it into your R environment using the following code:
@@ -125,7 +126,6 @@ dichot.transreas <- tam(transreas.responses)
 
 For brevity, we do not include all of the output from the model function in this book. However, after you run the model, you should see some output in the R console that includes information about each iteration in the estimation process.
 
-[Cheng - can we add a screenshot here?]
 
 ![Iteration Information](screenshots/Cha2_Iteration.png)
 
@@ -146,7 +146,6 @@ summary(dichot.transreas)
 
 From these results, we suggest taking a quick look at the Item Parameters as reported in the table labeled *Item Parameters in IRT parameterization.*
 
-[Cheng - can we add a screenshot here?]
 ![Item Parameters](screenshots/Cha2_ItemParameters.png)
 
 Because we ran a Rasch model, the *alpha* (discrimination) parameters are fixed to a constant value of 1. The *beta* parameters are the item locations on the latent variable. We will explore the item locations in more detail later in the analysis.
@@ -163,16 +162,12 @@ IRT.WrightMap(dichot.transreas, show.thr.lab=FALSE, main.title = "Transitive Rea
 ```
 In this *Wright Map* display, the results from the dichotomous Rasch model analysis of the transitive reasoning data are summarized grapihcally. The figure is organized as follows:
 
-The left panel of the plot shows a histogram of respondent (person) locations on the logit scale that represents the latent variable. Units on the logit scale are shown on the far-right axis of the plot (labeled *Logits*). In the panel with the person locations, the label "Dim1" means that the distribution of person locations is specific to one dimension. In multi-dimensional Rasch model (Brigs & Wilson, 2003) and multidimensional IRT analyses (Bonifay, 2019; Reckase, 2009), the Wright Map can show multiple distributions of person locations that correspond to each dimension in the model.
+The left panel of the plot shows a histogram of respondent (person) locations on the logit scale that represents the latent variable. Units on the logit scale are shown on the far-right axis of the plot (labeled *Logits*). In the panel with the person locations, the label "Dim1" means that the distribution of person locations is specific to one dimension. In multi-dimensional Rasch model (Brigs and Wilson 2003) and multidimensional IRT analyses (Bonifay 2019; Reckase 2009), the Wright Map can show multiple distributions of person locations that correspond to each dimension in the model.
 
-[Cheng - can we add a screenshot here with an arrow pointing to the left panel of the Wright map?]
-[Dr. Wind, do you think put two arrows in one map might be better?]
+
 ![Wright Map illustration](screenshots/Cha2_WM.png)
 
 The large central panel of the plot shows the item locations (item difficulty estimates) on the logit scale that represents the latent variable. Light grey diamond shapes show the logit scale location of each item, as labeled on the x-axis.
-
-[Cheng - can we add a screenshot here with an arrow pointing to the central panel of the Wright map?]
-[Dr.Wind, If you want to divide the previous Map for a better illustration, I can also do that.]
 
 Even though it is not appropriate to fully interpret item and person locations on the logit scale until there is evidence of acceptable model-data fit, we recommend examining the Wright Map during the preliminary stages of an item analysis to get a general sense of the model results and to identify any potential scoring or data entry errors.
 
