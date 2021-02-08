@@ -1,6 +1,6 @@
 # Dichotomous Rasch Model {#Dich_Rasch_model}
 
-This chapter provides a basic overview of the dichotomous Rasch model, along with guidance for analyzing data with the dichotomous Rasch model using R. We use a dataset from a transitive reasoning assessment presented by Sijtsma and Molenaar (2002) to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE). After the analyses are complete, we present an example description of the results in APA format. The chapter concludes with a challenge exercise and resources for further study.
+This chapter provides a basic overview of the dichotomous Rasch model, along with guidance for analyzing data with the dichotomous Rasch model using R. We use data from a transitive reasoning assessment presented by Sijtsma and Molenaar (2002) to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE) with the Test Analysis Modules ("TAM") package (Robitzsch et al., 2020). After the analyses are complete, we present an example description of the results in APA format. The chapter concludes with a challenge exercise and resources for further study.
 
 ## Dichotomous Rasch Model  
 
@@ -58,7 +58,7 @@ The transitive reasoning items varied in terms of the property students were ask
 
 We will use the *"Test Analysis Modules"*, or "TAM" package (Robitzsch et al. 2020) to run the dichotomous Rasch model analyses in this chapter. Although it is possible to use other R packages to conduct dichotomous Rasch model analyses, we have selected TAM for our demonstration in this chapter because it produces results whose interpretation is relatively straightforward and that are relatively easy to work with.
 
-The TAM package applies marginal maximum likelihood estimation (MMLE) to estimate the dichotomous Rasch model. Please keep this estimation approach in mind when comparing the results between TAM and other R packages or software programs that use other estimation techniques, such as Winsteps (Linacre 2020a) or Facets (Linacre 2020b).
+By default, the TAM package applies marginal maximum likelihood estimation (MMLE) to estimate the dichotomous Rasch model. Please keep this estimation approach in mind when comparing the results between TAM and other R packages or software programs that use other estimation techniques, such as Winsteps (Linacre 2020a) or Facets (Linacre 2020b).
 
 ## Install and load the package:
 To get started with the TAM package, install and load it into your R environment using the following code:
@@ -127,12 +127,10 @@ dichot.transreas <- tam(transreas.responses)
 For brevity, we do not include all of the output from the model function in this book. However, after you run the model, you should see some output in the R console that includes information about each iteration in the estimation process.
 
 
-![Iteration Information](screenshots/Cha2_Iteration.png)
-
-After you run the *tam()* function, your console will show estimates of item parameters (item difficulty locations), reliability estimates, and a summary of the time in which the analysis was completed. We will explore each of these results in more detail later.
 
 [Cheng - can we add a screenshot here?]
 [Dr.Wind, the tam() result do not include item estimates. The item parameters shows up when you call summary() function]
+[Cheng - Okay, please delete this screenshot.]
 
 ![TAM Result](screenshots/Cha2_TAM.png)
 
@@ -242,13 +240,8 @@ In the following code, we calculate person locations that correspond to our mode
 achievement <- as.data.frame(tam.wle(dichot.transreas))
 ``` 
 
-We can examine the achievement data frame by clicking on it in the *Environment* pane of R Studio or by using the *View()* function with the *achievement* object: 
-
+We can examine the achievement data frame by clicking on it in the *Environment* pane of R Studio. 
 [Cheng - can we add a screenshot here with an arrow pointing to the Environment pane?]
-
-```{r}
-# View(achievement)
-```
 
 The *achievement* data frame includes the following variables:
 
@@ -430,6 +423,14 @@ When the JMLE estimation method is used, we need to specify the item location es
 In the following code, we saved the item locations in a vector called *difficulty*, and the person locations in a vector called *theta*. Then, we used these vectors as arguments in the *wrightMap()* function to create the Wright Map:
 ```{r}
 jmle.difficulty <- jmle.dichot.transreas$xsi
+
+# Note: SW needs to update to include centering...
+uncentered.item.locations_JMLE <- jmle.dichot.transreas$xsi
+centered.item.locations_JMLE <- scale(uncentered.item.locations_JMLE, scale = FALSE)
+summary(centered.item.locations_JMLE)
+
+centered.item.locations_JMLE
+
 theta <- jmle.dichot.transreas$theta
 wrightMap(thetas = theta, thresholds = jmle.difficulty, show.thr.lab=FALSE, main.title = "Transitive Reasoning Wright Map: JMLE")
 ```
@@ -672,7 +673,7 @@ cor(achievement$theta, jmle.person.estimates$Theta)
 
 From this analysis, we can see that there is a nearly perfect linear correlation (r = 0.9990405) between the two sets of person estimates.
 
-## Example APA-Style Results Section based on the MMLE results:
+## Example Results Section based on the MMLE results:
 
 Table 1 presents a summary of the results from the analysis of the transitive reasoning data [Sijtsma and Molenaar,2002](https://methods.sagepub.com/book/introduction-to-nonparametric-item-response-theory) using the dichotomous Rasch model ([Rasch, 1960](https://eric.ed.gov/?id=ED419814)). Specifically, the calibration of students (*N* = 425) and tasks (*N* = 10) are summarized using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale (*M* = -0.06,*SD* = 1.28), compared to tasks (*M* = -1.94, *SD* = 1.28). This finding suggests that the items were relatively easy for the sample of students who participated in this transitive reasoning test. However, average values of the Standard Error (*SE*) were slightly larger for students (*M* = 1.02) compared to Tasks (*M* = 0.17), indicating that there may be some issues related to targeting for some of the students who participated in the assessment. Average values of model-data fit statistics indicate overall adequate fit to the model, with average Infit and Outfit mean square statistics around 1.00, and average standardized Infit and Outfit statistics near the expected value of 0.00 when data fit the model. This finding of overall adequate fit to the model supports the interpretation of item and person calibrations on the logit scale as indicators of their locations on the latent variable measured by the test.
 
@@ -704,7 +705,6 @@ knitr::kable(
 )
 ```
 
-
 Figure 1 illustrates the calibrations of the Participants and Items on the logit scale that represents the latent variable. The calibrations shown in this figure correspond to the results presented in Table 2 and Table 3 for tasks and students, respectively. The right-most column in the figure ("Logits") shows the logit scale. Higher numbers correspond to higher levels of achievement (for students) and higher levels of difficulty (for tasks), and lower numbers correspond to lower achievement and less difficulty, respectively, for students and tasks. Next, student locations on the latent variable are illustrated using a histogram. Examination of the histogram indicates a wide spread of achievement levels, with most students grouped near the middle of the logit scale (*θ* = 0.00). Next, task locations on the logit scale are plotted in the middle panel of the figure. Examination of the task locations indicates a similar overall spread as the student locations. However, the tasks appear somewhat clustered at the lower half of the logit scale, without many items appearing above *θ* >= 0.00. This lack of moderate-difficulty items may have contributed to the relatively large SE values for students with middle-range calibrations.  
 
 ```{r}
@@ -713,7 +713,7 @@ IRT.WrightMap(dichot.transreas,show.thr.lab=FALSE)
 ```
 
 ## Exericise
-Please use the TAM package to estimate item and person locations with the dichotomous Rasch model for the Exercise 1 data.
+Please use the TAM package to estimate item and person locations with the dichotomous Rasch model for the Exercise 1 data. Then, try writing a results section similar to the example in this chapter based on your findings.
 
 ## Bibliography
 

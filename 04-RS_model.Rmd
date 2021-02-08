@@ -19,7 +19,7 @@ Because it is a Rasch model, the RSM is based on the same requirements of unidim
 
 # Running the Rasch Rating Scale Model in R
 
-In the next section, we provide a step-by-step demonstration of a RSM analysis using R. We encourage readers to use the example dataset that is provided in the online supplement to conduct the analysis along with us.
+In the next section, we provide a step-by-step demonstration of a RSM analysis using R. We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
 ## Example Data: Liking for Science
 The example data for this chapter is a group of 75 children's responses to the 25-item *Liking for Science* questionnaire, which was designed to measure their attitudes toward science activities. The data were published in Wright and Masters (1982). Each item stem included a science activity, and three response options: 0 = *Dislike*, 1 = *Not Sure/Don't Care*, and 2 = *Like*, such that responses in higher categories indicated more-favorable attitudes toward science activities.
@@ -96,7 +96,7 @@ In this *Wright Map* display, the results from the RSM analysis of the Liking fo
 
 Starting at the bottom of the figure, the horizontal axis (labeled *Latent Dimension*) is the logit scale that represents the latent variable. In the application of the Liking for Science data, lower numbers indicate less-favorable attitudes toward science activities, and higher numbers indicate more-favorable attitudes toward science activities. 
 
-The central panel of the figure shows item difficulty locations on the logit scale for the 25 Liking for Science items; the y-axis for this panel shows the item labels. By default in eRm, the items are ordered according to their original order in the response matrix. The items can be ordered by difficulty by adding "sorted = TRUE" as an argument in the *plotPImap()* call. For each item, a solid circle plotting symbol shows the overall location estimate. This solid circle symbol is connected to two open-circle symbols that show the locations of the rating scale category thresholds. Each threshold is labeled with a "1" to indicate the threshold between rating scale category *x* = 0 and *x* = 1, or a "2" to indicate the threshold between rating scale category *x* = 1 and *x* = 2.
+The central panel of the figure shows item difficulty locations on the logit scale for the 24 Liking for Science items that were included in the analysis; the y-axis for this panel shows the item labels. By default in eRm, the items are ordered according to their original order in the response matrix. The items can be ordered by difficulty by adding "sorted = TRUE" as an argument in the *plotPImap()* call. For each item, a solid circle plotting symbol shows the overall location estimate. This solid circle symbol is connected to two open-circle symbols that show the locations of the rating scale category thresholds. Each threshold is labeled with a "1" to indicate the threshold between rating scale category *x* = 0 and *x* = 1, or a "2" to indicate the threshold between rating scale category *x* = 1 and *x* = 2.
 
 The upper panel of the figure shows a histogram of person (in this case, children) location estimates on the logit scale. Small vertical lines on the x-axis of this histogram show the points on the logit scale at which information (essentially variance) is maximized for the sample of persons and items in the analysis. These lines can be omitted by adding "irug = FALSE" as an argument in the *plotPImap()* call.
 
@@ -112,7 +112,7 @@ summary(item.locations)
 
 Because of the nature of the estimation process used in eRm, the item.locations object that we just created does not include the location estimate for the first item. One can calculate the location for item 1 by subtracting the sum of the item locations from zero. In the following code, we find the location for item 1, and then create a new object with all 24 item locations:
 ```{r}
-i1 <- 0 - sum(items[1:23])
+i1 <- 0 - sum(item.locations[1:23])
 item.locations.all <- c(i1, item.locations[c(1:23)])
 item.locations.all
 ```
@@ -146,7 +146,7 @@ for(tau in 1:n.thresholds){
 }
 ```
 
-Next, we will calculate standard errors for each item and threshold location. We will store them in new objects and use *summary()* to examine descriptive statistics for these values.
+Next, we will calculate standard errors for each item and threshold location and store them in new objects. We will use *summary()* to examine descriptive statistics for these values.
 
 ```{r}
 #SE for items + thresholds:
@@ -189,7 +189,7 @@ names(person.locations) <- c("theta", "SE")
 summary(person.locations)
 ```
 
-The estimation procedure in eRm does not directly produce parameter estimates for persons with extreme scores. In our example, extreme scores would result from a child giving a response of *x* = 0 to all items or a child giving a response of *x* = 2 to all items. For these students, a standard error is not calculated.
+The estimation procedure in eRm does not directly produce parameter estimates for persons with extreme scores. In our example, extreme scores would result from a child giving a response of *x* = 0 to all items or a child giving a response of *x* = 2 to all items. For these students, a standard error is not calculated. In our example, Child 2 had an extreme score because they gave a rating in category 2 to all items.
 
 ### Examine item fit statistics
 Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the same procedures in that chapter to examine item fit in detail for the RSM.
@@ -228,6 +228,123 @@ summary(person.fit)
 ```
 
 The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of person fit.
+
+## Summarize the results in tables
+As a final step, we will create tables that summarize the calibrations of the persons, items, and rating scale category thresholds.
+
+Table 1 is an overall model summary table that provides an overview of the logit scale locations, standard errors, fit statistics, and reliability statistics for items and persons. This type of table is useful for reporting the results from Rasch model analyses because it provides a quick overview of the location estimates and numeric model-data fit statistics for the items and persons in the analysis.
+
+### Model summary table:
+[Cheng - can you please add reliability of separation statistics to these tables??]
+```{r}
+RSM_summary.table.statistics <- c("Logit Scale Location Mean",
+                              "Logit Scale Location SD",
+                              "Standard Error Mean",
+                              "Standard Error SD",
+                              "Outfit MSE Mean",
+                              "Outfit MSE SD",
+                              "Infit MSE Mean",
+                              "Infit MSE SD",
+                              "Std. Outfit Mean",
+                              "Std. Outfit SD",
+                              "Std. Infit Mean",
+                              "Std. Infit SD")
+
+
+                              
+RSM_item.summary.results <- rbind(mean(centered.item.locations),
+                              sd(centered.item.locations),
+                              mean(delta.se),
+                              sd(delta.se),
+                              mean(item.fit.results$i.outfitMSQ),
+                              sd(item.fit.results$i.outfitMSQ),
+                              mean(item.fit.results$i.infitMSQ),
+                              sd(item.fit.results$i.infitMSQ),
+                              mean(item.fit.results$i.outfitZ),
+                              sd(item.fit.results$i.outfitZ),
+                              mean(item.fit.results$i.infitZ),
+                              sd(item.fit.results$i.infitZ))
+
+RSM_person.summary.results <- rbind(mean(person.locations$theta),
+                              sd(person.locations$theta),
+                              mean(person.locations$SE),
+                              sd(person.locations$SE),
+                              mean(person.fit$outfit_MSE),
+                              sd(person.fit$outfit_MSE),
+                              mean(person.fit$infit_MSE),
+                              sd(person.fit$infit_MSE),
+                              mean(person.fit$std_outfit),
+                              sd(person.fit$std_outfit),
+                              mean(person.fit$std_infit),
+                              sd(person.fit$std_infit))
+
+# Round the values for presentation in a table:
+RSM_item.summary.results_rounded <- round(RSM_item.summary.results, digits = 2)
+
+RSM_person.summary.results_rounded <- round(RSM_person.summary.results, digits = 2)
+
+RSM_Table1 <- cbind.data.frame(RSM_summary.table.statistics,
+                           RSM_item.summary.results_rounded, 
+                           RSM_person.summary.results_rounded)
+
+# add descriptive column labels:
+names(RSM_Table1) <- c("Statistic", "Items", "Persons")  
+```
+
+### Item calibration table:
+Table 2 is a table that summarizes the overall calibrations of individual items. For data sets with manageable sample sizes such as the Liking for Science data example in this chapter, we recommend reporting details about each item in a table similar to this one.
+
+```{r}
+# Calculate the average rating for each item:
+Avg_Rating <- apply(science.responses, 2, mean)
+
+# Combine item calibration results in a table:
+
+RSM_Table2 <- cbind.data.frame(c(1:ncol(science.responses)), 
+                           Avg_Rating,
+                           centered.item.locations,
+                           delta.se,
+                           item.fit$outfit_MSE,
+                           item.fit$std_outfit,
+                           item.fit$infit_MSE,
+                           item.fit$std_infit)
+names(RSM_Table2) <- c("Task ID", "Average Rating", "Item Location","Item SE","Outfit MSE","Std. Outfit", "Infit MSE","Std. Infit")                           
+
+# Sort Table 2 by Item difficulty:
+RSM_Table2 <- RSM_Table2[order(-RSM_Table2$`Item Location`),]
+
+# Round the numeric values (all columns except the first one) to 2 digits:
+RSM_Table2[, -1] <- round(RSM_Table2[,-1], digits = 2)
+
+```
+
+### Person calibration table:
+Finally, Table 3 provides a summary of the person calibrations. When there is a relatively large person sample size, it may be more useful to present the results as they relate to individual persons or subsets of the person sample as they are relevant to the purpose of the analysis.
+
+In our person calibration table, we have included the results for all of the children with non-extreme scores. This includes all of the children in our sample except Child 2.
+
+```{r}
+# Calculate average rating for persons who did not have extreme scores
+Person_Avg_Rating <- apply(person.locations.estimate$X.ex,1, mean)
+
+# Combine person calibration results in a table:
+RSM_Table3 <- cbind.data.frame(rownames(person.locations),
+                          Person_Avg_Rating,
+                          person.locations$theta,
+                          person.locations$SE,
+                          person.fit$outfit_MSE,
+                          person.fit$std_outfit,
+                          person.fit$infit_MSE,
+                          person.fit$std_infit)
+                          
+names(RSM_Table3) <- c("Child ID", "Average Rating", "Person Location","Person SE","Outfit MSE","Std. Outfit", "Infit MSE","Std. Infit")
+
+# Round the numeric values (all columns except the first one) to 2 digits:
+RSM_Table3[, -1] <- round(RSM_Table3[,-1], digits = 2)
+
+```
+
+
 
 # RSM Application with Marginal Maximum Likelihood Estimation in TAM
 The next section of this chapter includes an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). After this illustration, we also demonstrate the use of TAM to estimate the RSM with Joint Maximum Likelihood Estimation (JMLE). These illustrations use the Liking for Science data set that we described earlier in this chapter.
@@ -589,10 +706,58 @@ wrightMap(thetas = thetas_JMLE,
 
 In this *Wright Map* display, the results from the RSM analysis of the Liking for Science data are summarized graphically. The figure is organized in the same way as we described for the MMLE RSM analysis earlier in this chapter.
 
+# Example results section based on the eRm CMLE results:
+
+```{r}
+# Print Table 1:
+knitr::kable(
+  RSM_Table1, booktabs = TRUE,
+  caption = 'Model Summary Table'
+)
+```
+
+Table 1 presents a summary of the results from the analysis of the Liking for Science data (Wright & Masters, 1982) using the Rating Scale Model (RSM; Andrich, 1978). One item was excluded (item 12) because the responses to this item did not include any observations in the lowest rating scale category (*x* = 0). In addition, one child was excluded from the analysis (Child 2), who gave extreme responses to all of the items (*x* = 2).
+
+Specifically, Table 1 summarizes the calibration of the children with non-extreme responses (*N* = 74) and the items (*N* = 24) using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale (*M* = 1.57,*SD* = 1.18), compared to items, whose locations were centered at zero logits (*M* = 0.00, *SD* = 1.33). This finding suggests that the items were relatively easy to endorse among the sample of children who participated in this study. The average values of the Standard Error (*SE*) were comparable for children (*M* = 0.38) and items (*M* = 0.22). Average values of model-data fit statistics indicate overall adequate fit to the model, with average Infit and Outfit mean square error (MSE) statistics around 1.00, and average standardized Infit and Outfit statistics near the expected value of 0.00 when data fit the model. However, there was some variability in item fit and person fit, as indicated by relatively large standard errors for the fit statistics. Additional investigation into item fit and person fit is warranted.
+
+```{r}
+# Print Table 2:
+knitr::kable(
+  RSM_Table2, booktabs = TRUE,
+  caption = 'Item Calibration'
+)
+```
+
+Table 2 includes detailed results for the 24 items included in the analysis. For each item, the average rating is presented, followed by the overall logit-scale location (*δ*), SE, and model-data fit statistics. Examination of these results indicates that Item 5 was the most difficult to endorse (*Average Rating  = 0.49; *δ* = 2.21 ; *SE*  = 0.18), followed by Item 23 (*Average Rating* = 0.56; *δ* = 1.98; *SE*  = 0.20). The easiest item to endorse was Item 18 (*Average Rating* = 1.93; *δ* = -3.10; *SE* = 0.35).
+
+```{r}
+# Print Table 3 in a neat way:
+knitr::kable(
+  head(RSM_Table3,10), booktabs = TRUE,
+  caption = 'Person Calibration'
+)
+```
+
+Table 3 includes detailed results for first 10 students who participated in the Transitive Reasoning Test. For each student, the average rating is presented, followed by their logit-scale location estimate (*θ*), *SE*, and model-data fit statistics. 
+
+Figure 1
+```{r}
+# Plot the variable-Map
+graphics.off()
+plotPImap(RSM.science, main = "Liking for Science Rating Scale Model Wright Map", sorted = TRUE, irug = FALSE)
+```
+
+Figure 1 illustrates the calibrations of the Participants and Items on the logit scale that represents the latent variable. The calibrations shown in this figure correspond to the results presented in Table 2 and Table 3 for items and children, respectively.Starting at the bottom of the figure, the horizontal axis (labeled *Latent Dimension*) is the logit scale that represents the latent variable. Lower numbers on this scale indicate less-favorable attitudes toward science activities, and higher numbers indicate more-favorable attitudes toward science activities. The central panel of the figure shows item difficulty locations on the logit scale for the 24 Liking for Science items included in the analysis; the y-axis for this panel shows the item labels. The items are ordered according to their difficulty order, as estimated with the RSM. Easier-to-endorse items appear at the top of the figure, and harder-to-endorse items appear at the bottom of the figure; item labels are shown on the y-axis. For each item, a solid circle plotting symbol shows the overall location estimate. This solid circle symbol is connected to two open-circle symbols that show the locations of the rating scale category thresholds. Each threshold is labeled with a "1" to indicate the threshold between rating scale category *x* = 0 and *x* = 1, or a "2" to indicate the threshold between rating scale category *x* = 1 and *x* = 2. Examination of the item locations reveals that the threshold locations were ordered as expected, with $\tau$ 1 located lower on the logit scale ($\tau$ 1 = -0.78) compared to the location estimate for $\tau 2$ ($\tau 2$ = 0.78). The upper panel of the figure shows a histogram of person (in this case, children) location estimates on the logit scale.
 
 
-## Example APA-style results
+## Exericise
+Please use the eRm or TAM package to estimate item, threshold, and person locations with the RSM for the Exercise 4 data. Then, try writing a results section similar to the example in this chapter based on your findings.
+
+## Bibliography
 
 
 
+## Exericise
+Please use the TAM package to estimate item and person locations with the dichotomous Rasch model for the Exercise 1 data. Then, try writing a results section similar to the example in this chapter based on your findings.
 
+## Bibliography
