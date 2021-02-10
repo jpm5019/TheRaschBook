@@ -112,8 +112,9 @@ summary(item.locations)
 
 Because of the nature of the estimation process used in eRm, the item.locations object that we just created does not include the location estimate for the first item. One can calculate the location for item 1 by subtracting the sum of the item locations from zero. In the following code, we find the location for item 1, and then create a new object with all 24 item locations:
 ```{r}
-i1 <- 0 - sum(item.locations[1:23])
-item.locations.all <- c(i1, item.locations[c(1:23)])
+n.items <- ncol(science.responses)
+i1 <- 0 - sum(item.locations[1:(n.items - 1)])
+item.locations.all <- c(i1, item.locations[c(1:(n.items - 1))])
 item.locations.all
 ```
 
@@ -235,7 +236,7 @@ As a final step, we will create tables that summarize the calibrations of the pe
 Table 1 is an overall model summary table that provides an overview of the logit scale locations, standard errors, fit statistics, and reliability statistics for items and persons. This type of table is useful for reporting the results from Rasch model analyses because it provides a quick overview of the location estimates and numeric model-data fit statistics for the items and persons in the analysis.
 
 ### Model summary table:
-[Cheng - can you please add reliability of separation statistics to these tables??]
+-[] Cheng - can you please add reliability of separation statistics to these tables??
 ```{r}
 RSM_summary.table.statistics <- c("Logit Scale Location Mean",
                               "Logit Scale Location SD",
@@ -249,8 +250,6 @@ RSM_summary.table.statistics <- c("Logit Scale Location Mean",
                               "Std. Outfit SD",
                               "Std. Infit Mean",
                               "Std. Infit SD")
-
-
                               
 RSM_item.summary.results <- rbind(mean(centered.item.locations),
                               sd(centered.item.locations),
@@ -382,9 +381,9 @@ In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories threshold
 design.matrix <- designMatrices(resp=science.responses, modeltype="RSM", constraint = "items")$A
 ```
 
-Now we can run the RSM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function:
+Now we can run the RSM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function.
+-[] omit the model run output, keep the summary output.
 ```{r}
-#[Cheng - you can omit the output]
 RSM.science_MMLE <- tam.mml(science.responses, irtmodel="RSM", A = design.matrix, constraint = "items") 
 
 summary(RSM.science_MMLE)
@@ -451,8 +450,8 @@ This code generates plots of rating scale category probabilities for each item. 
 ## Evaluate item fit
 Next, we will examine numeric and graphical item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
 
+-[] omit the MMLE_fit output, keep the summary output.
 ```{r}
-#Cheng, you can omit this output 
 MMLE_fit <- tam.fit(RSM.science_MMLE)
 
 item.fit_MMLE <- MMLE_fit$itemfit
@@ -557,9 +556,10 @@ We will use the *tam.jml()* function to run the RSM with JMLE and store the resu
 design.matrix <- designMatrices(resp=science.responses, modeltype="RSM", constraint = "items")$A
 ```
 
-Now we can run the RSM with our design matrix. We have also added a few other specifications to maximize the comparability of the interpretation of the results from this analysis with results from the Winsteps and Facets software programs. After we run the model, we will request a summary of the model results using the *summary()* function:
+Now we can run the RSM with our design matrix. We have also added a few other specifications to maximize the comparability of the interpretation of the results from this analysis with results from the Winsteps and Facets software programs. After we run the model, we will request a summary of the model results using the *summary()* function.
+
+-[] omit the model run output, keep the summary output.
 ```{r}
-#[Cheng - you can omit the output]
 RSM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "items",
                          control=list(maxiter=500), version=2 )
 
@@ -751,13 +751,8 @@ Figure 1 illustrates the calibrations of the Participants and Items on the logit
 
 
 ## Exericise
-Please use the eRm or TAM package to estimate item, threshold, and person locations with the RSM for the Exercise 4 data. Then, try writing a results section similar to the example in this chapter based on your findings.
+Please use the eRm or TAM package to estimate item, threshold, and person locations with the RSM for the Exercise 4 data. The Exercise 4 data include responses from 500 participants to an attitude survey that includes 20 items with a 5-category rating scale. Then, try writing a results section similar to the example in this chapter based on your findings.
 
 ## Bibliography
 
 
-
-## Exericise
-Please use the TAM package to estimate item and person locations with the dichotomous Rasch model for the Exercise 1 data. Then, try writing a results section similar to the example in this chapter based on your findings.
-
-## Bibliography
