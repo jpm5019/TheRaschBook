@@ -1,6 +1,6 @@
 # Rating Scale Model {#RS_model}
 
-This chapter provides a basic overview of the Rasch Rating Scale Model (RSM;[Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814), along with guidance for analyzing data with the RSM using R. We use an example data set that includes participant responses to an attitude survey to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE). After the analyses are complete, we present an example description of the results in APA format. The chapter concludes with a challenge exercise and resources for further study.
+This chapter provides a basic overview of the Rasch Rating Scale Model (RSM;[Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814), along with guidance for analyzing data with the RSM using R. We use an example data set that includes participant responses to an attitude survey to illustrate the analysis using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise.
 
 ## Rasch Rating Scale Model 
 
@@ -10,7 +10,7 @@ The RSM can be stated in log-odds form as follows:
 
 Equation 4.1 $$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
 
-Where $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. 
+In the RSM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. 
 
 The RSM produces one common set of rating scale category thresholds that apply to all of the items in the analysis. As a result, the RSM requires that the responses to all of the items include observations in the same categories. In addition, this common set of thresholds implies that the rating scale categories have a consistent interpretation across items. For example, for items with a four-category rating scale where 0 = *Strongly Disagree*, 1 = *Disagree*, 2 = *Agree*, and 3 = *Strongly Agree*, the RSM would produce a common set of three thresholds for all of the items. This common set of thresholds implies that the difference in the level of the latent variable required to provide a rating of *Strongly Agree* and *Agree* is the same for all of the items included in the analysis.
 
@@ -142,6 +142,7 @@ n.thresholds <- max(science.responses)
 # Calculate adjacent-category threshold values:
 tau.estimates <- NULL
 
+tau <- 1
 for(tau in 1:n.thresholds){
   tau.estimates[tau] <- (items.and.taus.table[, (1+tau)] - items.and.taus.table[,1])[1]
 }
@@ -161,12 +162,12 @@ summary(delta.se)
 
 ### Plot item response functions (rating scale category probability plots)
 
-We will examine graphical displays of item difficulty using item response functions. With the RS model, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the 24 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once.
+We will examine graphical displays of item difficulty using item response functions. With the RSM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the 24 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once.
 
 ```{r}
 plotICC(RSM.science, ask = FALSE)
 ```
-This code generates plots of rating scale category probabilities for each item. In each item-specific plot, the x-axis is the logit scale that represents the latent variable; this scale represents favorability toward science activities in our example. The y-axis is the probability for a rating in each category, conditional on person locations on the latent variable. Separate lines in different colors show the conditional probability for each category of responses observed for the item of interest. Because we used the RS model, the overall shape of the curves and the relative distance between the curves is consistent across items--reflecting the common set of rating scale category thresholds. However, the location of the curves on the logit scale shifts across the individual items--reflecting each item's unique overall difficulty location ($\delta$).
+This code generates plots of rating scale category probabilities for each item. In each item-specific plot, the x-axis is the logit scale that represents the latent variable; this scale represents favorability toward science activities in our example. The y-axis is the probability for a rating in each category, conditional on person locations on the latent variable. Separate lines in different colors show the conditional probability for each category of responses observed for the item of interest. Because we used the RSM, the overall shape of the curves and the relative distance between the curves is consistent across items--reflecting the common set of rating scale category thresholds. However, the location of the curves on the logit scale shifts across the individual items--reflecting each item's unique overall difficulty location ($\delta$).
 
 #### Note about item fit
 
