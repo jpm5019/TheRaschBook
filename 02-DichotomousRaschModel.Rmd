@@ -104,7 +104,6 @@ summary(transreas.responses)
 Now, we are ready to run the dichotomous Rasch model on the transitive reasoning response data We will use the *RM()* function to run the model and store the results in an object called *dichot.transreas*:
 
 ```{r}
-# Running the Dichotomous Rasch Model
 dichot.transreas <- RM(transreas.responses)
 ```
 
@@ -126,7 +125,7 @@ As the next step in our analysis, we will create a Wright Map from our model res
 
 ```{r}
 # Plot the Wright Map 
-plotPImap(dichot.transreas, main = "Liking for Science Rating Scale Model Wright Map")
+plotPImap(dichot.transreas, main = "Transitive Reasoning Assessment Wright Map")
 ```
 In this *Wright Map* display, the results from the dichotomous Rasch model analysis of the Transitive Reasoning data are summarized graphically. The figure is organized as follows:
 
@@ -374,6 +373,7 @@ Table2[, -1] <- round(Table2[,-1], digits = 2)
 
 ## Person calibration table:
 Finally, Table 3 provides a summary of the person calibrations. When there is a relatively large person sample size, it may be more useful to present the results as they relate to individual persons or subsets of the person sample as they are relevant to the purpose of the analysis.
+
 ```{r}
 # Calculate proportion correct for persons:
 PersonPropCorrect <- apply(student.locations$X.ex, 1, mean)
@@ -426,7 +426,6 @@ Now, we are ready to run the dichotomous Rasch model on the transitive reasoning
 
 -[] Cheng, please omit model output.
 ```{r}
-# Running the Dichotomous Rasch Model
 dichot.transreas_MMLE <- tam.mml(transreas.responses, constraint = "items")
 ```
 For brevity, we do not include all of the output from the model function in this book. However, after you run the model, you should see some output in the R console that includes information about each iteration in the estimation process.
@@ -435,7 +434,6 @@ For brevity, we do not include all of the output from the model function in this
 
 The next step is to request a summary of the model estimation results in order to begin to understand the results from the analysis. We can do so by applying the *summary()* function to the model object:
 ```{r}
-# Request a summary of the model results
 summary(dichot.transreas_MMLE)
 ```
 
@@ -450,13 +448,11 @@ A useful feature of Rasch models is that when there is acceptable fit between th
 As the next step in our analysis, we will use the WrightMap package to create a Wright Map from our model results. We will create the plot using the function *IRT.WrightMap()* on the model object (*dichot.transreas*). We will set the option for displaying threshold labels as *FALSE*, because we are working with dichotomous data. We also used the *main.title=* option to customize the title of the plot.
 
 ```{r}
-# Plot the Wright Map 
 IRT.WrightMap(dichot.transreas_MMLE, show.thr.lab=FALSE, main.title = "Transitive Reasoning Wright Map (MMLE)")
 ```
 In this *Wright Map* display, the results from the dichotomous Rasch model analysis of the transitive reasoning data are summarized grapihcally. The figure is organized as follows:
 
 The left panel of the plot shows a histogram of respondent (person) locations on the logit scale that represents the latent variable. Units on the logit scale are shown on the far-right axis of the plot (labeled *Logits*). In the panel with the person locations, the label "Dim1" means that the distribution of person locations is specific to one dimension. In multi-dimensional Rasch model (Brigs and Wilson 2003) and multidimensional IRT analyses (Bonifay 2019; Reckase 2009), the Wright Map can show multiple distributions of person locations that correspond to each dimension in the model.
-
 
 ![Wright Map illustration](screenshots/Cha2_WM.png)
 
@@ -561,7 +557,6 @@ summary(person.fit_MMLE)
 
 The *person.fit_MMLE* object includes mean square error (*MSE*) and standardized (*t*) versions of the person Outfit and Infit statistics for Rasch models. These statistics are summaries of the residuals associated with each person The *Outfit* and *Infit* statistics are the MSE versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics.
 
-
 # Runing the Dichotomous Rasch Model with Joint Maximum Likelihood Estimation
 
 We can also use the *tam.jml()* function to estimate the dichotomous Rasch model using Joint Maximum Likelihood Estimation (JMLE), which is the same estimation method that is used in the Facets software program (Linacre, 2020b) and the Winsteps software program (Linacre, 2020b), which are popular standlone software programs for Rasch analyses.
@@ -600,6 +595,8 @@ jmle.item.se <- dichot.transreas_JMLE$errorP
 jmle.item.se
 ```
 
+Because of the item centering constraint that we included in our analysis, the standard error for item 10 is not reported.
+
 ### JMLE Person Parameters:
 Unlike the MMLE estimation approach, the JMLE approach calculates item parameters and person parameters in the same step. As a result, we do not need to use a separate function to find the person parameter estimates from our model. 
 
@@ -612,7 +609,7 @@ jmle.person.se <- dichot.transreas_JMLE$errorWLE
 
 When JMLE is used, TAM calculates both person and item fit using a single function: *tam.jml.fit()*. 
 ```{r}
-jmle.fit <- tam.jml.fit(dichot.transreas_JMLE) 
+jmle.fit <- tam.jml.fit(dichot.transreas_JMLE)
 ```
 
 ### JMLE Item Fit Statistics:
@@ -620,7 +617,6 @@ Now that we have calculated fit statistics for items and persons, we will save t
 ```{r}
 jmle.item.fit <- as.data.frame(jmle.fit$fit.item)
 jmle.item.fit
-# View(jmle.item.fit)
 summary(jmle.item.fit)
 ```
 
@@ -628,7 +624,6 @@ summary(jmle.item.fit)
 Next, we will save the person fit statistics in a data frame called *jmle.person.fit*. We can examine the person fit statistics in more detail by viewing it in the preview window and calculating summary statistics:
 ```{r}
 jmle.person.fit <- as.data.frame(jmle.fit$fit.person)
-# View(jmle.person.fit)
 summary(jmle.person.fit)
 ```
 
