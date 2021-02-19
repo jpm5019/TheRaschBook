@@ -8,7 +8,8 @@ Andrich (1978) proposed the RSM (sometimes also called the Polytomous Rasch mode
 
 The RSM can be stated in log-odds form as follows:
 
-Equation 4.1 $$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
+Equation 4.1 
+$$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
 
 In the RSM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. 
 
@@ -754,5 +755,18 @@ Figure 1 illustrates the calibrations of the children and items on the logit sca
 Please use the eRm or TAM package to estimate item, threshold, and person locations with the RSM for the Exercise 4 data. The Exercise 4 data include responses from 500 participants to an attitude survey that includes 20 items with a 5-category rating scale. Then, try writing a results section similar to the example in this chapter based on your findings.
 
 ## Bibliography
+Andrich, David. “A Rating Formulation for Ordered Response Categories.” *Psychometrika 43*, no. 4 (1978): 561–73. https://doi.org/10.1007/bf02293814. 
 
+--- “The Problem With the Step Metaphor for Polytomous Models for Ordinal Assessments.” *Educational Measurement: Issues and Practice 34*, no. 2 (2015): 8–14. https://doi.org/10.1111/emip.12074. 
 
+Linacre, John Micheal. *A user’s guide to FACETS: Rasch-model computer programs* (Version 3.83.4) [Computer software],2020. http://www.winsteps.com/manuals.htm.
+
+--- *A user’s guide to WINSTEPS MINISTEP Rasch-model computer programs* (Version 4.7.0) [Computer software],2020. http://winsteps.com.
+
+Mair, Patrick, Reinhold Hatzinger, and Marco Johannes Maier. *eRm: Extended Rasch Modeling* (Version 1.0-1) [Computer software], 2020. https://cran.r-project.org/package=eRm
+
+Mellenbergh, Gideon J. “Conceptual Notes on Models for Discrete Polytomous Item Responses.” *Applied Psychological Measurement 19*, no. 1 (1995): 91–100. https://doi.org/10.1177/014662169501900110. 
+
+Robitzsch, Alexander, Thomas Kiefer, and Margaret Wu. *TAM: Test Analysis Modules* (Version 3.5-19) [Computer software],2020. https://CRAN.R-project.org/package=TAM
+
+Wright, Benjamin D., and Geofferey N. Masters. Rating Scale Analysis. Rasch Measurement. MESA Press, 1982. 

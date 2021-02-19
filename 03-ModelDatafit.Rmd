@@ -363,7 +363,6 @@ library("TAM")
 
 # Run the Rasch model:
 ```{r results='hide'}
-#* Cheng - please hide this output.
 TAM_jmle_dichot.transreas <- tam.jml(transreas.responses)
 ```
 
