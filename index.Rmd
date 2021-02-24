@@ -1,6 +1,6 @@
 --- 
 title: "Rasch Measurement Theory Analysis in R: Illustrations and Practical Guidance for Researchers and Practitioners"
-author: "Stefanie Wind & Cheng Hua"
+author: "Stefanie A. Wind & Cheng Hua"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
@@ -8,24 +8,22 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-description: "The purpose of the proposed book is to illustrate techniques for conducting Rasch measurement theory analyses using existing R packages.The book will include some background information about Rasch models, but the primary objective will be to demonstrate how to apply the models to data using R packagesand interpretthe results. The academic level for this book is graduate students or professionals who have already been exposed to Rasch measurementtheory."
+description: "The purpose of the proposed book is to illustrate techniques for conducting Rasch measurement theory analyses using existing R packages.The book will include some background information about Rasch models, but the primary objective will be to demonstrate how to apply the models to data using R packages and interpret the results. The academic level for this book is graduate students or professionals who have already been exposed to Rasch measurement theory and who have a basic working knowledge of the R software."
 ---
 
 # Introduction
 
-## Introduction to the Book
+  The purpose of this book is to illustrate techniques for conducting Rasch measurement theory (Rasch 1960) analyses using existing R packages. The book includes some background information about Rasch models, but the primary objective is to demonstrate how to apply the models to data using R packages and interpret the results.
 
-  The purpose of this book is to illustrate techniques for conducting Rasch measurement theory analyses using existing R packages. The book includes some background information about Rasch models, but the primary objective is to demonstrate how to apply the models to data using R packages and interpret the results.
-
-  The primary audience for this book is graduate students or professionals who are familiar with Rasch measurement theory at a basic level, and who want to use open-source software to conduct their Rasch analyses. We provide a brief overview of several key features of Rasch measurement theory in this chapter, and we provide descriptions of basic characteristics of the models and analytic techniques in each of the following chapters. Accordingly, we encourage readers who are new to Rasch measurement theory to use this book as a supplement to other excellent introductory texts on the subject that include a detailed theoretical and statistical introduction to Rasch measurement. For example, interested readers may find the following texts useful to begin learning about Rasch measurement theory:
+  The primary audience for this book is graduate students or professionals who are familiar with Rasch measurement theory at a basic level, and who want to use the R software program to conduct their Rasch analyses. We provide a brief overview of several key features of Rasch measurement theory in this chapter, and we provide descriptions of basic characteristics of the models and analytic techniques in each of the following chapters. Accordingly, we encourage readers who are new to Rasch measurement theory to use this book as a supplement to other excellent introductory texts on the subject that include a detailed theoretical and statistical introduction to Rasch measurement. For example, interested readers may find the following texts useful to begin learning about Rasch measurement theory:
 
 > Andrich, David, and Ida Marais. *A Course in Rasch Measurement Theory: Measuring in the Educational, Social and Health Sciences.* Singapore: Springer, 2019. 
 
 > Bond, Trevor G., Zi Yan, and Moritz Heene. *Applying the Rasch Model: Fundamental Measurement in the Human Sciences (4th Ed.)*. New York: Routledge, Taylor & Francis Group, 2020.  
 
-> Engelhard, Georg, and Jue Wang. *Rasch Models for solving measurement problems: Invariant Measurement in the Social Sciences.* Vol.187. SAGE, 2020.  https://us.sagepub.com/en-us/nam/rasch-models-for-solving-measurement-problems/book267292
+> Engelhard, George, and Jue Wang. *Rasch Models for solving measurement problems: Invariant Measurement in the Social Sciences.* Vol.187. SAGE, 2020.  https://us.sagepub.com/en-us/nam/rasch-models-for-solving-measurement-problems/book267292
 
-  This book also assumes a basic working knowledge of the R software and programming language. To use this book, readers will need to know how to run existing code in R or R Studio, and how to make basic edits to existing code in order to adapt it for use with their own data. Readers who are new to R may find the following resources helpful for learning how to use this software program:
+  This book also assumes a basic working knowledge of the R software and programming language. To use this book, readers will need to know how to run existing code in R or R Studio, and how to make basic edits to existing code in order to adapt it for use with their own data. Readers who are new to R may find the following resources helpful for learning how to use this program:
   
 - [What is R & R Studio](https://libguides.library.kent.edu/statconsulting/r) Visit: *shorturl.at/NX367*
 
@@ -38,9 +36,9 @@ In addition, readers should note that our descriptions of the R code generally a
 
 ## Overview of Rasch Measurement Theory
 
-Georg Rasch was a Danish psychometrician who introduced a theory and approach to social science measurement in his classic text entitled Probabilistic Models for Some Intelligence and Attainment Tests (Rasch 1960). This approach to measurement involves transforming ordinal item response data, such as the data that are collected in a multiple-choice educational assessment of middle school students’ understanding of engineering design (Alemdar et al. 2017), a survey designed to measure self-efficacy for making career decisions (Nam et al. 2011), or a diagnostic scale used to identify individuals with depression (Shea et al. 2009). Now called Rasch measurement theory, this approach is based on principles and requirements that reflect measurement in the physical sciences. 
+Georg Rasch was a Danish psychometrician who introduced a theory and approach to social science measurement in his classic text entitled Probabilistic Models for Some Intelligence and Attainment Tests (Rasch 1960). This approach to measurement involves transforming ordinal item responses, such as the data that are collected in a multiple-choice educational assessment of middle school students’ understanding of engineering design (Alemdar et al. 2017), a survey designed to measure self-efficacy for making career decisions (Nam et al. 2011), or a diagnostic scale used to identify individuals with depression (Shea et al. 2009), to interval-level measures for examinees and items. Now called Rasch measurement theory, this approach is based on principles and requirements that reflect measurement in the physical sciences. 
 
-  Chief among the defining features of Rasch measurement theory is the emphasis on invariance in measurement. In the context of Rasch measurement theory, invariance occurs when the following properties are observed in item response data: 
+  Chief among the defining features of Rasch measurement theory is the emphasis on *invariance* in measurement. In the context of Rasch measurement theory, invariance occurs when the following properties are observed in item response data: 
 
 •	The comparison between two stimuli should be independent of which particular individuals were instrumental for the comparison; 
 
@@ -51,21 +49,19 @@ Georg Rasch was a Danish psychometrician who introduced a theory and approach to
 •	and it should also be independent of which other individuals were also compared on the same or on some other occasion 
 (Rasch 1961, pp. 331-332)
 
-  Rasch used the term specific objectivity (Rasch 1977) to describe the importance of identifying specific situations in which the requirements for invariant measurement are approximated. In emphasizing invariance, Rasch noted that meaningful interpretation and use of social science measurement instruments is not possible unless invariance is approximated.
+  Rasch used the term *specific objectivity* (Rasch 1977) to describe the importance of identifying specific situations in which the requirements for invariant measurement are approximated. In emphasizing invariance, Rasch noted that meaningful interpretation and use of social science measurement instruments is not possible unless invariance is approximated.
 
-  Rather than assuming that data will adhere perfectly to the model requirements, researchers who use Rasch models do so in order to identify deviations from these requirements when they occur. Information about departures from model requirements can help analysts identify areas for additional research, including qualitative investigations of persons and items, as well as guidance for improving the quality of a measurement procedure. This perspective in which the measurement theory (i.e., the model) is emphasized as a guide for understanding the quality of the data by comparing it to strict requirements, is a key distinguishing feature between Rasch measurement theory and other item response theory (IRT) approaches. In typical IRT analyses, analysts attempt to identify a model that is the most accurate representation of the characteristics of the data (Embretson & Reise, 2000). For example, many researchers select the three-parameter logistic model (Birnbaum, 1968) when analyzing responses to multiple-choice educational assessments because the model directly incorporates instances of guessing and differences in item discrimination. However, researchers guided by a Rasch perspective would instead use the Rasch model to identify unexpected observations that could alert them to potential guessing and inconsistent item ordering over examinee achievement levels (as reflected by differences in item discrimination). These unexpected observations could then lead to additional exploration and the improvement of the assessment procedure. Although there are many situations in which reproducing the characteristics of item response data may be useful or necessary, the general perspective that characterizes Rasch measurement theory is that the theory (i.e., the model) provides a framework for evaluating data according to its adherence to fundamental measurement properties. Rasch measurement theory scholars argue that evidence of adherence to model requirements is necessary before data can be used to make inferences about persons and items (e.g., in statistical analyses). As Bond and Fox (XXXX) noted, “researchers should spend more time investigating their scales than investigating with their scales” (p. XXXX). 
+  Rather than assuming that data will adhere perfectly to the model requirements, researchers who use Rasch models do so in order to identify deviations from these requirements when they occur. Information about departures from model requirements can help analysts identify areas for additional research, including qualitative investigations of persons and items, as well as guidance for improving the quality of a measurement procedure. This perspective in which the *measurement theory* (i.e., the model) is emphasized as a guide for understanding the quality of the data by comparing it to strict requirements, is a key distinguishing feature between Rasch measurement theory and other item response theory (IRT) approaches. In typical IRT analyses, analysts attempt to identify a model that is the most accurate representation of the characteristics of the *data* (Embretson & Reise, 2000). For example, many researchers select the three-parameter logistic model (Birnbaum, 1968) when analyzing responses to multiple-choice educational assessments because the model directly incorporates instances of guessing and differences in item discrimination. However, researchers guided by a Rasch perspective would instead use the Rasch model to identify unexpected observations that could alert them to potential guessing and inconsistent item ordering over examinee achievement levels (as reflected by differences in item discrimination). These unexpected observations could then lead to additional exploration and the improvement of the assessment procedure. Although there are many situations in which reproducing the characteristics of item response data may be useful or necessary, the general perspective that characterizes Rasch measurement theory is that the theory (i.e., the model) provides a framework for evaluating data according to its adherence to fundamental measurement properties. Rasch measurement theory scholars argue that evidence of adherence to model requirements is necessary before data can be used to make inferences about persons and items (e.g., in statistical analyses). As Bond and Fox (2015) noted, “researchers should spend more time investigating their scales than investigating with their scales” (p. 5). 
 
   In addition to providing useful information about adherence to fundamental measurement properties, Rasch models have several other theoretical and practical features that have contributed to their widespread popularity across disciplines in the social, behavioral, and health sciences (please see Aryadoust et al. (2019) for a review). Wright and Mok (2004) summarized the key theoretical and practical features of the Rasch measurement approach as follows:
 
   In order to construct inference from observation, the measurement model must: (a) produce linear measures, (b) overcome missing data, (c) give estimates of precision, (d) have devices for detecting misfit, (e) the parameters of the object being measured and of the measurement instrument must be separable. Only the family of Rasch measurement models solve these problems. (p. 4)
 
-  To help practical researchers take advantage of these useful features, our book provides an overview of several key models within the family of Rasch models, offers basic guidance on the estimation of the models using available R packages, and provides suggestions and advice for interpreting the results from the analyses.
+  To help researchers take advantage of these useful features in a practical way, our book provides an overview of several key models within the family of Rasch models, offers basic guidance on the estimation of the models using available R packages, and provides suggestions and advice for interpreting the results from the analyses.
   
 ## Online Resources
 
-  Besides the hard copy that you can purchase from XXX, this book also provides a free online version through R bookdown cite. The sources code for this book could be found at Github. 
-  
-  All the materials used in this book including R programming software, R packages, datasets are free to download. The following table provides a short list to download all the relevant learning materials.
+  This book includes several supplemental resources that are avialable online, including copies of the R code, example data sets, and data sets for the challenge exercises at the end of some of the chapters. All the materials used in this book including the R software, R packages, and data sets are free to download. The following table provides details about how to download all the relevant learning materials.
   
 | Title | Version | Download Link |
 | :---  |  :----  | :----:  |
@@ -84,6 +80,8 @@ Alemdar, Meltem, Jeremy A. Lingle, Roxanne Moore and Stefanie A. Wind. "Developi
 Aryadoust, Vahid, Hannah Ann Hui Tan and Ng Li Ying. "A Scientometric Review of Rasch Measurement: The Rise and Progress of a Specialty." *Frontiers in Psychology*, No.10(2019), https://doi.org/10.3389/fpsyg.2019.02197
 
 Birnbaum, Allan. "Some latent trait models and their use in inferring an examinee’s ability",  *Statistical theories of mental test scores* Part 5,(1968):395–479, Addison-Wesley.
+
+Bond, Trevor, and Fox, Christine M. "Applying the Rasch model: Fundamental measurement in the human sciences." (3rd edition). Routledge, 2015.
 
 Embretson, Susan E., and Seteven P. Reise. *Item response theory for psychologists.*(2000). Lawrence Erlbaum Associates, Publishers.
 
