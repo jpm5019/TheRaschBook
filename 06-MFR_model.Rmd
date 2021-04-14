@@ -1,214 +1,206 @@
-# Many Facet Rasch Model
+# Many Facet Rasch Model {#MFR_model}
 
-## Motivation
 
-Some assessment situations include additional variables of interest beyond person responses and item difficulty.
+This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM; Linacre, 1989 - ADD REFERENCE!!), along with guidance for analyzing data with the MFRM using R. We use the TAM package (Robitzsch et al., 2020) for all of the analyses in this chapter. To demonstrate the analyses, we use data from two performance assessments. In the first example, we demonstrate how to apply the MFRM to multi-faceted data that are stored in wide format (one row for each subject). Then, we demonstrate how to apply the MFRM to multi-faceted data that are stored in long format (multiple rows for each subject). Both examples use data from a writing performance assessment in which which 21 raters scored 372 students' essays. After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise.
 
-> Aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (B&F, p. 167)
+## Many-Facet Rasch Model
 
-Examples of “Interposing” Variables
+The Many-Facet Rasch Model was developed by Mike Linacre in his dissertation research with Ben Wright at the University of Chicago (Linacre, 1989). Since that time, it has been widely used across many measurement contexts.
 
-- Raters in a constructed-response assessment
+The MFRM (Linacre, 1989) is an extension of the Rasch family of models that allows researchers to include additional variables of interest ("facets") besides items and persons. Bond and Fox (XXXX) defined facets as "Aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (p. 167). Examples of interposing variables that could be modeled as facets include raters in a constructed-response assessment, participant demographic variables (e.g., gender, race/ethnicity, best language), item type, or domains in an analytic scoring rubric for constructed-response items.
 
-- Demographic variables (e.g., gender, race/ethnicity, best language)
+A general equation for the MFRM is:
 
-- Item/prompt type
+XXXXX
 
-- Domain (analytic rubrics)
+The model is user-specified and can be applied to any ordinal scoring scheme (XXXXX).
 
-## Introduction to Many-Facet Rasch (MFR) Model
 
-The Many-Facet Rasch Model allows the researcher to specify explanatory facets beyond person and item locations. The model is user-specified and can be applied to any ordinal scoring scheme (dichotomous, polytomous; rating scale or partial-credit). 
+### Model Requirements
 
-The Many-Facet Rasch Model was developed by Mike Linacre (1989/1992) in his dissertation research with Ben Wright at Chicago. Since that time, it has been widely used across many measurement contexts.
+The MFRM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. In practice, researchers should evaluate item responses for evidence that they approximate Rasch model requirements before examining model estimates in detail. Chapter 3 included details about model-data fit analysis procedures that can also be applied to the MFRM.
 
-## Why use the MFR model?
+# Example 1: Running the Many-Facet Rasch Model for Wide-Format Data using the TAM Package
 
-One popular use of the MFR model is to examine and mitigate differences in rater (judge) severity in performance assessments, where raters score test-taker performances. In these assessments, we want to make sure that our conclusions about test-takers' achievement don’t depend on the “luck of the rater draw” (Engelhard’s often-used phrase).
+In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R. We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
-The MFR model allows us to adjust test-taker achievement estimates for differences in rater severity (and/or other facets), as long as:
+For this first example, we use a subset of the writing assessment data that only includes students' scores related to the style of their writing. In the second example in this chapter, we use students' scores related to four domains: Style, Organization, Conventions, and Sentence Formation.
 
-- There is evidence of acceptable model-data fit for all facets
+## Getting Started
 
-- There is sufficient connectivity in the data (raters and test-takers are linked; more on that later in the semester)
-
-Are we adding dimensions by considering other facets?
-
-- Not if we believe that the facets are key aspects of the measurement process that systematically influence the overall score.
-
-- The MFR model allows us to test hypotheses of invariant calibrations across levels of facets (e.g., individual raters, item types, demographic subgroups)
-
-## MFR Calibrations
-
-MFR model provides location estimates for individual elements within each facet such as individual students, items, raters, domains, subgroups, subsets. These can be plotted on the variable map as before.
-
-There is no single equation for MFR model. You will decide which explanatory facets to include, as well as the scale structure/underlying model, including:
-
-- Dichotomous Rasch model (Rasch, 1960)
-- Polytomous models:
-  - Rating Scale Model (Andrich, 1978)
-  - Partial-Credit Model (Masters, 1982)
-
-For the PC-MFR model, the researcher decides the facet across which the scale varies (raters, prompts, subgroups, etc.).
-
-## R-Lab: Runing the Rasch Many-Facet Model in R
-
-NOTE: This lab is based on the TAM package for R. Although it is possible to run MFR models using this package, its use for this model is not currently widespread among researchers. In addition, there is not a direct correspondence between the information that TAM provides and the information that Facets provides about the MFR model results. Please keep this in mind when using the package for your MFR model analyses and watch for updates in the Rasch literature.
-
-### Prepare the Dataset
-
-Let's type in the data into R first. Please see the Facets lab guide for details about the data.
-
-```{r message=FALSE}
-g.data <- matrix(c(1,1,5,5,3,5,3,
-1,2,9,7,5,8,5,
-1,3,3,3,3,7,1,
-1,4,7,3,1,3,3,
-1,5,9,7,7,8,5,
-1,6,3,5,3,5,1,
-1,7,7,7,5,5,5,
-2,1,6,5,4,6,3,
-2,2,8,7,5,7,2,
-2,3,4,5,3,6,6,
-2,4,5,6,4,5,5,
-2,5,2,4,3,2,3,
-2,6,4,4,6,4,2,
-2,7,3,3,5,5,4,
-3,1,5,5,5,7,3,
-3,2,7,7,5,7,5,
-3,3,3,5,5,5,5,
-3,4,5,3,3,3,1,
-3,5,9,7,7,7,7,
-3,6,3,3,3,5,3,
-3,7,7,7,7,5,7),ncol=7,byrow=TRUE)
-```
-
-This data set contains 7 columns. The first column is the ID indicator for Sr. Scientist, ranging from 1 to 3 to indicate the three Sr. Scientists. The second column is the ID indicator for Jr. Scientist, ranging from 1 to 7. The rest of the columns (3-7) are the responses matrix, ranged from 1-9. Each column represents a trait that is being measured.
-
-Note about the data structure:
-This dataset is organized in long format (rather than wide format). As a result, there are multiple rows for each Sr. Scientist. This is because each Sr. Scientist rated all of the Jr. Scientists.
-
-Now, let's add column names to our dataset. First, we will turn the data into a data.frame object. Then, we will add column names.
+To get started with the TAM package, view the citation information, and then install and load it into your R environment using the following code:
 
 ```{r}
-g.data <- as.data.frame(g.data)
-colnames(g.data) <- c("subjects","raters","Trait_a","Trait_b","Trait_c","Trait_d","Trait_e")
+citation("TAM")
+# install.packages("TAM")
+#install.packages("TAM")
+library("TAM")
 ```
 
-### Run the MFR model using the TAM package
-
-```{r message=FALSE}
-library(TAM)
+To facilitate the example analysis, we will also use the *WrightMap* package (Torres Irribarra & Freund, 2014):
+  
+WrightMap:
+```{r}
+citation("WrightMap")
+# install.packages("WrightMap")
+library("WrightMap") 
 ```
 
-```{r message=FALSE, results='hide'}
-g.facet <- g.data[,"raters",drop=FALSE] # specify which facets will be included in the model (Here, we are including raters as a facet. Items ("assessment opportunities"; occassions on which the object of measurement is observed) are included as a facet by default)
-g.pid <- g.data$subjects # specify the ID for the object of measurement (Here, this is the Jr. Scientist)
-g.resp <- g.data[,-c(1:2)] # Indicate the response matrix
-g.formulaA <- ~ item + raters + step # Model formula for RS-MFR model (multiply (raters * step) to specify a PC-MFR model where the scale varies by rater)
-g.model <- tam.mml.mfr(resp=g.resp,facets=g.facet,formulaA=g.formulaA,pid=g.pid)
-# Run the many-facet model
-```
+## Prepare the data for analysis
+
+Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function *read.csv()* to import the comma-separated values (.csv) file that contains the data for the first example. We encourage readers to use their preferred method for importing data files into R or R Studio.
+
+Please note that if you use *read.csv()* to import the data, you will need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
+
+First, we will import the data using *read.csv()* and store it in an object called *writing_wide*:
 
 ```{r}
-summary(g.model) # Check the model summaries
+style <- read.csv("style_ratings.csv")
 ```
-
-### Test-taker Estimates
+The style ratings file is in *wide format*, because there is one row for each of the 372 unique students. Next, we will explore the data using descriptive statistics using the *summary()* function:
 ```{r}
-## Person (test-taker) Estimates
-# Compute person fit statistics
-person.fit <- tam.personfit(g.model)
-person.fit # Check the person infit/outfit
-# Person's Ability
-persons.mod <- tam.wle(g.model)
-theta <- persons.mod$theta
-theta # Print out the person's ability
+summary(style)
 ```
+From the summary of *style*, we can see there are no missing data. In addition, we can get a general sense of the scales, range, and distribution of each variable in the data set. For example, we can see that the data include student identification numbers, a language subgroup variable, and ratings from 21 raters. We can see that student identification numbers range from 3 to 1574. There are two language subgroups: Subgroup 1 (language = 1) indicates that students' best langauge is English, and subgroup 2 (language = 2) indicates that students' best language is a language other than English. The minimum rating from each rater was *x* = 0, and the maximum rating was *x* = 3.
 
-### Item's Estimates
-```{r}
-## Compute Item fit statistics
-item.fit <- msq.itemfit(g.model)
-summary(item.fit) # fit is shown for the rater*item combinations
+Please note that the TAM package requires that the lowest observation for item responses is equal to zero. In our data, this property is already present. If the lowest category is something other than zero, the analyst will need to recode the responses as we have done in previous chapters.
 
-library(knitr) # Use the knitr package to print out the result table
-kable(g.model$xsi.facets,digits=2)
-```
+## Specify the components of the MFR model
 
-### Plots
-
-#### The WrightMap 
+Now, we are ready to run the MFRM on the style ratings. Because the MFRM equation is user-specified, we need to define the components of the model. First, we will create an object called *facets* in which we specify the facets in the model. By default, the TAM package treats the variables that make up the columns of our item response matrix as an "item" facet. In our example, raters function as pseudo-items. Accordingly, raters make up the first facet in our analysis. Our second facet will be student language subgroups. We specify this facet and save it in a dataframe called *facets*:
 
 ```{r}
-library(WrightMap)
-IRT.WrightMap(g.model)
+facets <- style[,"language", drop=FALSE] 
 ```
 
-The tam.thresholds command provides us with the estimated difficulty for each item-by-rater 
+Next we need to identify the indicator variable for the object of measurement (i.e., subject). In our example, students are the object of measurement. We will save the student identification numbers in a vector called *students*:
 
 ```{r}
-thr <- tam.threshold(g.model)
-item.labs <- c("Trait_a", "Trait_b", "Trait_c", "Trait_d", "Trait_e")
-rater.labs <- c("rater1", "rater2", "rater3")
+students <- style$student
 ```
 
-Now we need to turn it into a matrix formatted the way WrightMap expects. We could organize it by item:
+Finally, we need to specify the response matrix. We do so by extacting the raters' scores for each student to a dataframe called *ratings*:
 
 ```{r}
-thr1 <- matrix(thr, nrow = 5, byrow = TRUE)
-wrightMap(theta, thr1, label.items = item.labs, thr.lab.text = rep(rater.labs, each = 5))
+ratings <- style[, -c(1:2)]
 ```
 
-Or by rater:
+## Specify the MFRM formula:
+
+Next, we need to specify the formula for our MFRM. To keep things simple for now, we will use a rating scale model specification of the MFRM.
+
+[EXPLAIN MODEL SPECIFICATION]
 
 ```{r}
-thr2 <- matrix(thr, nrow = 3)
-wrightMap(theta, thr2, label.items = rater.labs, thr.lab.text = rep(item.labs,  each = 3), axis.items = "Raters")
-```
-#### Plot Item Response Curves
-
-```{r}
-# Plot Item Response curves
-plot(g.model, type="items")
-# Plot expected response curves
-plot(g.model, type="expected")
+style_RS_MFRM <- ~ item + language + step
 ```
 
-## Reference
-
-Robert J. Sternberg & Elena L. Grigorenko (2001) Guilford's Structure of Intellect Model and Model of Creativity: Contributions and Limitations, Creativity Research Journal, 13:3-4, 309-316, DOI: 10.1207/S15326934CRJ1334_08
+[sw stopped editing here on April 14!]
 
 
-## Example 2:
 
-As a second example, let's analyze some data from a performance assessment in which 21 raters scored 372 students' essays on four domains: Style, Organization, Conventions, and Sentence Formation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Run the PC-MFR model
+
+
+
+
+PC_MFR_model <- tam.mml.mfr(resp = resp, facets = facets, formulaA = PC_MFR_formula, pid = pid)
+
+
+# Facet results:
+
+facet.estimates <- PC_MFR_model$xsi.facets # all facets together
+item.estimates <- subset(facet.estimates, facet.estimates$facet == "item")
+education.estimates <- subset(facet.estimates, facet.estimates$facet == "education")
+education_threshold.estimates <- subset(facet.estimates, facet.estimates$facet == "step:education")
+
+
+### Center the item parameter estimates for ease of interpretation
+uncentered.item.locations_PCMFR <- item.estimates$xsi
+centered.item.locations_PCMFR <- scale(uncentered.item.locations_PCMFR, scale = FALSE)
+summary(centered.item.locations_PCMFR)
+
+### Examine education locations:
+summary(education.estimates$xsi)
+
+### Examine person locations:
+person.estimates <- tam.wle(PC_MFR_model)
+theta <- person.estimates$theta
+summary(theta)
+
+### Store person parameters and their standard errors in a dataframe object:
+person.locations_PCMFR <- cbind.data.frame(cesd$id,
+                                          person.estimates$theta,
+                                          person.estimates$error)
+
+names(person.locations_PCMFR) <- c("id", "theta", "SE")
+
+### Subtract the original (uncentered) item mean location from the person locations:
+person.locations_PCMFR$theta_adjusted <- person.locations_PCMFR$theta - mean(uncentered.item.locations_PCMFR)
+
+
+
+
+We will use the *PCM()* function to run the model and store the results in an object called *PCM.science*. Then, we will request a summary of the model results using the *summary()* function:
+
+
+
+
+
+
+# Example 2:
+
 
 ```{r}
 # Input the data from the .csv file:
-georgia_writing <- read.csv("georgia_writing.csv")
+writing <- read.csv("writing.csv")
 ```
 
-Note that the data are in *long* format: This means that there are multiple rows for each element within the object of measurement (multiple rows for each student).
+Note that the data are in *long* format: This means that there are multiple rows for each element within the object of measurement. In the case of our example data, this means that there are multiple rows for each student. Each row includes one rater's ratings of one student on all four of the domains in the assessment: Style, Organization, Conventions, and Sentence Formation. 
+
+Next, we will explore the data using descriptive statistics using the *summary()* function:
 
 ```{r}
-# Get a summary of the data
-summary(georgia_writing)
-
-# count the unique student ids:
-length(unique(georgia_writing$student))
+summary(writing)
 ```
+
+From the summary of *writing*, we can see there are no missing data. In addition, we can get a general sense of the scales, range, and distribution of each variable in the data set.
+
+We can see that student identification numbers range from 3 to 1574. We can identify the number of unique students in the data using the following code:
+```{r}
+length(unique(writing$student))
+```
+There are 372 unique student identification numbers in our data. Returning to the summary of the writing data, we can see that the minimum rating on each domain was *x* = 1, and the maximum rating was *x* = 4. 
 
 Next, let's prepare the data for analysis with TAM by shifting the scale so that the lowest category equals zero:
 
 ```{r}
-# Recode the scale to begin at 0
-georgia_writing[, -c(1:2)] <- georgia_writing[, -c(1:2)] - 1
+writing[, -c(1:2)] <- writing[, -c(1:2)] - 1
 ```
 
-Now, we can run a MFR model with the following facets: Students (object of measurement), Raters, and Domains. 
 
-To work with the TAM package, we will treat Domains like items.
+
+
+
 
 We will run a Rating Scale formulation of the model first.
 
