@@ -416,6 +416,8 @@ tau.estimates_MMLE <- PCM.science_MMLE$item_irt[, c(4 : (3+n.thresholds))]
 # View the threshold estimates:
 tau.estimates_MMLE
 ```
+Note that the threshold values shown in the *tau.estimates_MMLE* must be added to the overall item location to obtain the location on the logit scale at which there is an equal probability for a rating in the corresponding adjacent categories. These values correspond to the graphical displays of rating scale category probabilities for the PCM.
+
 ### Examine item response functions (rating scale category probability plots)
 
 Next, we will examine rating scale category probability plots for the 25 items in our analysis.
