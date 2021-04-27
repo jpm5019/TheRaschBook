@@ -160,10 +160,10 @@ summary(delta.tau.se)
 
 ### Plot item response functions (rating scale category probability plots)
 
-We will examine graphical displays of item difficulty using item response functions. With the PCM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the 25 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once.
+We will examine graphical displays of item difficulty using item response functions. With the PCM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the first 5 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once. Readers who need to specify plots for different items can update the "items=" specification to produce the desired plots.
 
 ```{r}
-plotICC(PCM.science, ask = FALSE)
+plotICC(PCM.science, ask = FALSE, items = c(1:5))
 ```
 This code generates plots of rating scale category probabilities for each item. In each item-specific plot, the x-axis is the logit scale that represents the latent variable; this scale represents favorability toward science activities in our example. The y-axis is the probability for a rating in each category, conditional on person locations on the latent variable. Separate lines in different colors show the conditional probability for each category of responses observed for the item of interest. Because we used the PCM, the overall shape of the curves and the relative distance between the curves is unique for each items--reflecting the individual set of rating scale category thresholds for each item. In addition, the location of the curves on the x-axis shifts to reflect each item's overall difficulty level.
 
