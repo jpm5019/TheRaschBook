@@ -434,7 +434,7 @@ Next, we will examine numeric and graphical item fit indices using the *itemfit(
 
 -[] omit the MMLE_fit output, keep the summary output.
 ```{r}
-MMLE_fit <- tam.fit(PCM.science_MMLE)
+MMLE_fit <- msq.itemfit(PCM.science_MMLE)
 
 item.fit_MMLE <- MMLE_fit$itemfit
 summary(item.fit_MMLE)

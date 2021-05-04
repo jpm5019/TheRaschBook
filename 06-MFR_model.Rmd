@@ -1,7 +1,7 @@
 # Many Facet Rasch Model {#MFR_model}
 
 
-This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM; -[] Cheng please add reference to Linacre, 1989), along with guidance for analyzing data with the MFRM using R. We use the TAM package (-[] Cheng please add reference to Robitzsch et al., 2020) for all of the analyses in this chapter. We use data from two performance assessments to demonstrate the analyses. In the first example, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *wide format* (one row for each subject). Then, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *long format* (multiple rows for each subject). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise.
+This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM; -[] Cheng please add reference to Linacre, 1989), along with guidance for analyzing data with the MFRM using R. We use the TAM package (-[] Cheng please add reference to Robitzsch et al., 2020) for all of the analyses in this chapter. In the first example, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *wide format* (one row for each subject). Then, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *long format* (multiple rows for each subject). After the analyses are complete, we present an example description of the results from one example. The chapter concludes with a challenge exercise.
 
 ## Many-Facet Rasch Model
 
@@ -13,7 +13,7 @@ A general equation for the MFRM is:
 
 -[] Cheng, Please add Equation 6.1 here
 
-In Equation 6.1, $\theta$ is person ability and $\tau_k$ is the rating scale category threshold, which can be modified to reflect the PC model as needed. $\Sigma_facets_$$\epsilon$ is a linear combination of facets that are specific to each modeling context. For example, facets for MFR model analysis of a performance assessment could include raters and domains. According to Equation 6.1, the probability for an observation in category *k*, rather than in category *k*- 1 for Person *n* is modeled as the difference between Person n's location, the location of the researcher-specified facets, and the difficulty associated with providing a response in category *k*.
+In Equation 6.1, $\theta$ is person ability and $\tau_k$ is the rating scale category threshold, which can be modified to reflect the PC model as needed. $\Sigma$ facets $\epsilon$ is a linear combination of facets that are specific to each modeling context. For example, facets for MFR model analysis of a performance assessment could include raters and domains. According to Equation 6.1, the probability for an observation in category *k*, rather than in category *k*- 1 for Person *n* is modeled as the difference between Person n's location, the location of the researcher-specified facets, and the difficulty associated with providing a response in category *k*.
 
 Researchers can specify formulations of the MFR model to extend the dichotomous Rasch model (see Chapter 2) the Rating Scale (RS) model (see Chapter 4), the Partial Credit model (see Chapter 5), as well as other Rasch models (e.g., the binomial trials model and the Poisson counts model; -[] Cheng please add reference to Wright & Mok, 2004).
 
@@ -25,7 +25,7 @@ The MFRM is based on the same requirements of unidimensionality, local independe
 
 In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[] Cheng please add reference to Robitzsch et al., 2020). We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
 
-For this first example, we use a subset of the writing assessment data that only includes students' scores related to the style of their writing. In the second example in this chapter, we use students' scores related to four domains: Style, Organization, Conventions, and Sentence Formation.
+For this first example, we use a subset of the writing assessment data that only includes students' scores related to the style of their writing. In the second example in this chapter, we use students' scores related to all four domains.
 
 ## Getting Started
 
@@ -41,16 +41,15 @@ We will also use the *WrightMap* package (Torres Irribarra & Freund, 2014):
 ```{r}
 citation("WrightMap")
 # install.packages("WrightMap")
-library("WrightMap") 
+library("WrightMap")
 ```
 
 Finally, we will use the *psych* package (Revelle, 2016):
 ```{r}
 citation("psych")
 # install.packages("psych")
-library("psych") 
+library("psych")
 ```
-
 
 ## Prepare the data for analysis
 
@@ -63,6 +62,7 @@ First, we will import the data using *read.csv()* and store it in an object call
 ```{r}
 style <- read.csv("style_ratings.csv")
 ```
+
 The style ratings file is in *wide format*, because there is one row for each of the 372 unique students. We can see this structure by printing the first six rows of the data frame object:
 
 ```{r}
@@ -73,13 +73,14 @@ Next, we will explore the data using descriptive statistics using the *summary()
 ```{r}
 summary(style)
 ```
+
 From the summary of *style*, we can see there are no missing data. In addition, we can get a general sense of the scales, range, and distribution of each variable in the data set. For example, we can see that the data include student identification numbers, a language subgroup variable, and ratings from 21 raters. We can see that student identification numbers range from 3 to 1574. There are two language subgroups: Subgroup 1 (language = 1) indicates that students' best language is a language other than English, and subgroup 2 (language = 2) indicates that students' best language is English. The minimum rating from each rater was *x* = 0, and the maximum rating was *x* = 3.
 
 Please note that the TAM package requires that the lowest observation for item responses is equal to zero. In our data, this property is already present. If the lowest category is something other than zero, the analyst will need to recode the responses as we have done in previous chapters.
 
 ## Specify the components of the MFRM
 
-Now, we are ready to run the MFRM on the style ratings. Because the MFRM equation is researcher-specified, we need to define the components of the model. To do this, we will create an object called *facets* in which we specify the facets in the model. By default, the TAM package treats the variables that make up the columns of our item response matrix as an "item" facet. In our example, raters function as pseudo-items. Accordingly, raters make up the first facet in our analysis. Our second facet will be student language subgroups. We specify this facet and save it in a data frame object called *facets*:
+Now, we are ready to run the MFRM on the style ratings. Because the MFRM equation is researcher-specified, we need to define the components of the model. To do this, we will create an object called *facets* in which we specify the facets in the model. By default, the TAM package treats the variables that make up the columns of our item response matrix as an "item" facet. In our example, raters function as pseudo-items. Accordingly, raters make up the first facet in our analysis. Our second facet will be student language subgroups. We specify this facet and save it in a data frame object called *facets*. We specified "drop = FALSE" because the data frame only includes one column.
 
 ```{r}
 facets <- style[,"language", drop=FALSE]
@@ -103,7 +104,7 @@ Next, we need to specify the formula for our MFRM. For the first example will us
 
 In Equation 6.2, $\theta_n$ is defined as in Equation 6.1. $\gamma_j$ is the logit-scale location for student language subgroup *j*, $\lambda_i$ is the logit-scale location for rater *i*, and $\tau_k$ is the logit-scale location at which there is an equal probability for a rating in category *k* and category *k*-1. The subgroup facet ($\gamma_j$) reflects the overall location of students in subgroup *j*, where higher locations indicate higher levels of writing proficiency, and lower locations indicate lower levels of writing proficiency. The rater facet ($\lambda_i$) reflects the severity level of individual rater *i*, where higher locations mean that the rater is more severe, and requires higher levels of writing proficiency before giving high ratings to student performances. Lower rater locations indicate relatively lenient raters, who more readily give high ratings to student performances.
 
-We specify the MFRM from Equation 6.2 in an object for use with TAM as follows. First, we specify a name for the model object(*style_RS_MFRM*), which is defined using the tilde symbol (~), followed by the facet names. As a reminder, the model must include a facet named *item*; in our example, the item facet is made up of raters. We also include the student language subgroup (*language*) as a facet. Finally, we specify *step* to indicate the RS model. The components of the model are separated by addition signs (+) because the facets are additive. We will specify interactions in a MFRM later in this chapter.
+We specify the MFRM from Equation 6.2 in an object for use with TAM as follows. First, we specify a name for the model object(*style_RS_MFRM*), which is defined using the tilde symbol (~), followed by the facet names. As a reminder, the model must include a facet named *item*; in our example, the item facet is made up of raters. We also include the student language subgroup (*language*) as a facet. Finally, we specify *step* to indicate the RS model. The components of the model are separated by addition signs (+) because the facets are additive. We will use interactions in a MFRM later in this chapter.
 
 ```{r}
 style_RS_MFRM <- ~ item + language + step
@@ -114,23 +115,27 @@ style_RS_MFRM <- ~ item + language + step
 Now we can run our RS-MFRM. We do so using the *tam.mml.mfr()* function, in which we specify the response matrix (resp=), our specified facets (facets=), the model equation (formulaA=), and the identification numbers for the object of measurement (pid=).
 
 After we run the model, we will request a summary of the model results using the *summary()* function.
--[] omit the model run output
+
 ```{r results='hide'}
-RS_MFR_model <- tam.mml.mfr(resp = ratings, facets = facets, formulaA = style_RS_MFRM, pid = students)
+RS_MFR_model <- tam.mml.mfr(resp = ratings, facets = facets, formulaA = style_RS_MFRM, pid = students, verbose = FALSE)
+
+summary(RS_MFR_model)
 ```
 
-The MFRM function produces lengthy output. Included among the output are several details that may be important for some researchers, including details about each iteration, global model-fit indicators (e.g., deviance,  log-likelihood, AIC, BIC) and an estimate of person separation reliability (EAP Reliability). 
+The summary of the MFRM is lengthy. Included among the output are several details that may be important for some researchers, including details about each iteration, global model-fit indicators (e.g., deviance,  log-likelihood, AIC, BIC) and an estimate of person separation reliability (EAP Reliability). 
 
 We will focus our interpretation on the location estimates for the student, subgroup, rater, and threshold parameters.
 
 ## Examine facet results:
 
 Next, we will save the parameter estimates from the RS-MFRM in a data frame object called *facet.estimates*. This object includes the location estimates and standard errors for raters, student subgroups, and thresholds. Locations estimates are labeled *xsi* and standard errors are labeled *se.xsi*.
+
 ```{r}
 facet.estimates <- RS_MFR_model$xsi.facets
 ```
 
 For easier reference, we will now create objects in which we store the location estimates and standard errors for raters, subgroups, and thresholds separately. We do this by applying the *subset()* function to the *facet.estimates* object:
+
 ```{r}
 rater.estimates <- subset(facet.estimates, facet.estimates$facet == "item")
 subgroup.estimates <- subset(facet.estimates, facet.estimates$facet == "language")
@@ -139,6 +144,7 @@ threshold.estimates <- subset(facet.estimates, facet.estimates$facet == "step")
 
 ### Rater facet results
 We will center the rater parameter estimates for ease of interpretation, as we have done previously with item estimates. Then, we will request a summary of the centered rater locations.
+
 ```{r}
 uncentered.rater.locations_RSMFR <- rater.estimates$xsi
 centered.rater.locations_RSMFR <- scale(uncentered.rater.locations_RSMFR, scale = FALSE)
@@ -148,7 +154,8 @@ summary(centered.rater.locations_RSMFR)
 From the summary of rater locations, we can see that rater severity estimates range from -0.86 for the most lenient rater to 1.11 for the most severe rater.
 
 ### Student subgroup facet results
-We do not need to adjust the location of the subgroups to account for centering the rater facet because the facet locations are already centered at zero logits. We will examine the language subgroup estimates using the *summary()* function. Because there are only two subgroups in our analysis, we can also print the locations to our console to inspect them. 
+We do not need to adjust the location of the subgroups to account for centering the rater facet because the facet locations are already centered at zero logits. We will examine the language subgroup estimates using the *summary()* function. Because there are only two subgroups in our analysis, we can also print the locations to our console to inspect them.
+
 ```{r}
 summary(subgroup.estimates$xsi)
 subgroup.estimates$xsi
@@ -158,12 +165,14 @@ From these results, we can see that the two student subgroup locations are quite
 
 ### Threshold estimates
 Next we will examine the threshold estimates. Because we used a RS formulation of the MFRM, there is one set of threshold estimates for our model that applies across raters. We will print the threshold estimates to the console to view them.
+
 ```{r}
 threshold.estimates$xsi
 ```
 
 ### Student estimates
 Next we will examine the student location estimates from the RS-MFRM. To estimate student locations, we need to apply the *tam.wle()* function to our model object (*RS_MFR_model*) and store the results in an object called *student.ach*. We will then store the student identification numbers, location estimates, and standard errors in a new object called *student.locations_RSMFR*.
+
 ```{r results='hide'}
 student.ach <- tam.wle(RS_MFR_model)
 student.locations_RSMFR <- cbind.data.frame(student.ach$pid, student.ach$theta, student.ach$error)
@@ -171,6 +180,7 @@ names(student.locations_RSMFR) <- c("id", "theta", "se")
 ```
 
 To interpret the student locations in the same frame of reference as our centered rater locations, we need to subtract the original (uncentered) rater mean location from the student locations:
+
 ```{r}
 student.locations_RSMFR$theta_adjusted <- student.locations_RSMFR$theta - mean(uncentered.rater.locations_RSMFR)
 summary(student.locations_RSMFR$theta_adjusted)
@@ -183,6 +193,7 @@ From the summary of the adjusted student achievement locations, we can see that 
 Next, we will plot a Wright Map to display the locations of the parameter estimates for our RS-MFR model. To do this, we need to manipulate the location estimate objects into the format required for the WrightMap package. 
 
 First, we need to store the rater location estimates as a matrix that shows rater-specific threshold locations. We accomplish this task using a loop in which we add each rater's location to the three threshold values and store the results in a matrix called *rater_thresholds*.
+
 ```{r}
 rater_thresholds <- matrix(data = NA, nrow = length(centered.rater.locations_RSMFR), ncol = nrow(threshold.estimates))
 
@@ -215,12 +226,11 @@ wrightMap(thetas = persons,
 In this *Wright Map* display, the results from the RS-MFRM analysis of the style ratings are summarized graphically. The figure is organized as follows:
 
 * Units on the logit scale are shown on the far-right axis of the plot (labeled *Logits*). 
-
 * The left-most panel of the plot shows a histogram of student locations on the logit scale that represents the latent variable. 
 
 * The second panel from the left shows the distribution of subgroups on the logit scale. There are only two subgroups in our analysis.
 
-The large central panel of the plot shows the rating scale category threshold estimates specific to each rater on the logit scale that represents the latent variable. Light grey diamond shapes show the logit scale location of the threshold estimates for each rater, as labeled on the x-axis. Thresholds are labeled using tau symbols followed by an integer that shows the threshold number. In our example, $\tau$1 is the threshold between rating scale categories *x* = 0 and *x* = 1, $\tau$2 is the threshold between rating scale categories *x* = 1 and *x* = 2, and $\tau$3 is the threshold between rating scale categories *x* = 2 and *x* = 3. Because we used a RS model formulation, the distance between adjacent thresholds is the same for all of the raters in the analysis.
+The large central panel of the plot shows the rating scale category threshold estimates specific to each rater on the logit scale that represents the latent variable. Light grey diamond shapes show the logit scale location of the threshold estimates for each rater, as labeled on the x-axis. Thresholds are labeled using tau symbols followed by an integer that shows the threshold number. In our example, $\tau_1$ is the threshold between rating scale categories *x* = 0 and *x* = 1, $\tau_2$ is the threshold between rating scale categories *x* = 1 and *x* = 2, and $\tau_3$ is the threshold between rating scale categories *x* = 2 and *x* = 3. Because we used a RS model formulation, the distance between adjacent thresholds is the same for all of the raters in the analysis.
 
 Even though it is not appropriate to fully interpret item and person locations on the logit scale until there is evidence of acceptable model-data fit, we recommend examining the Wright Map during the preliminary stages of a MFRM analysis to get a general sense of the model results and to identify any potential scoring or data entry errors.
 
@@ -235,11 +245,13 @@ Because the MFR model analyses result in notably different output structures fro
 First, we will evaluate the MFRM requirement for unidimensionality using the same procedure that we demonstrated in Chapter 3. We will evaluate this requirement by examining the residuals for evidence of potential secondary latent variables in the rating data.
 
 First, we will extract the model residuals using the *IRT.residuals()* function from TAM. We will save the results in an object called *resids*.
+
 ```{r}
 resids <- IRT.residuals(RS_MFR_model)
 ```
 
 With the MFRM in TAM, residuals are presented separately for each level of the explanatory facets.We need to do some manipulation to construct a typical residual matrix.
+
 ```{r}
 # Extract the raw residuals from the residuals object:
 r <- as.data.frame(resids$residuals)
@@ -263,11 +275,13 @@ for(rater.number in 1:ncol(ratings)){
 ```
 
 The resulting residual matrix (*resid.matrix*) contains unstandardized residuals for each rater in combination with each student. We can request a summary of the residuals using the *summary()* function.
+
 ```{r}
 summary(resid.matrix)
 ```
 
 Next, we will calculate standardized residuals and save them in a matrix.
+
 ```{r}
 # Extract standardized residuals from the resids object:
 s <- as.data.frame(resids$stand_residuals)
@@ -291,11 +305,13 @@ for(rater.number in 1:ncol(ratings)){
 ```
 
 The resulting standardized residual matrix (*std.resid.matrix*) contains standardized residuals for each rater in combination with each student. We can request a summary of the standardized residuals using the *summary()* function.
+
 ```{r}
 summary(std.resid.matrix)
 ```
 
-Next, we will calculate the variance in observations due to Rasch-model-estimated locations:
+Next, we will calculate the variance in observations due to Rasch-model-estimated locations.
+
 ```{r}
 # Variance of the observations: VO
 observations.vector <- as.vector(as.matrix(ratings))
@@ -361,7 +377,9 @@ summary(fit_group_1)
 
 fit_group_2 <- subset(fit_with_subgroups, fit_with_subgroups$`style$language` == 2)
 summary(fit_group_2)
+```
 
+```{r}
 # Boxplots for MSE fit statistics:
 boxplot(fit_group_1$outfitPerson, fit_group_2$outfitPerson,
         fit_group_1$infitPerson, fit_group_2$infitPerson,
@@ -371,7 +389,9 @@ boxplot(fit_group_1$outfitPerson, fit_group_2$outfitPerson,
         main = "MSE Fit Statistics for English-not-Best-Language (Group 1) \nand English-Best-Language (Group 2) Students",
         cex.main = .8,
         ylab = "MSE Fit Statistic", xlab = "Student Subgroup")
+```
 
+```{r}
 # Boxplots for standardized fit statistics:
 boxplot(fit_group_1$outfitPerson_t, fit_group_2$outfitPerson_t,
         fit_group_1$infitPerson_t, fit_group_2$infitPerson_t,
@@ -385,8 +405,6 @@ boxplot(fit_group_1$outfitPerson_t, fit_group_2$outfitPerson_t,
 
 Finally, it may be useful to examine fit statistics as they apply to individual raters. This can be accomplished by extracting rater-specific fit statistics within each subgroup. The code below calculates rater fit statistics within each subgroup.
 ```{r}
-rater.subgroup.fit$itemfit
-
 ngroups <- nrow(subgroup.estimates)
 
 rater.fit <- matrix(data = NA, nrow = ncol(ratings), ncol = (ngroups * 4) + 1 )
@@ -434,6 +452,9 @@ for(group in 1:ngroups){
 
 names(rater.fit_results) <- c("Rater", outfit_mse_labels, infit_mse_labels,
                               std_outfit_mse_labels, std_infit_mse_labels)
+
+# Display the rater fit results for the first six raters using the head() function:
+head(rater.fit_results)
 ```
 
 Now that we have created a data frame with the rater-specific fit statistics, we can summarize the results.
@@ -476,8 +497,10 @@ Horizontal lines are used to assist in the interpretation of the values of the s
 As a final step in our fit analysis, we will construct plots of expected and observed response functions. By default, the TAM package combines the item facet (in this case, raters), with levels of the other facets (in this case, language subgroups) when constructing expected and observed response function plots. 
 
 For brevity, we only plot the expected and observed response functions for three selected rater*item combinations. Readers can adjust the "items=" specification to construct plots for elements of interest for their analyses.
+
 ```{r}
-plot(RS_MFR_model, type = "expected", items = c(1:3))
+raters.to.plot <- c(1:3)
+plot(RS_MFR_model, type = "expected", items = raters.to.plot)
 ```
 
 ## Summarize the results in tables
@@ -565,7 +588,7 @@ RS_MFRM_Table1
 ```
 
 ### Rater calibration table:
-Table 2 is a table that summarizes the overall calibrations of individual students. For data sets with manageable sample sizes such as the Liking for Science data example in this chapter, we recommend reporting details about each item in a table similar to this one.
+Table 2 is a table that summarizes the overall calibrations of individual raters. For data sets with manageable sample sizes such as the style ratings example in this chapter, we recommend reporting details about each element of explanatory facets (e.g., individual raters) in a table similar to this one.
 
 ```{r}
 # Calculate the average rating for each rater:
@@ -617,10 +640,7 @@ RS_MFRM_Table3[, -1] <- round(RS_MFRM_Table3[,-1], digits = 2)
 head(RS_MFRM_Table3)
 ```
 
-
-
-
-# Example 2:  Running the Many-Facet Rasch Model for Long-Format Data using the TAM Package
+# Example 2:  Running the Many-Facet Rasch Model for Long-Format Data using the TAM Package (Partial Credit MFRM)
 
 In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[] Cheng please add reference to Robitzsch et al., 2020) for data that are stored in long format. We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
 
@@ -631,6 +651,7 @@ Compared to the first example in this chapter, our description of the second exa
 ## Getting Started
 
 Before proceeding with the analysis, readers should ensure that they have installed and loaded all three of the packages that were described earlier in this chapter: *TAM*, *WrightMap*, and *psych*:
+
 ```{r}
 citation("TAM")
 # install.packages("TAM")
@@ -666,35 +687,34 @@ summary(writing)
 From the summary of *writing*, we can see there are no missing data. In addition, we can get a general sense of the scales, range, and distribution of each variable in the data set.
 
 We can see that student identification numbers range from 3 to 1574. We can identify the number of unique students in the data using the following code:
+
 ```{r}
 length(unique(writing$student))
 ```
-There are 372 unique student identification numbers in our data. Returning to the summary of the writing data, we can see that the minimum rating on each domain was *x* = 1, and the maximum rating was *x* = 4. 
 
-Next, let's prepare the data for analysis with TAM by shifting the scale so that the lowest category equals zero. We accomplish this by subtracting 1 from the ratings.
-```{r}
-writing[, -c(1:3)] <- writing[, -c(1:3)] - 1
-```
+There are 372 unique student identification numbers in our data. Returning to the summary of the writing data, we can see that the minimum rating on each domain was *x* = 0, and the maximum rating was *x* = 3. 
 
-## RS-MFRM Analysis with Long-Format Data
+## Partial Credit MFRM Analysis with Long-Format Data
 
-First, we will analyze the writing data using a RS-MFRM. The facets in this model will include raters and domains:
+We will analyze the writing data using a Partial Credit MFRM (PC-MFRM), where we specify rating scale category thresholds separately for the domains in the writing assessment. The facets in this model will include raters and domains.
 
 -[] Cheng, please add Equation 6.3 here.
 
-In Equation 6.3, $\theta_n$ and $\tau_k$ are defined as in Equation 6.1 and Equation 6.2. $\delta_m$ is the logit-scale location for domain *j*. Lower domain locations indicate relatively easy domains, and higher domain locations indicate relatively difficult domains.
+In Equation 6.3, $\theta_n$ and $\lambda_i$ are defined as in Equation 6.1 and Equation 6.2. $\delta_m$ is the logit-scale location for domain *m*. Lower domain locations indicate relatively easy domains, and higher domain locations indicate relatively difficult domains. $\tau_ik$ is the rating scale category threshold where there is an equal probability for a rating in category *k* and category *k*-1, specific to rater 
+*i*. This formulation of the PC-MFR model allows us to examine each rater's use of the rating scale separately.
 
-### Specify the MFRM:
+### Specify the PC-MFRM:
 
-We specify the MFRM from Equation 6.3 in an object for use with TAM as follows. First, we specify a name for the model object(*style_RS_MFRM*), which is defined using the tilde symbol (~), followed by the facet names. As a reminder, the model must include a facet named *item*; in our example, the item facet is made up of raters. We also include the student language subgroup (*language*) as a facet. Finally, we specify *step* to indicate the RS model. The components of the model are separated by addition signs (+) because the facets are additive. We will specify interactions in a MFRM later in this chapter.
+We specify the PC-MFRM from Equation 6.3 in an object for use with TAM as follows. First, we specify a name for the model object(*writing_PC_MFRM*), which is defined using the tilde symbol (~), followed by the facet names. As a reminder, the model must include a facet named *item*; in our example, the item facet is made up of domains, because the domains make up the columns in our long-format response matrix. We also include raters as a facet. Finally, we multiply the rater facet by *step* to indicate the PC model.
 
 With long format data, we need to ensure that the person identification numbers (in this case, student ids) are sorted from low to high before we can run the analysis.
 
 ```{r}
-writing <-writing[order(writing$student),]
+writing <- writing[order(writing$student),]
 ```
 
 Next, we specify the components of the RS-MFRM. In this long-format data analysis, the TAM package will treat domains as "items" because they make up the columns of the response matrix. Therefore, our facets object includes raters.
+
 ```{r}
 # identify the facets besides items :
 writing.facets <- writing[, c("rater"), drop=FALSE] 
@@ -705,25 +725,553 @@ writing.pid <- writing$student
 # identify the response matrix:
 writing.resp <- writing[,-c(1:3)]
 
-# specify the RS-MFR model:
-RS.writing.formula <- ~ item + rater + step 
+# specify the PC-MFR model:
+PC.writing.formula <- ~ item + (rater * step)
 
-# Run the RS-MFR model:
-
-RS_MFRM_writing.model <- tam.mml.mfr(resp=writing.resp,facets=writing.facets,
-                             formulaA=RS.writing.formula, pid=writing.pid)
-
-# Request a summary of the model results:
-summary(writing.model)
-
-# Save the facet estimates:
-facet.estimates <- writing.model$xsi.facets # all facets together
-
-domain.estimates <- subset(facet.estimates, facet.estimates$facet == "item")
-
-rater.estimates <- subset(facet.estimates, facet.estimates$facet == "rater")
-
-threshold.estimates <- subset(facet.estimates, facet.estimates$facet == "step")
+# Run the PC-MFR model:
+writing_PC_MFRM.model <- tam.mml.mfr(resp=writing.resp, facets=writing.facets,
+                             formulaA=PC.writing.formula, pid=writing.pid, verbose = FALSE)
 ```
 
+Analysts who are interested in model-fit indices or other details that are included in the summary of the MFRM may request it using the summary() function:
+```{r}
+summary(writing_PC_MFRM.model)
+```
+
+Because we used a PC formulation of the MFRM, the thresholds were estimated separately for each rater. We save the facet estimates for domains and raters as we did in the first example. However, for the threshold estimates, we extract the values labeled "step:rater".
+
+```{r}
+# Save the facet estimates:
+facet.estimates <- writing_PC_MFRM.model$xsi.facets # all facets together
+
+# Extract results for each facet separately:
+domain.estimates <- subset(facet.estimates, facet.estimates$facet == "item")
+rater.estimates <- subset(facet.estimates, facet.estimates$facet == "rater")
+
+# Extract rater-specific threshold estimates:
+threshold.estimates <- subset(facet.estimates, facet.estimates$facet == "step:rater")
+```
+
+### Domain facet results
+
+We will center the domain parameter estimates for ease of interpretation, as we have done previously with item estimates. Then, we will request a summary of the centered domain locations.
+
+```{r}
+uncentered.domain.locations_PCMFR <- domain.estimates$xsi
+centered.domain.locations_PCMFR <- scale(uncentered.domain.locations_PCMFR, scale = FALSE)
+summary(centered.domain.locations_PCMFR)
+```
+
+From the summary of domain locations, we can see that the domain difficulty estimates range from -0.90 for the easiest domain to 0.67 for the most difficult domain.
+
+### Rater subgroup facet results
+We do not need to adjust the location of the raters to account for centering the domain facet because the facet locations are already centered at zero logits. We will examine the rater estimates using the *summary()* function.
+```{r}
+summary(rater.estimates$xsi)
+```
+
+The rater location estimates from this model range from -0.54 to 0.76.
+
+### Threshold estimates
+Because we used a PC formulation of the MFRM, we have separate estimates of the rating scale category thresholds for each rater. In the following code, we organize the threshold values in a matrix with separate rows for each rater. Then, we print the first six rows of the threshold matrix to the console to preview it.
+ 
+```{r}
+n.raters <- nrow(rater.estimates)
+n.thresholds <- max(writing.resp)
+
+rater_taus <- matrix(data = NA, nrow = n.raters, ncol = n.thresholds)
+
+for(rater.number in 1:n.raters){
+  
+  rater.threshold.labels <- NULL
+  for(s in 1:n.thresholds){
+   
+    if(rater.number < 10) rater.threshold.labels[s] <- paste("step", s, ":rater_", rater.number, "_", sep = "")
+    
+        if(rater.number >= 10) rater.threshold.labels[s] <- paste("step", s, ":rater_", rater.number, sep = "")
+    
+  }
+    rater.thresholds <- subset(threshold.estimates, 
+                           threshold.estimates$parameter == rater.threshold.labels)
+    
+    rater.thresholds.t <- t(rater.thresholds$xsi)
+  
+  rater_taus[rater.number,] <- rater.thresholds.t[1,]
+}
+
+rater_taus <- cbind.data.frame(c(1:n.raters), rater_taus)
+names(rater_taus) <- c("rater", "t1", "t2", "t3")
+
+head(rater_taus)
+```
+### Student estimates
+Next, we will estimate student locations and store the results in an object called *student.ach*. We will then store the student identification numbers, location estimates, and standard errors in a new object called *student.locations_PCMFR*.
+
+```{r results='hide'}
+student.ach <- tam.wle(writing_PC_MFRM.model, progress = FALSE)
+student.locations_PCMFR <- cbind.data.frame(student.ach$pid, student.ach$theta, student.ach$error)
+names(student.locations_PCMFR) <- c("id", "theta", "se")
+```
+
+To interpret the student locations in the same frame of reference as our centered domain locations, we need to subtract the original (uncentered) domain mean location from the student locations:
+```{r}
+student.locations_PCMFR$theta_adjusted <- (student.locations_PCMFR$theta - mean(uncentered.domain.locations_PCMFR))
+summary(student.locations_PCMFR$theta_adjusted)
+```
+
+From the summary of the adjusted student achievement locations, we can see that student achievement ranges from -7.30 logits for the student with the lowest achievement estimate to 7.75 for the student with the highest achievement estimate. On average, the students were located higher (M = 0.72) than the average domain location (M = 0.00).
+
+### Plot a Wright Map
+
+Next, we will plot a Wright Map to display the locations of the parameter estimates for our PC-MFR model. To do this, we need to manipulate the location estimate objects into the format required for the WrightMap package. 
+
+The *wrightMap()* function requires us to store the rater location estimates as a matrix that shows rater-specific threshold locations. We already did this when we created the *rater_taus* object earlier. 
+
+Next, we need to store the adjusted student locations and the domain locations in a single data frame. Doing so will allow us to plot the locations for students and domains in the same Wright Map. We store these values in a data frame object called *persons*.
+```{r}
+persons.domains <- cbind.data.frame(student.locations_PCMFR$theta_adjusted,
+                            domain.estimates$xsi)
+```
+
+Finally, we can plot the Wright map using the *wrightMap()* function. We specify several graphical parameters to modify the appearance of the plot.
+```{r}
+wrightMap(thetas = persons.domains,
+          axis.persons = "Students",
+          dim.names = c("Students", "Domains"), 
+          thresholds = rater_taus[,-1],
+          show.thr.lab	= TRUE,
+          label.items.rows= 2,
+          label.items = rater.estimates$parameter,
+          axis.items = "Raters",
+          main.title = "Partial Credit Many-Facet Rasch Model Wright Map:\n Style Ratings",
+          cex.main = .6)
+```
+
+In this *Wright Map* display, the results from the PC-MFRM analysis of the writing assessment ratings are summarized graphically using the same format as the first example in this chapter. The major differences between the models is that domains are included as a facet instead of student subgroups, and each rater has a unique set of threshold estimates.
+
+## Evaluate model-data fit
+
+Next, we will evaluate model-data fit using the same procedures as described earlier in this chapter.
+
+### Evaluate unidimensionality
+
+First, we will construct a residual matrix.
+
+```{r}
+resids <- IRT.residuals(writing_PC_MFRM.model)
+
+# Extract the raw residuals from the residuals object:
+resid.matrix <- as.data.frame(resids$residuals)
+```
+
+The resulting residual matrix (*resid.matrix*) contains unstandardized residuals for each rater in combination with each domain and each student. Next, we will calculate standardized residuals and save them in a matrix.
+```{r}
+std.resid.matrix <- as.data.frame(resids$stand_residuals)
+```
+
+The resulting standardized residual matrix (*std.resid.matrix*) contains standardized residuals for each rater in combination with each domain and each student. Next, we will calculate the variance in observations due to Rasch-model-estimated locations:
+```{r}
+# Variance of the observations: VO
+observations.vector <- as.vector(as.matrix(writing.resp))
+VO <- var(observations.vector)
+VO
+
+# Variance of the residuals: VR
+residuals.vector <- as.vector(resid.matrix)
+VR <- var(residuals.vector)
+VR
+
+# Raw variance explained by Rasch measures: (VO - VR)/VO
+(VO - VR)/VO
+
+# Express the result as a percent:
+((VO - VR)/VO) * 100
+```
+
+Our analysis indicates that approximately 71.61% of the variance in ratings can be explained by the PC-MFRM estimates of student, domain, and rater locations on the logit scale that represents the latent variable. 
+
+### Principal Components Analysis of Standardized Residual Correlations
+
+Next, we will evaluate the MFRM requirement for unidimensionality using a principal components analysis (PCA) of standardized residual correlations.
+
+```{r}
+pca <- pca(std.resid.matrix, nfactors = ncol(ratings), rotate = "none")
+
+contrasts <- c(pca$values[1], pca$values[2], pca$values[3], pca$values[4], pca$values[5])
+
+plot(contrasts, ylab = "Eigenvalues for Contrasts", xlab = "Contrast Number", main = "Contrasts from PCA of Standardized Residual Correlations \n(PC-MFRM)", cex.main = .8)
+```
+
+In this example, there are three contrasts that have an eigenvalue larger than Linacre's (2016) critical value of 2.00. This result suggests potential multi-dimensionality. We will explore the results further using residual-based fit statistics.
+
+### Summaries of Residuals: Infit & Outfit Statistics
+
+Next, we will evaluate model-data fit for individual elements of our facets (students, subgroups, and raters) using numeric summaries of the residuals associated with each element, as we have done in previous chapters.
+
+***Student fit***
+
+First, we will examine student fit using numeric infit and outfit statistics. We can request these statistics for each student using the *tam.personfit()* function. We will store the student fit results in an object called *student.fit*, and then request a summary of the results.
+```{r}
+student.fit <- tam.personfit(writing_PC_MFRM.model)
+summary(student.fit)
+```
+
+On average, the MSE outfit and infit statistics are slightly lower than the expected value of 1 (Mean Outfit = 0.96, Mean Infit = 0.97). The average values of the standardized fit statistics are also slightly lower than their expected value of 0 (Mean Std. Outfit = -0.26, Mean Std. Infit = -0.21). For both the standardized and unstandardized fit statistics, there is notable variability across the student sample. This result suggests that model-data fit varies for individual students.
+
+***Domain and rater fit***
+
+We can also examine model-data fit related to the domain and rater facets. In the TAM package, fit analysis for facets besides the object of measurement uses combinations of elements within facets. In our example, fit statistics are calculated for rater*subgroup combinations.
+```{r}
+rater.domain.fit <- msq.itemfit(writing_PC_MFRM.model)
+rater.domain.fit <- rater.domain.fit$itemfit
+summary(rater.domain.fit)
+```
+
+As needed, researchers can also examine model-data fit statistics specific to levels of explanatory facets, such as domains in the case of the current example. This can be accomplished by calculating summaries of fit statistics within domains. The code below  calculates averages of rater fit within each domain. For a more detailed view of rater fit within domains, we create an object with domain-specific rater fit statistics in the subsequent code block.
+
+```{r}
+ngroups <- nrow(domain.estimates)
+
+domain.fit <- matrix(data = NA, nrow = ncol(domain.estimates), ncol = 4 )
+
+for(domain.number in 1:ncol(domain.estimates)){
+  
+  d <- domain.estimates$parameter[domain.number]
+  
+  rater.domain.labels <- NULL
+  
+    for(r in 1:nrow(rater.estimates)){
+      rater_label <- rater.estimates$parameter[r]
+    rater.domain.labels[r] <- paste(d, "-", rater_label, sep = "")
+    }
+
+  rater.domain.fit.subset <- subset(rater.domain.fit, rater.domain.fit$item %in% rater.domain.labels) 
+  
+  # add the fit statistics to the matrix:  
+  domain.fit[domain.number, ] <-  c(mean(rater.domain.fit.subset$Infit),
+                                   mean(rater.domain.fit.subset$Outfit),
+                                   mean(rater.domain.fit.subset$Infit_t),
+                                   mean(rater.domain.fit.subset$Outfit_t))
+  }
+
+# add domain labels to the domain.fit object:
+
+domain.fit <- cbind.data.frame(domain.estimates$parameter,
+                               domain.fit)
+
+# Convert the domain fit results to a data frame object and add meaningful column names:  
+domain.fit_results <- as.data.frame(domain.fit)
+
+names(domain.fit_results) <- c("domain", "Mean_Infit_MSE", "Mean_Outfit_MSE", 
+                               "Mean_Std_Infit", "Mean_Std_Outfit")
+```
+
+Now that we have created a data frame with the domain-specific (average) fit statistics, we can summarize the results.
+```{r}
+summary(domain.fit_results)
+```
+
+Finally, it may be useful to examine fit statistics as they apply to individual raters. This can be accomplished by extracting rater-specific fit statistics within each domain. The code below calculates rater fit statistics within each subgroup.
+```{r}
+n.domains <- nrow(domain.estimates)
+
+rater.fit <- matrix(data = NA, nrow = ncol(ratings), ncol = (n.domains * 4) + 1 )
+
+for(rater.number in 1:nrow(rater.estimates)){
+  
+  if(rater.number < 10) r <- paste("rater_", rater.number, "_", sep = "")
+  if(rater.number >= 10) r <- paste("rater_", rater.number, sep = "")
+  
+  rater.domain.labels <- NULL
+    
+  for(d in 1:nrow(domain.estimates)){
+      domain_label <- domain.estimates$parameter[d]
+    rater.domain.labels[d] <- paste(domain_label, "-", r, sep = "")
+    }
+
+  rater.domain.fit.subset <- subset(rater.domain.fit, rater.domain.fit$item %in% rater.domain.labels) 
+  
+  # calculate rater-specific fit statistics:
+  rater.outfit <- rater.domain.fit.subset$Outfit
+  rater.infit <- rater.domain.fit.subset$Outfit
+  rater.std.outfit <- rater.domain.fit.subset$Outfit_t
+  rater.std.infit <- rater.domain.fit.subset$Infit_t
+       
+  # add the fit statistics to the matrix:  
+  rater.fit[rater.number, ] <-  c(rater.number, rater.outfit, rater.infit,
+                                  rater.std.outfit, rater.std.infit)
+}
+
+
+# Convert the rater fit results to a dataframe object and add meaningful column names:  
+
+rater.fit_results <- as.data.frame(rater.fit)
+
+infit_mse_labels <- NULL
+for(domain in 1:n.domains){
+  d <- domain.estimates$parameter[domain]
+  infit_mse_labels[domain] <- paste("Infit_MSE_", d, sep = "")
+}
+
+outfit_mse_labels <- NULL
+for(domain in 1:n.domains){
+  d <- domain.estimates$parameter[domain]
+  outfit_mse_labels[domain] <- paste("outfit_MSE_", d, sep = "")
+}
+
+std_infit_mse_labels <- NULL
+for(domain in 1:n.domains){
+  d <- domain.estimates$parameter[domain]
+  std_infit_mse_labels[domain] <- paste("std_infit_MSE_", d, sep = "")
+}
+
+std_outfit_mse_labels <- NULL
+for(domain in 1:n.domains){
+  d <- domain.estimates$parameter[domain]
+  std_outfit_mse_labels[domain] <- paste("std_outfit_MSE_", d, sep = "")
+}
+
+names(rater.fit_results) <- c("Rater", outfit_mse_labels, infit_mse_labels,
+                              std_outfit_mse_labels, std_infit_mse_labels)
+```
+
+Now that we have created a data frame with the rater-specific fit statistics, we can summarize the results.
+```{r}
+summary(rater.fit_results)
+```
+
+***Graphical displays of residuals***
+
+Next we will construct plots of standardized residuals associated with individual raters within each domain. 
+```{r}
+# Before constructing the plots, find the maximum and minimum values of the standardized residuals to set limits for the axes:
+max.resid <- ceiling(max(std.resid.matrix))
+min.resid <- ceiling(min(std.resid.matrix))
+
+# The code below will produce plots of standardized residuals for selected raters as listed in raters.to.plot:
+raters.to.plot <- c(1:2)
+
+for(rater.number in raters.to.plot){
+  
+  if(rater.number < 10) r <- paste("rater_", rater.number, "_", sep = "")
+  if(rater.number >= 10) r <- paste("rater_", rater.number, sep = "")
+  
+  rater.domain.labels <- NULL
+    
+  for(d in 1:nrow(domain.estimates)){
+      domain_label <- domain.estimates$parameter[d]
+    rater.domain.labels[d] <- paste(domain_label, "-", r, sep = "")
+    }
+
+  std.resid.subset <- subset(resids$stand_residuals, select = rater.domain.labels)
+  
+  for(domain.number in 1:n.domains){
+    domain.name <- domain.estimates$parameter[domain.number]
+    plot(std.resid.subset[, domain.number], ylim = c(min.resid, max.resid),
+       main = paste("Standardized Residuals for Rater ", rater.number, " Domain = ", domain.name, sep = ""),
+       ylab = "Standardized Residual", xlab = "Person Index")
+    abline(h = 0, col = "blue")
+    abline(h=2, lty = 2, col = "red")
+    abline(h=-2, lty = 2, col = "red")
+  
+      legend("topright", c("Std. Residual", "Observed = Expected", "+/- 2 SD"), pch = c(1, NA, NA), 
+             lty = c(NA, 1, 2),
+             col = c("black", "blue", "red"), cex = .8)
+  }
+}
+```
+
+A separate plot is produced for each rater*domain combination. 
+
+***Expected and observed response functions***
+
+Finally, we will construct plots of expected and observed response functions. By default, the TAM package combines the item facet (in this case, domains), with levels of the other facets (in this case, raters) when constructing expected and observed response function plots. 
+
+For brevity, we only plot the expected and observed response functions for three selected rater*domain combinations. Readers can adjust the "items=" specification to construct plots for elements of interest for their analyses.
+```{r}
+plot(writing_PC_MFRM.model, type = "expected", items = c(1:3))
+```
+
+## Summarize the results in tables
+As a final step, we will create tables that summarize the calibrations of the students, domains, raters, and rating scale category thresholds.
+
+Table 1 is an overall model summary table that provides an overview of the logit scale locations, standard errors and fit statistics for all of the facets in the analysis. This table provides a quick overview of the location estimates and numeric model-data fit statistics for the facets in a MFRM.
+
+Because of the estimation procedure for the MFRM in TAM, fit statistics are combined for the item facet (in this case, domains) and other facets. As a result, the fit statistics in this table will be the same for the rater facet and the domain facets.
+
+### Model summary table:
+```{r}
+PC_MFRM_summary.table.statistics <- c("Logit Scale Location Mean",
+                              "Logit Scale Location SD",
+                              "Standard Error Mean",
+                              "Standard Error SD",
+                              "Outfit MSE Mean",
+                              "Outfit MSE SD",
+                              "Infit MSE Mean",
+                              "Infit MSE SD",
+                              "Std. Outfit Mean",
+                              "Std. Outfit SD",
+                              "Std. Infit Mean",
+                              "Std. Infit SD")
+                              
+PC_MFRM_student.summary.results <- rbind(mean(student.locations_PCMFR$theta_adjusted),
+                              sd(student.locations_PCMFR$theta_adjusted),
+                              mean(student.locations_PCMFR$se),
+                              sd(student.locations_PCMFR$se),
+                              mean(student.fit$outfitPerson),
+                              sd(student.fit$outfitPerson),
+                              mean(student.fit$infitPerson),
+                              sd(student.fit$infitPerson),
+                              mean(student.fit$outfitPerson_t),
+                              sd(student.fit$outfitPerson_t),
+                              mean(student.fit$infitPerson_t),
+                              sd(student.fit$infitPerson_t))
+
+
+PC_MFRM_domain.summary.results <- rbind(mean(domain.estimates$xsi),
+                              sd(domain.estimates$xsi),
+                              mean(domain.estimates$se.xsi),
+                              sd(domain.estimates$se.xsi),
+                              mean(rater.domain.fit$Outfit),
+                              sd(rater.domain.fit$Outfit),
+                              mean(rater.domain.fit$Infit),
+                              sd(rater.domain.fit$Infit),
+                              mean(rater.domain.fit$Outfit_t),
+                              sd(rater.domain.fit$Outfit_t),
+                              mean(rater.domain.fit$Infit_t),
+                              sd(rater.domain.fit$Infit_t))
+
+PC_MFRM_rater.summary.results <- rbind(mean(rater.estimates$xsi),
+                              sd(rater.estimates$xsi),
+                              mean(rater.estimates$se.xsi),
+                              sd(rater.estimates$se.xsi),
+                              mean(rater.domain.fit$Outfit),
+                              sd(rater.domain.fit$Outfit),
+                              mean(rater.domain.fit$Infit),
+                              sd(rater.domain.fit$Infit),
+                              mean(rater.domain.fit$Outfit_t),
+                              sd(rater.domain.fit$Outfit_t),
+                              mean(rater.domain.fit$Infit_t),
+                              sd(rater.domain.fit$Infit_t))
+
+
+# Round the values for presentation in a table:
+PC_MFRM_student.summary.results_rounded <- round(PC_MFRM_student.summary.results, digits = 2)
+
+PC_MFRM_domain.summary.results_rounded <- round(PC_MFRM_domain.summary.results, digits = 2)
+
+PC_MFRM_rater.summary.results_rounded <- round(PC_MFRM_rater.summary.results, digits = 2)
+
+
+PC_MFRM_Table1 <- cbind.data.frame(PC_MFRM_summary.table.statistics,
+                           PC_MFRM_student.summary.results_rounded,
+                           PC_MFRM_domain.summary.results_rounded,
+                           PC_MFRM_rater.summary.results_rounded)
+                           
+# add descriptive column labels:
+names(PC_MFRM_Table1) <- c("Statistic", "Students", "Domains", "Raters")  
+
+# Print the table to the console
+PC_MFRM_Table1
+```
+
+### Rater calibration table:
+Table 2 is a table that summarizes the overall calibrations of individual raters. For data sets with manageable sample sizes such as the writing assessment example in this chapter, we recommend reporting details about each level of explanatory facets (e.g., individual raters) in a table similar to this one.
+
+```{r}
+# Calculate the average rating for each rater:
+n.raters <- nrow(rater.estimates)
+
+Avg_Rating_rater.domains <- NULL
+
+for(rater.number in 1:n.raters){
+  rater.subset <- subset(writing, writing$rater == rater.number)
+  rater.ratings <- as.vector(c(rater.subset$style,
+                     rater.subset$org, rater.subset$conv,
+                     rater.subset$sent_form))
+  Avg_Rating_rater.domains[rater.number] <- mean(rater.ratings)
+}
+
+
+
+# Combine rater calibration results in a table:
+
+PC_MFRM_Table2 <- cbind.data.frame(c(1:nrow(rater.estimates)), 
+                           Avg_Rating_rater.domains,
+                           rater.estimates$xsi,
+                           rater.estimates$se.xsi,
+                           rater_taus[,-1],
+                           rater.fit_results[, -1])
+
+names(PC_MFRM_Table2) <- c("Rater ID", "Average Rating", "Rater Location","Rater SE",
+                           "Threshold 1", "Threshold 2", "Threshold 3", names(rater.fit_results[, -1]))                           
+
+# Sort Table 2 by rater severity:
+PC_MFRM_Table2 <- PC_MFRM_Table2[order(-PC_MFRM_Table2$`Rater Location`),]
+
+# Round the numeric values (all columns except the first one) to 2 digits:
+PC_MFRM_Table2[, -1] <- round(PC_MFRM_Table2[,-1], digits = 2)
+
+# Print the first six rows of the table to the console
+head(PC_MFRM_Table2)
+```
+
+### Domain calibration table:
+Table 3 is a table that summarizes the overall calibrations of individual domains For data sets with manageable sample sizes such as the writing assessment example in this chapter, we recommend reporting details about each element of explanatory facets (e.g., individual domains) in a table similar to this one.
+
+```{r}
+# Calculate the average rating for each domain:
+Avg_Rating_domains <- colMeans(writing.resp)
+
+
+# Combine domain calibration results in a table:
+
+PC_MFRM_Table3 <- cbind.data.frame(domain.estimates$parameter, 
+                           Avg_Rating_domains,
+                           domain.estimates$xsi,
+                           domain.estimates$se.xsi,
+                           domain.fit_results[, -1])
+
+names(PC_MFRM_Table3) <- c("Domain", "Average Rating", "Domain Location","Domain SE",
+                            names(domain.fit_results[, -1]))                           
+
+# Sort Table 3 by domain difficulty:
+PC_MFRM_Table3 <- PC_MFRM_Table3[order(-PC_MFRM_Table3$`Domain Location`),]
+
+# Round the numeric values (all columns except the first one) to 2 digits:
+PC_MFRM_Table3[, -1] <- round(PC_MFRM_Table3[,-1], digits = 2)
+
+# Print the table to the console
+PC_MFRM_Table3
+```
+
+### Student calibration table:
+Finally, Table 4 provides a summary of the student calibrations. When there is a relatively large person sample size, it may be more useful to present the results as they relate to individual persons or subsets of the person sample as they are relevant to the purpose of the analysis.
+
+```{r}
+# Calculate average ratings for students:
+Person_Avg_Rating <- apply(writing.resp, 1, mean)
+
+# Combine person calibration results in a table:
+PC_MFRM_Table4 <- cbind.data.frame(rownames(student.locations_PCMFR),
+                          Person_Avg_Rating,
+                          student.locations_PCMFR$theta_adjusted,
+                          student.locations_PCMFR$se,
+                          student.fit$outfitPerson,
+                          student.fit$outfitPerson_t,
+                          student.fit$infitPerson,
+                          student.fit$infitPerson_t)
+                          
+names(PC_MFRM_Table4) <- c("Student ID", "Average Rating", "Student Location","Student SE","Outfit MSE","Std. Outfit", "Infit MSE","Std. Infit")
+
+# Round the numeric values (all columns except the first one) to 2 digits:
+PC_MFRM_Table4[, -1] <- round(PC_MFRM_Table4[,-1], digits = 2)
+
+# Print the first six rows of the table to the console
+head(PC_MFRM_Table4)
+```
+
+
+*** SW Stopped Editing Here on 5/4/21 ***
+*** Note: At the end of this chapter, show different formulations for MFRMs.***
 
