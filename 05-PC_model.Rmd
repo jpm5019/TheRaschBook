@@ -538,7 +538,7 @@ Now we can run the PCM with our design matrix. After we run the model, we will r
 -[] omit the model run output, keep the summary output.
 ```{r}
 PCM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "items",
-                         control=list(maxiter=500), version=2 )
+                         control=list(maxiter=500), version=2 , verbose = FALSE)
 
 summary(PCM.science_JMLE)
 ```
@@ -563,14 +563,14 @@ summary(centered.item.locations_JMLE)
 
 We need to find the rating scale category threshold parameter estimates. The following code extracts the adjacent-categories threshold parameters from the item parameter table (*item1*) that is stored in the *PCM.science_JMLE* object, and then stores them in an object called *tau.estimates_JMLE*:
 ```{r}
+# Specify the number of thresholds as the maximum observed score in the response matrix (be sure the responses begin at category 0):
+n.thresholds <- max(science.responses)
+
 # Save the threshold estimates, which begin in column 5 of the item1 table:
 tau.estimates_JMLE <- PCM.science_JMLE$item1[, c(5 : (4+n.thresholds))]
 
 # Specify the number of items that were included in the analysis:
 n.items <- ncol(science.responses)
-
-# Specify the number of thresholds as the maximum observed score in the response matrix (be sure the responses begin at category 0):
-n.thresholds <- max(science.responses)
 
 # Create a matrix in which to store the adjacent-category threshold values for each item:
 tau.matrix_JMLE <- matrix(data = NA, ncol = n.thresholds, nrow = n.items)
