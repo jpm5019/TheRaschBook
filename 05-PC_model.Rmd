@@ -13,17 +13,20 @@ $$ln\left[\frac{P_{n_i(xi=k)}}{P_{n_i(xi=k-1)}}\right]=\theta_{n}-\delta_{i}-\ta
 In the PCM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau_ik$ is the rating scale category threshold specific to item i. As in the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. Thresholds($τ_{k}$) are estimated empirically for each element of one facet, such as items. They are not necessarily evenly spaced or ordered as expected. In contrast to the RSM, the location and relative distance between thresholds is estimated separately for each item.
 
 ### Model Requirements
+
 The PCM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. In practice, researchers should evaluate item responses for evidence that they approximate Rasch model requirements before examining model estimates in detail. Chapter 3 included details about model-data fit analysis procedures that can also be applied to the PCM. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons based on the PCM. In addition, we encourage readers to use rating scale analysis techniques to consider additional issues related to rating scale functioning with the PCM; we discuss these methods in detail in Chapter X.
 
-# Running the Partial Credit Model in R
+## Running the Partial Credit Model in R
 
 In the next section, we provide a step-by-step demonstration of a PCM analysis using R. We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
-## Example Data: Liking for Science
+### Example Data: Liking for Science
+
 The example data set for this chapter is the same data set that we used in Chapter 4 of this book. The data include a group of 75 children's responses to the 25-item *Liking for Science* questionnaire, which was designed to measure their attitudes toward science activities. The data were published in Wright and Masters (1982). Each item stem included a science activity, and three response options: 0 = *Dislike*, 1 = *Not Sure/Don't Care*, and 2 = *Like*, such that responses in higher categories indicated more-favorable attitudes toward science activities.
 
-## Prepare for the Analyses: Install and Load Packages
-We will use the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020) as the first package with which we demonstrate PCM analyses. We selected eRm for the first illustrations in the current chapter because it includes functions for applying the PCM that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. At the end of this chapter, we have included an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre, 2020a) and Facets (Linace, 2020b). 
+### Prepare for the Analyses: Install and Load Packages
+
+We will use the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020) as the first package with which we demonstrate PCM analyses. We selected eRm for the first illustrations in the current chapter because it includes functions for applying the PCM that are relatively straightforward to use and interpret. Please note that the "eRm" package uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. At the end of this chapter, we have included an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre, 2020a) and Facets (Linace, 2020b). 
 
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 
@@ -34,7 +37,7 @@ citation("eRm")
 library("eRm")
 ```
 
-## Getting Started
+### Getting Started
 
 Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function *read.csv()* to import the comma-separated values (.csv) file that contains the Liking for Science survey data. We encourage readers to use their preferred method for importing data files into R or R Studio.
 
@@ -56,7 +59,7 @@ From the summary of *science*, we can see there are no missing data. We can also
 
 We can see that Student ID numbers range from 1 to 75, and that the maximum rating on the items was *x* = 2. Importantly, we can see that for Item 12, the minimum rating was *x* = 1, and no ratings in the first category (*x* = 0) were observed in our sample. In contrast to the RSM analysis in Chapter 4, we can include this item in our analysis with the PCM because the PCM estimates rating scale category thresholds separately for each item. 
 
-## Run the Partial Credit Model
+### Run the Partial Credit Model
 
 Next we need to isolate the item response matrix from the descriptive variables in the data (in this case, student IDs). To do this, we will create an object made up of only the item responses by removing the first variable (*student*) from the data:
 
@@ -72,7 +75,8 @@ We will use *summary()* to calculate descriptive statistics for the *science.res
 summary(science.responses)
 ```
 
-Now, we are ready to run the PCM on the Liking for Science response data. We will use the *PCM()* function to run the model and store the results in an object called *PCM.science*. Then, we will request a summary of the model results using the *summary()* function:
+Now, we are ready to run the PCM on the Liking for Science response data. We will use the *PCM()* function to run the model and store the results in an object called *PCM.science*. Then, we will request a summary of the model results using the *summary()* function.
+
 ```{r}
 PCM.science <- PCM(science.responses, se = TRUE)
 summary(PCM.science)
@@ -81,7 +85,7 @@ When we run the PCM on the science data, we see a message indicating that the re
 
 The summary of the PCM output includes the Conditional Log-likelihood statistic, details about the number of iterations and model parameters, and a table with item parameters, their standard errors, and confidence intervals. It is important to note that the item parameters included in this preliminary output are *item easiness* parameters--*not* item difficulty parameters. We will examine item difficulty parameters in detail later in our analysis.
 
-# Plot a Wright Map to visualize item and person locations:
+### Plot a Wright Map to visualize item and person locations
 
 Next, we will create a Wright Map to display our model results. This plot will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the eRm package function *plotPImap* on the model object (*PCM.science*). 
 
@@ -97,7 +101,7 @@ The central panel of the figure shows item difficulty locations on the logit sca
 
 The upper panel of the figure shows a histogram of person (in this case, children) location estimates on the logit scale. Small vertical lines on the x-axis of this histogram show the points on the logit scale at which information (variance) is maximized for the sample of persons and items in the analysis. These lines can be omitted by adding "irug = FALSE" as an argument in the *plotPImap()* call.
 
-## Examine item parameters
+### Examine item parameters
 
 Next, we will examine the item parameter estimates. In the PCM, item difficulty and threshold locations are combined. The eRm package reports item-specific rating scale category threshold parameters for each item as part of the *PCM()* function that we used to estimate the model. We extract these parameters, print them to the console, and calculate summary statistics for them with the following code:
 
@@ -107,14 +111,15 @@ item.locations
 summary(item.locations)
 ```
 
-Because of the nature of the estimation process used in eRm, the item.locations object that we just created does not include the location estimate for the first threshold for the first item. One can calculate the location for item 1 by subtracting the sum of the item parameter estimates from zero. In the following code, we find the location for item 1 threshold 1, and then create a new object with all of the item + threshold locations:
+Because of the nature of the estimation process used in eRm, the item.locations object that we just created does not include the location estimate for the first threshold for the first item. One can calculate the location for item 1 by subtracting the sum of the item parameter estimates from zero. In the following code, we find the location for item 1 threshold 1, and then create a new object with all of the item + threshold locations.
+
 ```{r}
 i1 <- 0 - sum(item.locations[(1:length(item.locations)) - 1])
 item.locations.all <- c(i1, item.locations[(1:length(item.locations)) - 1])
 item.locations.all
 ```
 
-Alternatively, one can apply the *thresholds()* function to the model object in order to find the item locations from the PCM. This procedure provides item location estimates ($\delta\) as well as estimates of the item location combined with rating scale category thresholds ($\delta\ + $\tau\). However, the values produced with this function are not centered at zero logits, so a little manipulation is required to obtain the centered values. In the following code chunk, we apply the *thresholds()* function to obtain the uncentered item location estimates and then calculate centered item locations:
+Alternatively, one can apply the *thresholds()* function to the model object in order to find the item locations from the PCM. This procedure provides item location estimates ($\delta\) as well as estimates of the item location combined with rating scale category thresholds ($\delta\ + $\tau\). However, the values produced with this function are not centered at zero logits, so a little manipulation is required to obtain the centered values. In the following code chunk, we apply the *thresholds()* function to obtain the uncentered item location estimates and then calculate centered item locations.
 
 ```{r}
 # Apply thresholds() function to the model object in order to obtain item locations (not centered at zero logits):
@@ -163,17 +168,21 @@ summary(delta.tau.se)
 We will examine graphical displays of item difficulty using item response functions. With the PCM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the first 5 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once. Readers who need to specify plots for different items can update the "items=" specification to produce the desired plots.
 
 ```{r}
-plotICC(PCM.science, ask = FALSE, items = c(1:5))
+graphics.off()
+plotICC(PCM.science, ask = FALSE, item.subset = c(1:5))
 ```
+
 This code generates plots of rating scale category probabilities for each item. In each item-specific plot, the x-axis is the logit scale that represents the latent variable; this scale represents favorability toward science activities in our example. The y-axis is the probability for a rating in each category, conditional on person locations on the latent variable. Separate lines in different colors show the conditional probability for each category of responses observed for the item of interest. Because we used the PCM, the overall shape of the curves and the relative distance between the curves is unique for each items--reflecting the individual set of rating scale category thresholds for each item. In addition, the location of the curves on the x-axis shifts to reflect each item's overall difficulty level.
 
-#### Note about item fit
+**Note about item fit**
+
 In the eRm package, it is necessary to calculate person parameters *before* item fit statistics can be calculated. Accordingly, we will proceed with a brief examination of person parameters before we conduct item fit analyses. In practice, we recommend examining item fit before examining and interpreting item locations in detail.
 
 ### Examine person parameters
+
 The next step in our analysis is to calculate and examine person location parameters (i.e., person achievement or ability estimates). With the CMLE method that is used in eRm, person parameters are calculated *after* the item locations are estimated.
 
-In the following code, we calculate person locations that correspond to our model using the *person.parameter()* function with the PCM model object (*PCM.science*). This function also produces standard errors for the person locations. We store the person location estimates and their standard errors in a new data frame called *person.locations*, and then request a summary of the estimation results using *summary()*:
+In the following code, we calculate person locations that correspond to our model using the *person.parameter()* function with the PCM model object (*PCM.science*). This function also produces standard errors for the person locations. We store the person location estimates and their standard errors in a new data frame called *person.locations*, and then request a summary of the estimation results using the *summary()* function.
 
 ```{r}
 # Calculate person parameters:
@@ -191,9 +200,11 @@ summary(person.locations)
 The estimation procedure in eRm does not directly produce parameter estimates for persons with extreme scores. In our example, extreme scores would result from a child giving a response of *x* = 0 to all items or a child giving a response of *x* = 2 to all items. For these students, a standard error is not calculated. In our example, Child 2 had an extreme score because they gave a rating in category 2 to all items.
 
 ### Examine item fit statistics
+
 Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the same procedures in that chapter to examine item fit in detail for the PCM.
 
-To calculate numeric item fit statistics, we will use the function *itemfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called *item.fit*, and then format this object as a dataframe for easy manipulation and exporting:
+To calculate numeric item fit statistics, we will use the function *itemfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called *item.fit*, and then format this object as a dataframe for easy manipulation and exporting.
+
 ```{r}
 item.fit.results <- itemfit(person.locations.estimate)
 item.fit <- cbind.data.frame(item.fit.results$i.infitMSQ,
@@ -203,7 +214,8 @@ item.fit <- cbind.data.frame(item.fit.results$i.infitMSQ,
 names(item.fit) <- c("infit_MSE", "outfit_MSE", "std_infit", "std_outfit")
 ```
 
-Next, we will request a summary of the numeric item fit statistics using the *summary()* function:
+Next, we will request a summary of the numeric item fit statistics using the *summary()* function.
+
 ```{r}
 summary(item.fit)
 ```
@@ -211,7 +223,9 @@ summary(item.fit)
 The *item.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each item included in the analysis.These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of item fit.
 
 ### Examine person fit statistics
-Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a dataframe for easy manipulation and exporting:
+
+Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a dataframe for easy manipulation and exporting.
+
 ```{r}
 person.fit.results <- personfit(person.locations.estimate)
 person.fit <- cbind.data.frame(person.fit.results$p.infitMSQ,
@@ -221,18 +235,21 @@ person.fit <- cbind.data.frame(person.fit.results$p.infitMSQ,
 names(person.fit) <- c("infit_MSE", "outfit_MSE", "std_infit", "std_outfit")
 ```
 
-Next, we will request a summary of the numeric person fit statistics using the *summary()* function:
+Next, we will request a summary of the numeric person fit statistics using the *summary()* function.
+
 ```{r}
 summary(person.fit)
 ```
 The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of person fit.
 
-## Summarize the results in tables
+## Summarize the Results in Tables
+
 As a final step, we will create tables that summarize the calibrations of the persons, items, and rating scale category thresholds.
 
 Table 1 is an overall model summary table that provides an overview of the logit scale locations, standard errors, fit statistics, and reliability statistics for items and persons. This type of table is useful for reporting the results from Rasch model analyses because it provides a quick overview of the location estimates and numeric model-data fit statistics for the items and persons in the analysis.
 
-### Model summary table:
+### Model summary table
+
 -[] Cheng - can you please add reliability of separation statistics to these tables??
 ```{r}
 PCM_summary.table.statistics <- c("Logit Scale Location Mean",
@@ -287,7 +304,8 @@ PCM_Table1 <- cbind.data.frame(PCM_summary.table.statistics,
 names(PCM_Table1) <- c("Statistic", "Items", "Persons")  
 ```
 
-### Item calibration table:
+### Item calibration table
+
 Table 2 is a table that summarizes the overall calibrations of individual items. For data sets with manageable sample sizes such as the Liking for Science data example in this chapter, we recommend reporting details about each item in a table similar to this one.
 
 ```{r}
@@ -313,7 +331,8 @@ PCM_Table2 <- PCM_Table2[order(-PCM_Table2$`Item Location`),]
 PCM_Table2[, -1] <- round(PCM_Table2[,-1], digits = 2)
 ```
 
-### Person calibration table:
+### Person calibration table
+
 Finally, Table 3 provides a summary of the person calibrations. When there is a relatively large person sample size, it may be more useful to present the results as they relate to individual persons or subsets of the person sample as they are relevant to the purpose of the analysis.
 
 In our person calibration table, we have included the results for all of the children with non-extreme scores. This includes all of the children in our sample except Child 2.
@@ -338,14 +357,13 @@ names(PCM_Table3) <- c("Child ID", "Average Rating", "Person Location","Person S
 PCM_Table3[, -1] <- round(PCM_Table3[,-1], digits = 2)
 ```
 
-
-# PCM Application with Marginal Maximum Likelihood Estimation in TAM
+## PCM Application with Marginal Maximum Likelihood Estimation in TAM
 
 The next section of this chapter includes an illustration of PCM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). After this illustration, we also demonstrate the use of TAM to estimate the PCM with Joint Maximum Likelihood Estimation (JMLE). These illustrations use the Liking for Science data set that we described earlier in this chapter.
 
 Except where there are significant differences between the eRm and TAM procedures, we provide fewer details about the analysis procedures and interpretations in this section compared to the first illustration.
 
-## Getting Started
+### Getting Started
 
 To get started with the TAM package, view the citation information, and then install and load it into your R environment using the following code:
 
@@ -365,11 +383,11 @@ citation("WrightMap")
 library("WrightMap") 
 ```
 
-## Prepare the data for analysis
+### Prepare the data for analysis
 
 If you have not already imported the Liking for Science data and prepared it for analysis as described earlier in this chapter and isolated the response matrix, please do so before continuing with the TAM analyses.  
 
-## Run the Partial Credit Model
+### Run the Partial Credit Model
 
 In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds) from our analysis, we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*:
 
@@ -377,17 +395,17 @@ In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories threshold
 design.matrix <- designMatrices(resp=science.responses, modeltype="PCM", constraint = "items")$A
 ```
 
-Now we can run the RSM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function.
+Now we can run the PCM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function.
 -[] omit the model run output, keep the summary output.
-```{r}
-PCM.science_MMLE <- tam.mml(science.responses, irtmodel="PCM", A = design.matrix, constraint = "items") 
 
+```{r}
+PCM.science_MMLE <- tam.mml(science.responses, irtmodel="PCM", A = design.matrix, constraint = "items", verbose = FALSE) 
 summary(PCM.science_MMLE)
 ```
 
 The summary of the PCM output includes details about the number of iterations, global model fit statistics, a summary of the model parameters, and several other statistics. 
 
-## Examine item parameters
+### Examine item parameters
 
 Next, we will examine the item difficulty location and rating scale category threshold estimates. As of this writing, the TAM package does not provide centered item estimates (mean set to zero logits) with the design matrix that we specified in our analysis. As a result, we need to manually center the item locations at zero logits for ease in interpretation. We will use the same procedure that we used earlier to do the centering.
 
@@ -405,7 +423,8 @@ centered.item.locations_MMLE <- scale(uncentered.item.locations_MMLE, scale = FA
 summary(centered.item.locations_MMLE)
 ```
 
-We need to find the rating scale category threshold parameter estimates for our rating scale. In our example with the Liking for Science data, our rating scale has three categories, so there are two threshold parameters for each item in which all three categories are observed. The following code extracts the adjacent-categories threshold parameters from the *item_ parameter table_irt* component of the *PCM.science_MMLE* object, and then stores them in an object called *tau.estimates_MMLE*:
+We need to find the rating scale category threshold parameter estimates for our rating scale. In our example with the Liking for Science data, our rating scale has three categories, so there are two threshold parameters for each item in which all three categories are observed. The following code extracts the adjacent-categories threshold parameters from the *item_ parameter table_irt* component of the *PCM.science_MMLE* object, and then stores them in an object called *tau.estimates_MMLE*.
+
 ```{r}
 # View the item parameter table (note that the overall item location shown here is not centered):
 PCM.science_MMLE$item_irt
@@ -416,20 +435,22 @@ tau.estimates_MMLE <- PCM.science_MMLE$item_irt[, c(4 : (3+n.thresholds))]
 # View the threshold estimates:
 tau.estimates_MMLE
 ```
+
 Note that the threshold values shown in the *tau.estimates_MMLE* must be added to the overall item location to obtain the location on the logit scale at which there is an equal probability for a rating in the corresponding adjacent categories. These values correspond to the graphical displays of rating scale category probabilities for the PCM.
 
 ### Examine item response functions (rating scale category probability plots)
 
-Next, we will examine rating scale category probability plots for the 25 items in our analysis.
+Next, we will examine rating scale category probability plots for the items in our analysis. To save space, we have only printed the plots for the first five items. Analysts can request plots for different items using the *items= =* argument in the *plot()* function.
 
 ```{r}
 #graphics.off()
-plot(PCM.science_MMLE, type="items")
+plot(PCM.science_MMLE, type="items", items = c(1:5))
 ```
 
 This code generates plots of rating scale category probabilities for each item. These plots have the same interpretation as the rating scale category probability plots that we generated using eRm, where the x-axis is the logit scale that represents the latent variable, the y-axis is the probability for a rating in each category, and individual lines show the conditional probability for a rating in each category.
 
-## Evaluate item fit
+### Evaluate item fit
+
 Next, we will examine numeric and graphical item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
 
 -[] omit the MMLE_fit output, keep the summary output.
@@ -442,7 +463,7 @@ summary(item.fit_MMLE)
 
 The *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. The *Outfit* and *Infit* statistics are the *MSE* versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics. TAM also reports a *p* value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*). Please see Chapter 3 for a detailed consideration of procedures for evaluating item fit in detail, including the use of graphical tools to evaluate item fit.
 
-## Examine person parameters
+### Examine person parameters
 
 Now we will examine person parameter estimates. With the MMLE procedure in TAM, person parameters are calculated after the item estimates using the *tam.wle()* function. The following code calculates person parameter estimates and saves them in an object called person.locations_MMLE.
 
@@ -471,7 +492,8 @@ summary(person.locations_MMLE)
 
 If analysts do not prefer to use the zero-centered item location estimates, they should also use the original person parameters without subtracting the mean item location.
 
-## Evaluate person fit
+### Evaluate person fit
+
 We can evaluate person fit using the *tam.personfit()* function from TAM. This function uses the model object as an argument and it produces infit and outfit statistics, as well as standardized versions of these statistics, for each person in the response matrix.
 
 ```{r}
@@ -479,7 +501,7 @@ person.fit.results_MMLE <- tam.personfit(PCM.science_MMLE)
 summary(person.fit.results_MMLE)
 ```
 
-## Plot the Wright Map:
+### Plot the Wright Map
 
 Next, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the WrightMap package function *IRT.WrightMap* on the model object (*PCM.science_MMLE*). 
 
@@ -501,6 +523,7 @@ for(item.number in 1:n.items){
 thetas_MMLE <- person.locations_MMLE$theta_adjusted
 
 # Plot the Variable Map
+graphics.off()
 wrightMap(thetas = thetas_MMLE,
         thresholds = thresholds_MMLE,
          main.title = "Liking for Science Partial Credit Model Wright Map (MMLE)",
@@ -518,17 +541,18 @@ Even though it is not appropriate to fully interpret item and person locations o
 
 A quick glance at the Wright Map suggests that, on average, the persons are located higher on the logit scale compared to the average item threshold locations. In addition, there appears to be a relatively wide spread of person and item locations on the logit scale, such that the Liking for Science questionnaire appears to be a useful tool for identifying differences in children's attitudes toward science activities as well as the difficulty to find each of the activities as favorable. Finally, the distance between rating scale category thresholds displays notable variability across the items in the survey. This finding supports the use of the PCM to analyze the Liking for Science data.
 
-# PCM Application with Joint Maximum Likelihood Estimation in TAM
+## PCM Application with Joint Maximum Likelihood Estimation in TAM
 
 In the following section, we provide an illustration of PCM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Joint Maximum Likelihood Estimation (JMLE). Except where there are significant differences between the MMLE and JMLE procedures, we provide fewer details about the analysis procedures and interpretations compared to the eRm and TAM MMLE illustrations.
 
-## Getting Started
+### Getting Started
 
 Please make sure that you have installed the TAM and WrightMap packages and loaded them into your working environment. You will also need to have imported the Liking for Science data and isolated the response matrix as described earlier in the chapter before you run the R code in the following sections.
 
-## Run the Rating Scale Model
+### Run the Rating Scale Model
 
-We will use the *tam.jml()* function to run the PCM with JMLE and store the results in an object called *PCM.science_JMLE*. As with the MMLE procedure, in order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds), we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*:
+We will use the *tam.jml()* function to run the PCM with JMLE and store the results in an object called *PCM.science_JMLE*. As with the MMLE procedure, in order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds), we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*.
+
 ```{r}
 design.matrix <- designMatrices(resp=science.responses, modeltype="PCM", constraint = "items")$A
 ```
@@ -543,7 +567,7 @@ PCM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "
 summary(PCM.science_JMLE)
 ```
 
-## Examine item parameters
+### Examine item parameters
 
 Next, we will examine the item difficulty location and rating scale category threshold estimates. As described earlier, we need to manually center the item locations at zero logits for ease in interpretation. 
 
@@ -561,7 +585,8 @@ centered.item.locations_JMLE <- scale(uncentered.item.locations_JMLE, scale = FA
 summary(centered.item.locations_JMLE)
 ```
 
-We need to find the rating scale category threshold parameter estimates. The following code extracts the adjacent-categories threshold parameters from the item parameter table (*item1*) that is stored in the *PCM.science_JMLE* object, and then stores them in an object called *tau.estimates_JMLE*:
+We need to find the rating scale category threshold parameter estimates. The following code extracts the adjacent-categories threshold parameters from the item parameter table (*item1*) that is stored in the *PCM.science_JMLE* object, and then stores them in an object called *tau.estimates_JMLE*.
+
 ```{r}
 # Specify the number of thresholds as the maximum observed score in the response matrix (be sure the responses begin at category 0):
 n.thresholds <- max(science.responses)
@@ -589,21 +614,21 @@ for(item.number in 1:n.items){
   }
 }
 
-
 # View the threshold estimates:
 tau.matrix_JMLE
 ```
 
 ### Examine item response functions (rating scale category probability plots)
 
-Next, we will examine rating scale category probability plots for the 25 items in our analysis. These plots have the same format and interpretation as in the previous examples in this chapter.
+Next, we will examine rating scale category probability plots for the items in our analysis. These plots have the same format and interpretation as in the previous examples in this chapter. To save space, we only printed the plots for the first five items. Analysts can request plots for different items using the *items = * argument in the *plot()* function.
 
 ```{r}
-#graphics.off()
-plot(PCM.science_JMLE, type="items")
+graphics.off()
+plot(PCM.science_JMLE, type="items", items = c(1:5))
 ```
 
-## Evaluate item fit
+### Evaluate item fit
+
 Next, we will examine numeric item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
 
 ```{r}
@@ -614,7 +639,7 @@ summary(item.fit_JMLE)
 ```
 The *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each item estimate.
 
-## Examine person parameters
+### Examine person parameters
 
 Now we will examine person parameter estimates. With the JMLE procedure in TAM, person parameters are calculated at the same time as the item parameters. This means that we can extract the person parameter estimates from the model object without any additional iterations. The following code calculates person parameter estimates and saves them in an object called person.locations_JMLE.
 
@@ -641,7 +666,8 @@ summary(person.locations_JMLE)
 
 If analysts do not prefer to use the zero-centered item location estimates, they can use the original person parameters without subtracting the mean item location.
 
-## Evaluate person fit
+### Evaluate person fit
+
 Next, we will examine numeric person fit indices using the *tam.fit()* function from TAM. We will save the results in an object called *person.fit_JMLE* and then view summary statistics for the fit statistics.
 
 ```{r}
@@ -653,7 +679,7 @@ summary(person.fit_JMLE)
 
 The *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each person location estimate.
 
-## Plot the Wright Map:
+### Plot the Wright Map
 
 Finally, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the WrightMap package function *IRT.WrightMap* on the model object (*PCM.science_JMLE*). 
 
@@ -675,6 +701,7 @@ for(item.number in 1:n.items){
 thetas_JMLE <- person.locations_JMLE$theta_adjusted
 
 # Plot the Variable Map
+graphics.off()
 wrightMap(thetas = thetas_JMLE,
         thresholds = thresholds_JMLE,
          main.title = "Liking for Science Partial Credit Model Wright Map (JMLE)",
@@ -683,7 +710,7 @@ wrightMap(thetas = thetas_JMLE,
 ```
 
 
-# Example results section based on the eRm CMLE results:
+## Example results section based on the eRm CMLE results
 
 ```{r}
 # Print Table 1:
@@ -700,7 +727,7 @@ Specifically, Table 1 summarizes the calibration of the children with non-extrem
 ```{r}
 # Print Table 2:
 knitr::kable(
-  RSM_Table2, booktabs = TRUE,
+  PCM_Table2, booktabs = TRUE,
   caption = 'Item Calibrations'
 )
 ```
