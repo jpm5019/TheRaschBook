@@ -10,9 +10,9 @@ We encourage readers to note that model-data fit analysis in modern measurement 
 
 When researchers evaluate model-data fit for Rasch models, they do so for the purpose of evaluating the psychometric quality of assessment procedures. In addition, such analyses often include analyses related to issues of reliability, validity, and fairness. At the end of this chapter, we demonstrate techniques for calculating reliability indices using a Rasch approach. For additional discussions about these topics and demonstrations of how Rasch measurement indicators align with these foundational areas for evaluating psychometric procedures, we refer readers to the following resources:
 
-- Engelhard,George. and Stefanie A.Wind. "Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments." Taylor & Francis, 2018.
+- Engelhard, George. and Wind, Stefanie A.  *Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments.* Taylor & Francis, 2018.
     
-- Wolfe,Edward W. and Everrett V. Smith Jr. "Instrument development tools and activities for measure validation using Rasch models: Part I - instrument development tools." *Journal of Applied Measurement*, 8(1), 2007a, 97–123.
+- Wolfe, Edward W. and Everrett V. Smith Jr. "Instrument development tools and activities for measure validation using Rasch models: Part I - instrument development tools." *Journal of Applied Measurement*, 8(1), 2007a, 97–123.
     
 - Wolfe,Edward W. and Everrett V. Smith Jr. "Instrument development tools and activities for measure validation using Rasch models: Part II--validation activities." *Journal of Applied Measurement*, 8(2), 2007b, 204–234.
 
@@ -26,17 +26,15 @@ Deviations from model expectations can alert researchers to individual elements 
 
 We focus on residual-based model-data fit indicators that are theoretically aligned with the Rasch measurement framework. Specifically, we demonstrate how analysts can calculate numeric and graphical summaries of *residuals*, or discrepancies between observed item responses and responses that would be expected given model estimates. In the framework of Rasch measurement theory, researchers typically examine residuals as they relate to individual items, persons, or other elements of the assessment context. These residual analyses provide insight into the degree to which the responses associated with elements of interest reflect model expectations. 
 
-Residuals (Yni) are calculated as follows:
+Residuals ($Y_{ni}$) are calculated as follows:
 
-Formula 3.1
-	$$Y_{ni} = X{ni} - E{ni}$$
+\begin{equation}\tag{3.1} Y_{ni} = X{ni} - E{ni} \end{equation}
 
 where $X{ni}$ is the observed response from person n on item i, and $E{ni}$ is the model-expected value of the response for person n on item i.
 
 To evaluate the magnitude of residuals, it is often useful to transform them to standardized residuals ($Z{ni}$) as follows:
 
-Formula 3.2
-	$$Z{ni} = Y{ni}/\sqrt{W{ni}}$$,
+\begin{equation}\tag{3.2} Z{ni} = Y{ni}/\sqrt{W{ni}} \end{equation}
 
 where $W{ni}$ is the variance of the observed response.
 
@@ -67,7 +65,6 @@ We will also use the "psych" package (Revelle, 2016) to perform a principal comp
 ```{r}
 citation("psych")
 # install.packages("psych")
-#install.packages("psych")
 library("psych")
 ```
 
@@ -202,11 +199,12 @@ pca <- pca(std.resids, nfactors = ncol(transreas.responses), rotate = "none")
 contrasts <- c(pca$values[1], pca$values[2], pca$values[3], pca$values[4], pca$values[5])
 plot(contrasts, ylab = "Eigenvalues for Contrasts", xlab = "Contrast Number", main = "Contrasts from PCA of Standardized Residual Correlations")
 ```
+
 In this example, all of the contrasts have eigenvalues that are smaller than Linacre's (2016) critical value of 2.00. This result suggests that the correlations among the model residuals primarily reflect randomness (i.e., noise)--thus providing evidence that the responses adhere to the Rasch model requirement of unidimensionality.
 
 ### Summaries of Residuals: Infit & Outfit Statistics
 
-As a next step in evaluating the quality of our measurement procedure, we will calculate numeric fit statistics for the individual elements in the assessment procedure: items and persons. The most popular Rasch fit statistics for practical purposes are based on sums of squared residuals. There are two major categories of residual summary statistics: Unweighted (Outfit) and Weighted (Infit) mean square error (MSE) statistics. Unstandardized (χ2) & standardized versions (Z) are available in most Rasch software programs. In this analysis, we will focus on the Unstandardized (χ2) versions of these statistics.
+As a next step in evaluating the quality of our measurement procedure, we will calculate numeric fit statistics for the individual elements in the assessment procedure: items and persons. The most popular Rasch fit statistics for practical purposes are based on sums of squared residuals. There are two major categories of residual summary statistics: Unweighted (Outfit) and Weighted (Infit) mean square error (MSE) statistics. Unstandardized ($χ^2$) & standardized versions (Z) are available in most Rasch software programs. In this analysis, we will focus on the Unstandardized ($χ^2$) versions of these statistics.
 
 ***Outfit Mean Square Error***
 
@@ -237,19 +235,23 @@ There is considerable disagreement among measurement scholars about how to class
 In practice, researchers usually begin individual Rasch fit analyses by examining fit statistics for items, rather than persons. There are two main reasons for this order. First, there is usually more data available with which to evaluate each item compared to each person, so the interpretation of fit statistics is less likely to be influenced by random fluctuations (i.e., noise). Second, it is usually easier to manage item misfit during a routine analysis compared to person misfit. For example, content validity concerns notwithstanding, in the case of severe item misfit, it may be possible to remove an item from an analysis and re-estimate parameters; removing persons from an analysis may warrant relatively more consideration. Alternatively, evidence of item misfit could signal data quality issues such as scoring or coding errors that could be resolved prior to additional analysis. 
 
 The eRm package includes the *itemfit()* function, which calculates Rasch model infit MSE and outfit MSE statistics for items. This function is applied to the object that includes person parameters. Earlier in this chapter, we applied *itemfit()* to the *student.locations* object and we stored the results in an object called *item.fit*. We will examine the *item.fit* object in detail now by printing the results to our console:
+
 ```{r}
 item.fit
 ```
+
 The resulting table includes infit MSE and outfit MSE statistics for each item (labeled as "MSQ" statistics in the eRm package). The table also includes standardized versions of infit and outfit in the form of *t* statistics, along with an estimate of item discrimination (i.e., item slope). Item discrimination is not a parameter in the Rasch model, but it is calculated here as an additional indicator of fit to the Rasch model for individual items. 
 
 ***Person Fit Statistics***
 
 Next we will calculate numeric person fit statistics in the form of infit MSE and outfit MSE. In the eRm package, *personfit()* can be applied to the object with person parameter estimates to calculate these statistics. In our example, we will apply *personfit()* to the *student.locations* object and save the results in an object called *person.fit*. Because we have a relatively large sample, we will use the *summary()* function to explore the infit and outfit statistics rather than printing the results to the console like we did for the item fit statistics.
+
 ```{r}
 person.fit <- personfit(student.locations)
 summary(person.fit$p.infitMSQ)
 summary(person.fit$p.outfitMSQ)
 ```
+
 From these results, we can see that there is some variability in person fit, with infit MSE statistics ranging from 0.41 to 2.25, and outfit MSE statistics ranging from 0.17 to 7.30.
 
 For discussions on interpreting person fit statistics in the context of Rasch measurement theory, we refer readers to the following resources:
@@ -301,6 +303,7 @@ Horizontal lines are used to assist in the interpretation of the values of the s
 ### Empirical Item Response Functions
 
 A second useful graphical display for evaluating model-data fit is a plot of model-expected item response functions (IRFs) overlaid with empirical (observed) IRFs. IRFs are sometimes called item characteristic curves (ICCs); these plots illustrate the relationship between the latent variable and the probability for a certain response (e.g., a correct response). Plotting the model-expected IRFs in the same display as the empirical IRFs provides insight into the frequency, magnitude, direction, and logit-scale location of expected an unexpected responses associated with individual items. To create these plots, we will apply the *plotICC()* function from the eRm package in a for-loop so that we can create plots for multiple items. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the *items.to.plot* object.
+
 ```{r}
 items.to.plot <- c(1:3)
 for(item.number in items.to.plot){
@@ -320,21 +323,21 @@ Our transitive reasoning data include two facets: items and persons. Accordingly
 
 ***Reliability of Item Separation***
 The reliability of item separation statistic is calculated using a ratio of true (adjusted) variance to observed variance for items:
-formula 3.3
-$$Rel_{I}=\left(SA_{I}^{2}\right) /\left(SD_{I}^{2}\right)$$
+
+\begin{equation}\tag{3.3} Rel_{I}=\left(SA_{I}^{2}\right) /\left(SD_{I}^{2}\right) \end{equation}
+
 Where:
 	  *SA^2^~I~* : Adjusted item variability;
-    Calculated by subtracting error variance for Item from total Item          variance: $$ SA_{I}^{2} = SD_{I}^{2} - SE_{I}^{2}$$
+    Calculated by subtracting error variance for Item from total Item          variance: \begin{equation}\tag{3.4} SA_{I}^{2} = SD_{I}^{2} - SE_{I}^{2} \end{equation}
 	  *SD^2^~I~* : Total Item variance
 	  
 ### Reliability of Person Separation
 The reliability of person separation statistic is calculated using a ratio of true (adjusted) variance to observed variance for persons:
 
-formula 3.4
-$$Rel_{p}=\left(SA_{P}^{2}\right) /\left(SD_{P}^{2}\right)$$
+\begin{equation}\tag{3.5} Rel_{p}=\left(SA_{P}^{2}\right) /\left(SD_{P}^{2}\right) \end{equation}
 Where:
 	  *SA^2^~P~* : Adjusted person variability;
-    Calculated by subtracting error variance for persons from total person variance: $$ SA_{P}^{2} = SD_{P}^{2} - SE_{P}^{2}$$
+    Calculated by subtracting error variance for persons from total person variance: \begin{equation}\tag{3.6} SA_{P}^{2} = SD_{P}^{2} - SE_{P}^{2} \end{equation}
 	  *SD^2^~P~* : Total person variance
 	  
 The "eRm" package includes the function *SepRel()* to calculate the person separation reliability statistic. This function is applied to the person parameter object. We apply the *SepRel()* function to our *student.locations* object::
@@ -345,7 +348,7 @@ summary(SepRel(student.locations))
 
 ## Rasch Model Fit Analysis with Marginal Maximum Likelihood Estimation in TAM
 
-Next, we demonstrate model-data fit analyses using the TAM package (Robitzsch, Kiefer, & Wu, 2020) with Marginal Maximum Likelihood Estimation (MMLE). The procedures for evaluating model-data fit with TAM are quite similar to those that we presented earlier in this chapter with eRm. As a result, we do not provide detailed annotations or discussions of the results from these analyses.
+Next, we demonstrate model-data fit analyses using the TAM package (Robitzsch et al. 2020) with Marginal Maximum Likelihood Estimation (MMLE). The procedures for evaluating model-data fit with TAM are quite similar to those that we presented earlier in this chapter with eRm. As a result, we do not provide detailed annotations or discussions of the results from these analyses.
 
 ### Prepare for the Analyses: Install and Load Packages
 ```{r}
@@ -590,7 +593,7 @@ Rasch, Georg. *Probabilistic models for some intelligence and achievement tests(
 
 Reckase, Mark D. "Unifactor Latent Trait Models Applied to Multifactor Tests: Results and Implications." *Journal of Educational and Behavioral Statistics*, 4(3),1979, 207–230. https://doi.org/10.3102/10769986004003207
 
-Revelle William. *psych: Procedures for Psychological, Psychometric, and Personality Research.* Northwestern University, Evanston, Illinois. R package version 2.0.12, 2020. https://CRAN.R-project.org/package=psych.
+William, Revelle. *psych: Procedures for Psychological, Psychometric, and Personality Research.* Northwestern University, Evanston, Illinois. R package version 2.0.12, 2020. https://CRAN.R-project.org/package=psych.
 
 Smith, Jr.Everett. “Detecting and evaluating the impact of multidimensionality using item fit statistics and principal component analysis of residuals.” *Journal of Applied Measurement*, 3(2),2020, 205–231.
 

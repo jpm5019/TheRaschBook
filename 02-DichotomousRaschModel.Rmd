@@ -5,7 +5,7 @@ output:
 ---
 # Dichotomous Rasch Model {#Dich_Rasch_model}
 
-This chapter provides a basic overview of the dichotomous Rasch model, along with guidance for analyzing data with the dichotomous Rasch model using R. We use data from a transitive reasoning assessment presented by Sijtsma and Molenaar (2002) to illustrate the analysis using Conditional Maximum Likelihood Estimation (CMLE) with the Extended Rasch Modeling ("eRm") package (Mair et al., 2020). Then, we illustrate the application of the dichotomous Rasch model using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE) with the Test Analysis Modules ("TAM") package (Robitzsch et al., 2020). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise and resources for further study.
+This chapter provides a basic overview of the dichotomous Rasch model, along with guidance for analyzing data with the dichotomous Rasch model using R. We use data from a transitive reasoning assessment presented by Sijtsma and Molenaar (2002) to illustrate the analysis using Conditional Maximum Likelihood Estimation (CMLE) with the Extended Rasch Modeling ("eRm") package (Mair et al. 2020). Then, we illustrate the application of the dichotomous Rasch model using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE) with the Test Analysis Modules ("TAM") package (Robitzsch et al. 2020). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise and resources for further study.
 
 ***Overview of the Dichotomous Rasch Model***
 
@@ -13,8 +13,7 @@ The *dichotomous Rasch model* (Rasch 1960) is the simplest model in the Rasch fa
 
 The equation for the dichotomous Rasch model can be expressed in log-odds form as follows:
 
-Formula 2.1
-$$\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}$$ 
+\begin{equation}\tag{2.1}\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}\end{equation}
 
 The Rasch model predicts the probability of person *n* on item *i* providing a correct or positive (x = 1), rather than an incorrect or negative (x = 0) response, given person locations (i.e., ability, achievement, *θn*) and item locations (i.e., difficulty, *δi*), as expressed on the logit scale.
 
@@ -58,7 +57,7 @@ In the next section, we provide a step-by-step demonstration of a dichotomous Ra
 
 ### Prepare for the Analyses: Install and Load Packages
 
-We selected eRm for the first illustration in the current chapter because it includes functions for applying the dichotomous Rasch model that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. Later in this chapter, we have included illustrations of dichotomous Rasch model analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre, 2020a) and Facets (Linace, 2020b). 
+We selected eRm for the first illustration in the current chapter because it includes functions for applying the dichotomous Rasch model that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. Later in this chapter, we have included illustrations of dichotomous Rasch model analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al. 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre 2020a) and Facets (Linace 2020b). 
 
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 ```{r}
