@@ -1,20 +1,130 @@
-
 # Basics of Differential Item Functioning {#DIF}
 
-## Purpose
+This chapter provides a basic overview of differential item functioning (DIF) along with methods for detecting DIF with Rasch models using R. We will use the eRm package (Mair et al., 2020) and the TAM package (Robitzch et al., 2020) for the analyses in this chapter.
 
-The purpose of this lab is to introduce students to some basic differential item functioning (DIF) analyses based on Rasch models. We will use the "eRm" package for most of the analyses in this lab.
+## What is Differential Item Functioning (DIF)?
 
-## R-lab 1: DIF Analysis with the Dichotomous Rasch Model
+DIF occurs when examinees who are members of different groups (e.g., demographic subgroups) who have the *same location* on the latent variable have *different* probabilities for a response in a given category (e.g., a correct response or a rating of "agree") on an item. In the context of Rasch measurement theory (Rasch, 1960), DIF means that an item has a different location (i.e., a different level of difficulty) across subgroups by more than the standard error. Rasch analyses of DIF typically focus on detecting *uniform DIF*, which occurs when the distance between item response functions (IRFs) is constant between subgroups.
 
-### Prepare the R-package and data set
+Figure 7.1 illustrates uniform DIF between two groups of examinees for a dichotomous item (x = 0, 1). The x-axis shows examinee locations on the latent variable, and the y-axis shows the probability for a correct or positive response (P(x=1)). The dashed line shows the IRF for Group 1, and the dashed line shows IRF for Group 2. This item shows DIF because examinees who have the same location on the latent variable have different probabilities for a correct or positive response.
+
+Figure 7.1
+```{r}
+IRF <- function(b_group1, b_group2){
+  colors <- c("purple", "seagreen3")
+  theta <- seq(-3, 3, .1)
+  P1 <- 1 / (1 + exp(-(theta - b_group1)))
+  P2 <- 1 / (1 + exp(-(theta - b_group2)))
+  plot(theta, P1, type="l", xlim=c(-3,3), ylim=c(0,1),
+       xlab="Theta", ylab="P(X=1)", col = colors[1], lty = 1,
+       main = "Item i")
+  lines(theta, P2, col = colors[2], lty = 2)
+  legend("bottomright", c("Group 1", "Group 2"), lty = c(1, 2),
+         col = c(colors[1], colors[2]))
+}
+
+IRF(b_group1 = 1, b_group2 = -1)
+```
+
+DIF analysis in modern measurement theory in general, as well as in the context of Rasch models in particular, is nuanced. The interpretation and use of DIF indices varies along with the individual purpose and consequences of each assessment. As a result, it is critical that analysts consider the unique context in which they are evaluating DIF when they interpret the results from DIF analyses. In addition, it is often useful to consider DIF from multiple perspectives, including different statistical techniques for identifying DIF. 
+
+It is also important to note that when DIF occurs, it does not always imply a threat to fairness from a psychometric perspective (AERA et al., 2014). Instead, evidence of DIF is a *starting place* for additional research, such as qualitative analyses of item content or the assessment context, to evaluate whether DIF may reflect a threat to fairness. 
+
+In this chapter, we demonstrate techniques that analysts can use to identify DIF within the Rasch measurement theory framework. Our presentation is not exhaustive and there are many other methods that can be used to supplement those that we demonstrate here. We encourage interested readers to consult the resources listed throughout the chapter, as well as the resource list at the end of this chapter, to learn more about identifying DIF within the context of Rasch measurement theory.
+
+## Methods for Identifying DIF with Rasch models
+
+From the perspective of Rasch measurement theory, DIF poses a serious threat to measurement quality because it implies a lack of invariance. When DIF occurs, the requirements for invariant measurement are not met (see Chapter 1). Accordingly, DIF can be interpreted as not only a potential threat to fairness, but also as a violation of Rasch model requirements (Hagquist & Andrich, 2017).
+
+Researchers have proposed several methods for identifying DIF within the framework of Rasch measurement theory. Methods that are routinely used in practical applications of Rasch measurement theory can be broadly classified into three approaches: (1) Comparison of group-specific item estimates; (2) Interaction analyses between item locations and examinee subgroup indicators; and (3) Methods based on analysis of variance with residuals. There are numerous other approaches to detecting DIF that are beyond the scope of this volume. We encourage readers who are interested in learning more about DIF to consult the resources that we have listed at the end of this chapter.
+
+***Comparing Group-Specific Item Estimates***
+
+A popular method for identifying DIF within the framework of Rasch measurement theory is to calculate group-specific estimates of item difficulty, and compare those estimates to see if they are meaningfully different. In order to meaningfully compare item difficulty estimates between two groups, it is necessary to adjust (i.e., equate) the item difficulty measures for one group so that they are on the same scale as the item difficulty measures for the second group. The equated differences in item difficulty estimates  reflect the distance between group-specific IRFs (Raju, 1988).
+
+Some software programs, including the eRm package (Mair et al., 2020), perform this adjustment procedure automatically as part of their DIF functions. In other cases, the analyst needs to perform the adjustment procedure manually before item locations can be compared. For a discussion of the adjustment procedure, please see Luppescu (1995).
+
+After group-specific item difficulty estimates have been calculated and adjusted for the purpose of comparison, it is necessary to consider the degree to which differences in item difficulty estimates are large enough to indicate substantial DIF. Researchers who use Rasch models to evaluate DIF evaluate these differences using several approaches. For example, many researchers calculate the difference between item difficulty estimates as:
+
+-[] Add Equation 7.1 here
+
+In Equation 7.1, $/delta_i1$ is the group-specific item difficulty estimate for Group 1, and $/delta_i2$ is the group-specific item difficulty estimate for Group 2. Researchers sometimes interpret the difference in item difficulty in logits as an effect size, where larger differences indicate more substantial DIF. Wright and Douglas (1975) recommended that researchers use a critical value of 0.5 logits (i.e., the "half-logit rule") to identify DIF that warrants further investigation. This recommendation is based on the typical range of item difficulty for achievement tests (around -2.5 logits to around 2.5 logits), because a difference of 0.5 logits reflects 10% of the item difficulty scale. Differences of this magnitude may impact the accuracy of the measurement procedure between subgroups. Other researchers have proposed smaller critical values, such as Engelhard and Myford (2003), who recommended a difference of 0.3 logits to identify meaningful DIF. 
+
+In Winsteps software manual, Linacre (2020) proposed guidelines for interpreting differences in item difficulty that reflect the *Delta Index* from ETS (Dorans & Holland, 1993). He noted that differences less than 0.43 logits can be interpreted as negligible DIF (Category A DIF), differences between 0.43 logits and 0.63 logits can be interpreted as slight-to-moderate DIF (Category B DIF), and differences equal to or greater than 0.64 logits as substantial DIF (Category C DIF). These recommendations reflect a conversion between the Delta index that ETS uses to report Mantel-Haenszel DIF statistics (Holland & Thayer, 1988) and logits, where one Delta unit is equal to 0.426 logits. 
+
+In some cases, it may also be useful to use a statistical hypothesis test to evaluate whether the difference in item difficulty estimates between groups is larger than what could be expected by chance. Many researchers use the Rasch separate calibration t-test method (Wright & Stone, 1979). This test evaluates the difference between item difficulty estimates calculated from separate calibrations of the same item that have been equated to a common scale. The t-test is defined as:
+
+-[] Add Equation 7.2 here
+
+In Equation 7.2, $/delta_i1$ and $/delta_i2$ are defined as in Equation 7.1, and sp is the pooled variance, defined as:
+
+-[] Add Equation 7.3 here
+
+In Equation 7.3, s1 is the standard error of estimate for $/delta_i1$, s2 is the standard error of estimate for $/delta_i2$, n1 is the number of test-takers in Group 1, and n2 is the number of test-takers in Group 2 (Smith, 1996). The resulting t-statistic can be interpreted using a p-value.
+
+When more than two groups are of interest, it is possible to apply the t-test method to compare pairs of groups (e.g., Group A compared to Group B; Group B compared to Group C; Group C compared to Group A). As needed, corrections such as Bonferroni adjustments can be used to reduce the chance of Type 1 errors from multiple comparisons.
+
+***Interaction Analyses***
+
+Another method for identifying DIF is to examine interactions between item difficulty and examinee subgroup identifiers using the Many-Facet Rasch Model (MFRM; Linacre, 1989; See Chapter 6). Including interaction terms in MFRMs allows researchers to test the null hypothesis that the calibrations of elements within one facet (e.g., items) are invariant across levels of another facet (e.g., subgroups). For the purpose of identifying DIF, researchers can examine the magnitude of the interaction effect between individual items and relevant examinee subgroups, where larger interaction terms indicate larger differences in item difficulty parameters for the subgroup of interest.
+
+For example, the following formulation of the MFRM could be used to evaluate DIF:
+
+-[] Insert Equation 7.4 here
+
+In Equation 7.4, $\theta_n$ is the location of Examinee n, $\delta_i$ is the location of item i, $\gamma_g$ is the location of examinee subgroup G, and $\tau_k$ is the rating scale category threshold between category k and category k - 1. The model also includes the interaction between item locations and subgroup locations: $\delta_i$*$\gamma_g$. The interaction term tests the null hypothesis that item locations are invariant across examinee subgroups, against the alternative hypothesis that item locations are different across examinee subgroups, which would be evidence of DIF.
+
+***Analysis of Variance (ANOVA) Methods***
+
+Andrich and Hagquist (2017) discussed an approach to detecting uniform DIF and non-uniform DIF based on ANOVA of residuals. This approach is promising because it allows researchers to explore patterns of DIF related to more than two subgroups using a single analysis. This approach involves using a Rasch model 
+to estimate examinee, item, and other location parameters of interest. Then, standardized residuals are analyzed using two-way independent analysis of variance (ANOVA) models with factors for examinee subgroups (e.g., demographic subgroups) and achievement level subgroups. Achievement level subgroups can be constructed using the empirical distribution of examinee location parameters. The ANOVA model is specified such that the standardized residuals for a given item are the dependent variable, and the independent variables (i.e., factors) include main effects for demographic subgroups and achievement-level subgroups, and the interaction between the demographic subgroups and achievement-level subgroups. 
+
+The demographic subgroup main effect tests the null hypothesis that the average value of the standardized residuals for students in the demographic subgroups were equal, controlling for achievement level. The achievement-level subgroup factor tests the null hypothesis that the average value of the standardized residuals was equal across achievement levels. The main effects test for uniform DIF.
+The interaction effect between demographic subgroup and achievement-level subgroups tests the null hypothesis that the average value of the standardized residuals were equal across achievement levels. This effect reflects non-uniform DRF. For additional details about this procedure, we recommend that readers consult Andrich and Hagquist (2017).
+
+## Example Data: Liking for Science with Student Subgroups
+
+The example data for this chapter is the Liking For Science attitude survey data that we used in Chapter 4 and Chapter 5. The data include a group of 75 children's responses to the 25-item *Liking for Science* questionnaire, which was designed to measure their attitudes toward science activities. The data were published in Wright and Masters (1982). Each item stem included a science activity, and three response options: 0 = *Dislike*, 1 = *Not Sure/Don't Care*, and 2 = *Like*, such that responses in higher categories indicated more-favorable attitudes toward science activities.
+
+The Liking for Science data file for the current chapter includes demographic subgroup identification numbers for students related to their gender. In the current analysis, there are two gender subgroups: 1 = Female; and 2 = Male.
+
+### Prepare for the Analyses: Install and Load Packages
+
+We will use the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020) and the *Test Analysis Modules* or *TAM* package (Robitzsch et al., 2020) to demonstrate DIF analyses in this chapter. 
+
+We will get started with these packages by viewing the citation information, and then installing and loading them into the R environment.
 
 ```{r}
-# Load the package
-library(eRm)
-# If you want to cite the R packages that you're planning to use in your research article, you can use the citation function:
 citation("eRm")
+# install.packages("eRm")
+#install.packages("eRm")
+library("eRm")
+
+citation("TAM")
+# install.packages("eRm")
+#install.packages("eRm")
+library("TAM")
 ```
+
+### Getting Started
+
+Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function *read.csv()* to import the comma-separated values (.csv) file that contains the Liking for Science survey data. We encourage readers to use their preferred method for importing data files into R or R Studio.
+
+Please note that if you use *read.csv()* to import the data, you will need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
+
+First, we will import the data using *read.csv()* and store it in an object called *science*:
+
+```{r}
+science <- read.csv("liking_for_science.csv")
+```
+
+Next, we need to import a 
+
+Next, we will explore the data using descriptive statistics using the *summary()* function:
+
+
+
+
 
 Now, let's load the data. We will practice running some DIF analyses based on the dichotomous Rasch model. To do this, we will use the “raschdat1” data that are provided as part of the "eRm" package.
 

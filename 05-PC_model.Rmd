@@ -28,7 +28,7 @@ The example data set for this chapter is the same data set that we used in Chapt
 
 We will use the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020) as the first package with which we demonstrate PCM analyses. We selected eRm for the first illustrations in the current chapter because it includes functions for applying the PCM that are relatively straightforward to use and interpret. Please note that the "eRm" package uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. At the end of this chapter, we have included an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre, 2020a) and Facets (Linace, 2020b). 
 
-To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
+First we will get started with the eRm package by viewing the citation information, and then installing and loading it into the R environment.
 
 ```{r}
 citation("eRm")
