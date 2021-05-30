@@ -8,7 +8,7 @@ Masters (1982) proposed the PCM as a generalization of the dichotomous Rasch mod
 
 The PCM can be stated in log-odds form as follows:
 
-$$ln\left[\frac{P_{n_i(xi=k)}}{P_{n_i(xi=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{ik}$$
+\begin{equation}\tag{5.1}ln\left[\frac{P_{n_i(xi=k)}}{P_{n_i(xi=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{ik}\end{equation}
 
 In the PCM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau_ik$ is the rating scale category threshold specific to item i. As in the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. Thresholds($τ_{k}$) are estimated empirically for each element of one facet, such as items. They are not necessarily evenly spaced or ordered as expected. In contrast to the RSM, the location and relative distance between thresholds is estimated separately for each item.
 
@@ -242,6 +242,34 @@ summary(person.fit)
 ```
 The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of person fit.
 
+Then, we calculate the reliability of separation statistics using the similar code we mentioned in the Chapter 3. 
+
+```{r}
+## Person separation reliability
+person.separation.reliability <- SepRel(person.locations.estimate)
+person.separation.reliability
+
+## Item separation reliability:
+# Get Item scores
+ItemScores <- colSums(science.responses)
+
+# Get Item SD
+ItemSD <- apply(science.responses,2,sd)
+
+# Calculate the se of the Item
+ItemSE <- ItemSD/sqrt(length(ItemSD))
+
+# compute the Observed Variance (also known as Total Person Variability or Squared Standard Deviation)
+SSD.ItemScores <- var(ItemScores)
+
+# compute the Mean Square Measurement error (also known as Model Error variance)
+Item.MSE <- sum((ItemSE)^2) / length(ItemSE)
+
+# compute the Item Separation Reliability
+item.separation.reliability <- (SSD.ItemScores-Item.MSE) / SSD.ItemScores
+item.separation.reliability
+```
+
 ## Summarize the Results in Tables
 
 As a final step, we will create tables that summarize the calibrations of the persons, items, and rating scale category thresholds.
@@ -251,6 +279,7 @@ Table 1 is an overall model summary table that provides an overview of the logit
 ### Model summary table
 
 -[] Cheng - can you please add reliability of separation statistics to these tables??
+
 ```{r}
 PCM_summary.table.statistics <- c("Logit Scale Location Mean",
                               "Logit Scale Location SD",
@@ -263,7 +292,8 @@ PCM_summary.table.statistics <- c("Logit Scale Location Mean",
                               "Std. Outfit Mean",
                               "Std. Outfit SD",
                               "Std. Infit Mean",
-                              "Std. Infit SD")
+                              "Std. Infit SD",
+                              "Separation.reliability")
                               
 PCM_item.summary.results <- rbind(mean(centered.item.locations),
                               sd(centered.item.locations),
@@ -276,7 +306,8 @@ PCM_item.summary.results <- rbind(mean(centered.item.locations),
                               mean(item.fit.results$i.outfitZ),
                               sd(item.fit.results$i.outfitZ),
                               mean(item.fit.results$i.infitZ),
-                              sd(item.fit.results$i.infitZ))
+                              sd(item.fit.results$i.infitZ),
+                              item.separation.reliability)
 
 PCM_person.summary.results <- rbind(mean(person.locations$theta),
                               sd(person.locations$theta),
@@ -289,7 +320,8 @@ PCM_person.summary.results <- rbind(mean(person.locations$theta),
                               mean(person.fit$std_outfit),
                               sd(person.fit$std_outfit),
                               mean(person.fit$std_infit),
-                              sd(person.fit$std_infit))
+                              sd(person.fit$std_infit),
+                              as.numeric(person.separation.reliability))
 
 # Round the values for presentation in a table:
 PCM_item.summary.results_rounded <- round(PCM_item.summary.results, digits = 2)
@@ -396,10 +428,13 @@ design.matrix <- designMatrices(resp=science.responses, modeltype="PCM", constra
 ```
 
 Now we can run the PCM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function.
--[] omit the model run output, keep the summary output.
+-[done] omit the model run output, keep the summary output.
+
+```{r results="hide"}
+PCM.science_MMLE <- tam.mml(science.responses, irtmodel="PCM", A = design.matrix, constraint = "items", verbose = FALSE) 
+```
 
 ```{r}
-PCM.science_MMLE <- tam.mml(science.responses, irtmodel="PCM", A = design.matrix, constraint = "items", verbose = FALSE) 
 summary(PCM.science_MMLE)
 ```
 
@@ -453,11 +488,14 @@ This code generates plots of rating scale category probabilities for each item. 
 
 Next, we will examine numeric and graphical item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
 
--[] omit the MMLE_fit output, keep the summary output.
-```{r}
-MMLE_fit <- msq.itemfit(PCM.science_MMLE)
+-[Done] omit the MMLE_fit output, keep the summary output.
 
+```{r results="hide"}
+MMLE_fit <- msq.itemfit(PCM.science_MMLE)
 item.fit_MMLE <- MMLE_fit$itemfit
+```
+
+```{r}
 summary(item.fit_MMLE)
 ```
 
@@ -541,7 +579,7 @@ Even though it is not appropriate to fully interpret item and person locations o
 
 A quick glance at the Wright Map suggests that, on average, the persons are located higher on the logit scale compared to the average item threshold locations. In addition, there appears to be a relatively wide spread of person and item locations on the logit scale, such that the Liking for Science questionnaire appears to be a useful tool for identifying differences in children's attitudes toward science activities as well as the difficulty to find each of the activities as favorable. Finally, the distance between rating scale category thresholds displays notable variability across the items in the survey. This finding supports the use of the PCM to analyze the Liking for Science data.
 
-## PCM Application with Joint Maximum Likelihood Estimation in TAM
+## PCM Application with Joint Maximum Likelihood Estimation
 
 In the following section, we provide an illustration of PCM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Joint Maximum Likelihood Estimation (JMLE). Except where there are significant differences between the MMLE and JMLE procedures, we provide fewer details about the analysis procedures and interpretations compared to the eRm and TAM MMLE illustrations.
 
@@ -559,11 +597,13 @@ design.matrix <- designMatrices(resp=science.responses, modeltype="PCM", constra
 
 Now we can run the PCM with our design matrix. After we run the model, we will request a summary of the model results using the *summary()* function.
 
--[] omit the model run output, keep the summary output.
-```{r}
-PCM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "items",
-                         control=list(maxiter=500), version=2 , verbose = FALSE)
+-[Done] omit the model run output, keep the summary output.
 
+```{r results="hide"}
+PCM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "items",control=list(maxiter=500), version=2 , verbose = FALSE)
+```
+
+```{r}
 summary(PCM.science_JMLE)
 ```
 
@@ -756,6 +796,15 @@ Figure 1 illustrates the calibrations of the children and items on the logit sca
 
 ## Exercise
 
-Please use the eRm or TAM package to estimate item, threshold, and person locations with the PCM for the Exercise 5 data. The Exercise 5 data include responses from 500 participants to an attitude survey that includes 20 items with a 5-category rating scale. This dataset is the same as the Exercise 4 data. After completing the anaysis, try writing a results section similar to the example in this chapter based on your findings.
+Please use the eRm or TAM package to estimate item, threshold, and person locations with the PCM for the Exercise 5 data. The Exercise 5 data include responses from 500 participants to an attitude survey that includes 20 items with a 5-category rating scale. This dataset is the same as the Exercise 4 data. After completing the analysis, try writing a results section similar to the example in this chapter based on your findings.
 
 ## Bibliography
+Andrich, David. "A rating formulation for ordered response categories." *Psychometrika, 43* No.4(1978): 561–573. https://doi.org/10.1007/BF02293814
+
+Mair, Patrick, Reinhold Hatzinger, and Marco Johannes Maier. *eRm: Extended Rasch Modeling* (Version 1.0-1) [Computer software], 2020. https://cran.r-project.org/package=eRm
+
+Masters, Geoff. "A Rasch model for partial credit scoring." *Psychometrika, 47* No.2, (1982): 149–174. https://doi.org/10.1007/BF02296272
+
+Mellenbergh, Gideon. "Conceptual Notes on Models for Discrete Polytomous Item Responses." *Applied Psychological Measurement, 19* No.1 (1995), 91–100. https://doi.org/10.1177/014662169501900110
+
+Robitzsch, Alexander, Thomas Kiefer, and Margaret Wu. *TAM: Test Analysis Modules* (Version 3.5-19) [Computer software],2020. https://CRAN.R-project.org/package=TAM

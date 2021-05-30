@@ -1,26 +1,30 @@
 # Many Facet Rasch Model {#MFR_model}
 
-This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM; -[] Cheng please add reference to Linacre, 1989), along with guidance for analyzing data with the MFRM using R. We use the TAM package (-[] Cheng please add reference to Robitzsch et al., 2020) for all of the analyses in this chapter. In the first example, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *wide format* (one row for each subject). Then, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *long format* (multiple rows for each subject). After the analyses are complete, we present an example description of the results from one example. The chapter concludes with a challenge exercise.
+This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM; -[Done] Cheng please add reference to Linacre, 1989), along with guidance for analyzing data with the MFRM using R. We use the TAM package (-[Done] Cheng please add reference to Robitzsch et al., 2020) for all of the analyses in this chapter. In the first example, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *wide format* (one row for each subject). Then, we demonstrate how to apply the MFRM to multi-faceted data that are stored in *long format* (multiple rows for each subject). After the analyses are complete, we present an example description of the results from one example. The chapter concludes with a challenge exercise.
 
 ## Many-Facet Rasch Model
 
-The MFRM (-[] Cheng please add reference to Linacre, 1989) is an extension of the Rasch family of models that allows researchers to include additional variables of interest ("facets") besides items and persons. Bond and Fox (-[] SW needs to look this up) defined facets as "aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (p. 167). Examples of variables that could be modeled as facets include raters in a constructed-response assessment, participant demographic variables (e.g., gender, race/ethnicity, best language), item type, or domains in an analytic scoring rubric for constructed-response items.
+The MFRM (-[Done] Cheng please add reference to Linacre, 1989) is an extension of the Rasch family of models that allows researchers to include additional variables of interest ("facets") besides items and persons. Bond and Fox (-[] SW needs to look this up) defined facets as "aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (p. 167). Examples of variables that could be modeled as facets include raters in a constructed-response assessment, participant demographic variables (e.g., gender, race/ethnicity, best language), item type, or domains in an analytic scoring rubric for constructed-response items.
 
 A general equation for the MFRM is:
 
--[] Cheng, Please add Equation 6.1 here
 
-In Equation 6.1, $\theta$ is person ability and $\tau_k$ is the rating scale category threshold, which can be modified to reflect different variations on the Rasch model (e.g., the PC model) as needed. $\Sigma$ facets $\epsilon$ is a linear combination of facets that are specific to each modeling context. For example, facets for MFR model analysis of a performance assessment could include raters and domains. According to Equation 6.1, the probability for an observation in category *k*, rather than in category *k*- 1 for Person *n* is modeled as the difference between Person n's location, the location of the researcher-specified facets, and the difficulty associated with providing a response in category *k*.
+\begin{equation}\tag{6.1}\ln\left(\frac{P_{n(x=k)}}{P_{n(x=k-1)}}\right)=\theta_{n}-\sum_{\text {facets }}\varepsilon-\tau_{k}\end{equation}
 
-Researchers can specify formulations of the MFR model to extend the dichotomous Rasch model (see Chapter 2) the Rating Scale (RS) model (see Chapter 4), the Partial Credit model (see Chapter 5), as well as other Rasch models (e.g., the binomial trials model and the Poisson counts model; -[] Cheng please add reference to Wright & Mok, 2004).
+
+-[Done] Cheng, Please add Equation 6.1 here
+
+In Equation 6.1, $\theta$ is person ability and $\tau_k$ is the rating scale category threshold, which can be modified to reflect different variations on the Rasch model (e.g., the PC model) as needed. $\Sigma$ facets $\epsilon$ is a linear combination of facets that are specific to each modeling context. For example, facets for MFR model analysis of a performance assessment could include raters and domains. According to Equation 6.1, the probability for an observation in category *k*, rather than in category *k-1* for Person *n* is modeled as the difference between Person n's location, the location of the researcher-specified facets, and the difficulty associated with providing a response in category *k*.
+
+Researchers can specify formulations of the MFR model to extend the dichotomous Rasch model (see Chapter 2) the Rating Scale (RS) model (see Chapter 4), the Partial Credit model (see Chapter 5), as well as other Rasch models (e.g., the binomial trials model and the Poisson counts model; -[Done] Cheng please add reference to Wright & Mok, 2004).
 
 ### Model Requirements
 
 The MFRM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. In practice, researchers should evaluate item responses for evidence that they approximate Rasch model requirements before examining model estimates in detail. Chapter 3 included details about model-data fit analysis procedures that can also be applied to the MFRM.
 
-## Example 1: Running the Many-Facet Rasch Model for Wide-Format Data using the TAM Package
+## Example 1: Running MFRM for Wide-Format Data using the TAM Package
 
-In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[] Cheng please add reference to Robitzsch et al., 2020). We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
+In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[Done] Cheng please add reference to Robitzsch et al., 2020). We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
 
 For this first example, we use a subset of the writing assessment data that only includes students' scores related to the style of their writing. In the second example in this chapter, we use students' scores related to all four domains.
 
@@ -101,7 +105,9 @@ ratings <- style[, -c(1:2)]
 
 Next, we need to specify the formula for our MFRM. For the first example will use a rating scale model specification of the MFRM. This means that we will constrain the threshold parameters to be equal across raters. The model is specified as follows:
 
--[]Cheng please add Equation 6.2 here
+-[Done]Cheng please add Equation 6.2 here
+
+\begin{equation}\tag{6.2}\ln\left(\frac{P_{n j i(x=k)}}{P_{n j i(x=k-1)}}\right)=\theta_{n}-\gamma_{j}-\lambda_{i}-\tau_{k}\end{equation}
 
 In Equation 6.2, $\theta_n$ is defined as in Equation 6.1. $\gamma_j$ is the logit-scale location for student language subgroup *j*, $\lambda_i$ is the logit-scale location for rater *i*, and $\tau_k$ is the logit-scale location at which there is an equal probability for a rating in category *k* and category *k*-1. The subgroup facet ($\gamma_j$) reflects the overall location of students in subgroup *j*, where higher locations indicate higher levels of writing proficiency, and lower locations indicate lower levels of writing proficiency. The rater facet ($\lambda_i$) reflects the severity level of individual rater *i*, where higher locations mean that the rater is more severe, and requires higher levels of writing proficiency before giving high ratings to student performances. Lower rater locations indicate relatively lenient raters, who more readily give high ratings to student performances.
 
@@ -121,7 +127,7 @@ RS_MFR_model <- tam.mml.mfr(resp = ratings, facets = facets, formulaA = style_RS
 summary(RS_MFR_model)
 ```
 
-The summary of the MFRM is lengthy. Included among the output are several details that may be important for some researchers, including details about each iteration, global model-fit indicators (e.g., deviance,  log-likelihood, AIC, BIC) and an estimate of person separation reliability (EAP Reliability). We will focus our interpretation on the location estimates for the student, subgroup, rater, and threshold parameters.
+The summary of the MFRM is lengthy. Included among the output are several details that may be important for some researchers, including details about each iteration, global model-fit indicators (e.g., deviance, log-likelihood, AIC, BIC) and an estimate of person separation reliability (EAP Reliability). We will focus our interpretation on the location estimates for the student, subgroup, rater, and threshold parameters.
 
 ### Examine facet results
 
@@ -203,6 +209,7 @@ for(rater in 1:nrow(rater.estimates)){
 
 head(rater_thresholds)
 ```
+
 Finally, we can plot the Wright map using the *wrightMap()* function. We specify several graphical parameters to modify the appearance of the plot.
 
 ```{r}
@@ -687,9 +694,9 @@ head(RS_MFRM_Table4)
 ```
 
 
-## Example 2:  Running the Many-Facet Rasch Model for Long-Format Data using the TAM Package (Partial Credit MFRM)
+## Example 2: Running PC-MFRM for Long-Format Data using the TAM Package
 
-In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[] Cheng please add reference to Robitzsch et al., 2020) for data that are stored in *long format*. We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
+In the next section, we provide a step-by-step demonstration of a MFRM analysis using the TAM package for R (-[Done] Cheng please add reference to Robitzsch et al., 2020) for data that are stored in *long format*. We encourage readers to use the example data set for this chapter that is provided in the online supplement to conduct the analysis along with us.
 
 For this example, we use a subset of the writing assessment data that includes students' scores related to four domains: Style, Organization, Conventions, and Sentence Formation.
 
@@ -732,7 +739,9 @@ There are 372 unique student identification numbers in our data. Returning to th
 
 We will analyze the writing data using a Partial Credit MFRM (PC-MFRM), where we specify rating scale category thresholds separately for the domains in the writing assessment. The facets in this model will include raters and domains.
 
--[] Cheng, please add Equation 6.3 here.
+-[Done] Cheng, please add Equation 6.3 here.
+
+\begin{equation}\tag{6.3}\ln\left(\frac{P_{n \operatorname{mi}(x=k)}}{P_{n \operatorname{mi}(x=k-1)}}\right)=\theta_{n}-\delta_{m}-\lambda_{i}-\tau_{m k}\end{equation}
 
 In Equation 6.3, $\theta_n$ and $\lambda_i$ are defined as in Equation 6.1 and Equation 6.2. $\delta_m$ is the logit-scale location for domain *m*. Lower domain locations indicate relatively easy domains, and higher domain locations indicate relatively difficult domains. $\tau_mk$ is the rating scale category threshold where there is an equal probability for a rating in category *k* and category *k*-1, specific to domain *m*. This formulation of the PC-MFR model allows us to examine each rater's use of the rating scale separately.
 
@@ -1325,7 +1334,7 @@ In this chapter, we included two examples that demonstrated some basic principle
 
 Table 6.1 provides an overview of some popular MFRM formula specifications for the TAM package that may be useful for analyses that differ from those used in this chapter. For example, analysts can specify a dichotomous MFRM by omitting "step" from the formula. In addition, analysts can specify an interaction between facets using the multiplication symbol (*) to create interaction terms.
 
--[] Cheng, please add Table 6.1 about here.
+-[Need Discuss] Cheng, please add Table 6.1 about here.
 
 ## Example results section based on Example 1:
 
@@ -1395,4 +1404,14 @@ The Wright Map suggests that, on average, the students are located higher on the
 Please use the TAM package to estimate item, threshold, and person locations with the RS-MFRM for the Exercise 6 data. The Exercise 6 data include responses from 350 participants from two subgroups (group 1 and group 2) to a survey with 30 items. Participants used a four-category rating scale (x = 0, 1, 2, 3) to respond to each item. The MFRM can be specified using various formulations, including a RS-MFRM and a PC-MFRM. After completing the analysis, try writing a results section similar to the example in this chapter based on your findings.
 
 ## Bibliography
+
+Linacre, John. *Many-Facet Rasch Measurement.* MESA Press,1989.
+
+--- *Winsteps Rasch Measurement.* [Computer software] V.3.92.1.Winsteps.com.PC. 2016.
+
+Revelle, W. *psych: Procedures for Personality and Psychological Research* V.1.6.9. [Computer software]. Northwestern University. https://CRAN.R-project.org/package=psych.PC.2016.
+
+Robitzsch, Alexander, Thomas Kiefer, and Margaret Wu. *TAM: Test Analysis Modules* V.3.5-19.[Computer software]. https://CRAN.R-project.org/package=TAM.PC.2021
+
+Wright, Benjamin D. and Magdalena M. C. Mok. "An overview of the family of Rasch measurement models." In *Introduction to Rasch Measurement* edited by Everett V. Smith, Jr and Richard M. Smith (Eds.), 1 - 24. JAM Press,2004.
 

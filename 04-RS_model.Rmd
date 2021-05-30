@@ -1,6 +1,6 @@
 # Rating Scale Model {#RS_model}
 
-This chapter provides a basic overview of the Rasch Rating Scale Model (RSM;[Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814), along with guidance for analyzing data with the RSM using R. We use an example data set that includes participant responses to an attitude survey to illustrate the analysis using Conditional Maximum Likelihood Estimation (CMLE) via the eRm package (Mair et al., 2020). We also demonstrate RSM analyses using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE) via the TAM package (Robitzsch et al., 2020). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise.
+This chapter provides a basic overview of the Rasch Rating Scale Model (RSM;[Andrich(1978)](https://link.springer.com/article/10.1007/BF02293814), along with guidance for analyzing data with the RSM using R. We use an example data set that includes participant responses to an attitude survey to illustrate the analysis using Conditional Maximum Likelihood Estimation (CMLE) via the eRm package (Mair et al. 2020). We also demonstrate RSM analyses using Marginal Maximum Likelihood Estimation (MMLE) and Joint Maximum Likelihood Estimation (JMLE) via the TAM package (Robitzsch et al. 2020). After the analyses are complete, we present an example description of the results. The chapter concludes with a challenge exercise.
 
 ***Overview of the Rating Scale Model***  
 
@@ -8,24 +8,23 @@ Andrich (1978) proposed the RSM (sometimes also called the Polytomous Rasch mode
 
 The RSM can be stated in log-odds form as follows:
 
-Equation 4.1 
-$$ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k}$$
+\begin{equation}\tag{4.1} ln\left[\frac{P_{n_i(x=k)}}{P_{n_i(x=k-1)}}\right]=\theta_{n}-\delta_{i}-\tau_{k} \end{equation}
 
-In the RSM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category *k* and category *k* - 1. For a rating scale made up of *m* categories, there are *m* - 1 rating scale category thresholds. 
+In the RSM, $\theta$ is the person's ability, $\delta$ is the item's difficulty, and $\tau$ is the rating scale category threshold. In the RSM, the threshold is the location on the logit scale at which there is an equal probability for a rating in category $k$ and category $k - 1$. For a rating scale made up of $m$ categories, there are $m - 1$ rating scale category thresholds. 
 
 The RSM produces one common set of rating scale category thresholds that apply to all of the items in the analysis. As a result, the RSM requires that the responses to all of the items include observations in the same categories. In addition, this common set of thresholds implies that the rating scale categories have a consistent interpretation across items. For example, for items with a four-category rating scale where 0 = *Strongly Disagree*, 1 = *Disagree*, 2 = *Agree*, and 3 = *Strongly Agree*, the RSM would produce a common set of three thresholds for all of the items. This common set of thresholds implies that the difference in the level of the latent variable required to provide a rating of *Strongly Agree* and *Agree* is the same for all of the items included in the analysis.
 
 ***Rating Scale Model Requirements***
 
-Because it is a Rasch model, the RSM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. Evidence that rating scale responses approximate these requirements provides support for the meaningful interpretation and use of person, item, and threshold estimates on the logit scale as indicators of their respective on the latent variable. In practice, many analysts evaluate some or all of these requirements using various indicators of model-data fit. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons. Readers can use the same techniques that we considered in Chapter 3 to evaluate fit to the RSM. In addition, readers can use rating scale analysis techniques to consider additional issues related to rating scale functioning; we discuss these methods in detail in Chapter XXX.
+Because it is a Rasch model, the RSM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. Evidence that rating scale responses approximate these requirements provides support for the meaningful interpretation and use of person, item, and threshold estimates on the logit scale as indicators of their respective on the latent variable. In practice, many analysts evaluate some or all of these requirements using various indicators of model-data fit. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons. Readers can use the same techniques that we considered in Chapter 3 to evaluate fit to the RSM. In addition, readers can use rating scale analysis techniques to consider additional issues related to rating scale functioning; we discuss these methods in detail in next Chapter.
 
 ## Example Data: Liking for Science
 
 The example data for this chapter is a group of 75 children's responses to the 25-item *Liking for Science* questionnaire, which was designed to measure their attitudes toward science activities. The data were published in Wright and Masters (1982). Each item stem included a science activity, and three response options: 0 = *Dislike*, 1 = *Not Sure/Don't Care*, and 2 = *Like*, such that responses in higher categories indicated more-favorable attitudes toward science activities.
 
-## Rating Scale Model Analysis with Conditional Maximum Likelihood Estimation in eRm
+## RSM Analysis with Conditional Maximum Likelihood Estimation
 
-In the next section, we provide a step-by-step demonstration of a RSM analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
+In the next section, we provide a step-by-step demonstration of a RSM analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al. 2020). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
 ### Prepare for the Analyses: Install and Load Packages
 
@@ -67,6 +66,7 @@ science.responses <- subset(science_drop_i12, select = -student)
 ```
 
 We will use *summary()* to calculate descriptive statistics for the *science.responses* object to check our work and ensure that the responses are ready for analysis:
+
 ```{r}
 summary(science.responses)
 ```
@@ -123,7 +123,7 @@ centered.item.locations <- scale(uncentered.item.locations, scale = FALSE)
 summary(centered.item.locations)
 ```
 
-In addition, the eta parameters from the RSM object include *cumulative* rating scale category thresholds, printed after the final item location estimate. In our example, this value is labeled "Cat 2". Cumulative thresholds are not typically used in Rasch model applications; Rasch-Andrich (i.e., adjacent categories) thresholds are typically used instead (Andrich, 2015; Mellenbergh, 1995). We will calculate the values of the rating scale category thresholds using the results from the *thresholds()* function. This function produced estimates of the rating scale category thresholds combined with item difficulty parameter estimates. We can subtract these values from the item locations to find the values of each threshold.
+In addition, the eta parameters from the RSM object include *cumulative* rating scale category thresholds, printed after the final item location estimate. In our example, this value is labeled "Cat 2". Cumulative thresholds are not typically used in Rasch model applications; Rasch-Andrich (i.e., adjacent categories) thresholds are typically used instead (Andrich 2015; Mellenbergh 1995). We will calculate the values of the rating scale category thresholds using the results from the *thresholds()* function. This function produced estimates of the rating scale category thresholds combined with item difficulty parameter estimates. We can subtract these values from the item locations to find the values of each threshold.
 
 In our example, we have a rating scale with three categories, so we have two rating scale category thresholds. In the following code chunk, we create an empty object in which to store the threshold estimates (*tau.estimates*), and then we use a for-loop to calculate the estimates and store them in our object. Because the thresholds are the same for all of the items, we will save the first value from vector of differences between the item+threshold locations and the overall locations. 
 ```{r}
@@ -140,6 +140,7 @@ for(tau in 1:n.thresholds){
 ```
 
 Next, we will calculate standard errors for each item and threshold location and store them in new objects. We will use *summary()* to examine descriptive statistics for these values.
+
 ```{r}
 #SE for items + thresholds:
 delta.tau.se <- items.and.taus$se.thresh
@@ -153,6 +154,7 @@ summary(delta.se)
 ### Item Response Functions (Rating Scale Category Probability Plots)
 
 We will examine graphical displays of item difficulty using item response functions. With the RSM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the 24 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the *items.to.plot* object.
+
 ```{r}
 items.to.plot <- c(1:3)
 plotICC(RSM.science, ask = FALSE, item.subset = items.to.plot)
@@ -188,6 +190,7 @@ The estimation procedure in eRm does not directly produce parameter estimates fo
 Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the same procedures in that chapter to examine item fit in detail for the RSM.
 
 To calculate numeric item fit statistics, we will use the function *itemfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called *item.fit*, and then format this object as a data.frame object for easy manipulation and exporting:
+
 ```{r}
 item.fit.results <- itemfit(person.locations.estimate)
 item.fit <- cbind.data.frame(item.fit.results$i.infitMSQ,
@@ -205,6 +208,7 @@ summary(item.fit)
 The *item.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each item included in the analysis.These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of item fit.
 
 Then, we calculate the reliability of separation statistics using the similar code we mentioned in the Chapter 3. 
+
 ```{r}
 ## Person separation reliability
 person.separation.reliability <- SepRel(person.locations.estimate)
@@ -368,7 +372,7 @@ RSM_Table3[, -1] <- round(RSM_Table3[,-1], digits = 2)
 head(RSM_Table3)
 ```
 
-## Rating Scale Model Analysis with Marginal Maximum Likelihood Estimation in TAM
+## RSM Analysis with Marginal Maximum Likelihood Estimation
 
 The next section of this chapter includes an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). After this illustration, we also demonstrate the use of TAM to estimate the RSM with Joint Maximum Likelihood Estimation (JMLE). These illustrations use the Liking for Science data set that we described earlier in this chapter.
 
@@ -555,7 +559,7 @@ Even though it is not appropriate to fully interpret item and person locations o
 
 A quick glance at the Wright Map suggests that, on average, the persons are located higher on the logit scale compared to the average item threshold locations. In addition, there appears to be a relatively wide spread of person and item locations on the logit scale, such that the Liking for Science questionnaire appears to be a useful tool for identifying differences in children's attitudes toward science activities as well as the difficulty to find each of the activities as favorable.
 
-## Rating Scale Model Analysis with Joint Maximum Likelihood Estimation in TAM
+## RSM Analysis with Joint Maximum Likelihood Estimation
 
 In the following section, we provide an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Joint Maximum Likelihood Estimation (JMLE). Except where there are significant differences between the MMLE and JMLE procedures, we provide fewer details about the analysis procedures and interpretations compared to the eRm and TAM MMLE illustrations.
 
