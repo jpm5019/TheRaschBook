@@ -14,7 +14,7 @@ In the PCM, $\theta$ is the person's ability, $\delta$ is the item's difficulty,
 
 ### Model Requirements
 
-The PCM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. In practice, researchers should evaluate item responses for evidence that they approximate Rasch model requirements before examining model estimates in detail. Chapter 3 included details about model-data fit analysis procedures that can also be applied to the PCM. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons based on the PCM. In addition, we encourage readers to use rating scale analysis techniques to consider additional issues related to rating scale functioning with the PCM; we discuss these methods in detail in Chapter X.
+The PCM is based on the same requirements of unidimensionality, local independence, and invariance that we discussed in Chapter 2 for the dichotomous Rasch model. In practice, researchers should evaluate item responses for evidence that they approximate Rasch model requirements before examining model estimates in detail. Chapter 3 included details about model-data fit analysis procedures that can also be applied to the PCM. In the current chapter, we provide code for calculating some popular residual-based fit indices for items and persons based on the PCM. In addition, we encourage readers to use rating scale analysis techniques to consider additional issues related to rating scale functioning with the PCM; we discuss these methods in detail in Chapter 8.
 
 ## Running the Partial Credit Model in R
 
@@ -587,7 +587,7 @@ In the following section, we provide an illustration of PCM analyses with the *T
 
 Please make sure that you have installed the TAM and WrightMap packages and loaded them into your working environment. You will also need to have imported the Liking for Science data and isolated the response matrix as described earlier in the chapter before you run the R code in the following sections.
 
-### Run the Rating Scale Model
+### Run the Partial Credit Model
 
 We will use the *tam.jml()* function to run the PCM with JMLE and store the results in an object called *PCM.science_JMLE*. As with the MMLE procedure, in order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds), we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*.
 
@@ -788,7 +788,7 @@ Figure 1
 ```{r}
 # Plot the variable map
 graphics.off()
-plotPImap(PCM.science, main = "Liking for Science Rating Scale Model Wright Map", sorted = TRUE, irug = FALSE)
+plotPImap(PCM.science, main = "Liking for Science Partial Credit Model Wright Map", sorted = TRUE, irug = FALSE)
 ```
 
 Figure 1 illustrates the calibrations of the children and items on the logit scale that represents the latent variable. The calibrations shown in this figure correspond to the results presented in Table 2 and Table 3 for items and children, respectively.Starting at the bottom of the figure, the horizontal axis (labeled *Latent Dimension*) is the logit scale that represents the latent variable. Lower numbers on this scale indicate less-favorable attitudes toward science activities, and higher numbers indicate more-favorable attitudes toward science activities. The central panel of the figure shows item difficulty locations on the logit scale for the 25 Liking for Science items included in the analysis; the y-axis for this panel shows the item labels. The items are ordered according to their difficulty order, as estimated with the PCM Easier-to-endorse items appear at the top of the figure, and harder-to-endorse items appear at the bottom of the figure; item labels are shown on the y-axis. For each item, a solid circle plotting symbol shows the overall location estimate. This solid circle symbol is connected to two open-circle symbols that show the locations of the rating scale category thresholds. Each threshold is labeled with a "1" to indicate the threshold between rating scale category *x* = 0 and *x* = 1, or a "2" to indicate the threshold between rating scale category *x* = 1 and *x* = 2. Examination of the item locations reveals that the threshold locations were ordered as expected for most items, with $\tau_1$ located lower on the logit scale ($\tau$) compared to the location estimate for $\tau_2$. However, the thresholds were disordered for Item 13 and Item 18. In addition, there were some differences in the relative difficulty to endorse the rating scale categories across items. Finally, the upper panel of the figure shows a histogram of person (in this case, children) location estimates on the logit scale.
