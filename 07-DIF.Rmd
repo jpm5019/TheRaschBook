@@ -37,7 +37,7 @@ In this chapter, we demonstrate two techniques that analysts can use to identify
 
 From the perspective of Rasch measurement theory, DIF poses a threat to measurement quality because it implies a lack of invariance. When DIF occurs, the requirements for invariant measurement are not met (see Chapter 1). Accordingly, DIF can be interpreted as not only a potential threat to fairness, but also as a violation of Rasch model requirements (Hagquist & Andrich, 2017).
 
-Researchers have proposed several methods for identifying DIF within the framework of Rasch measurement theory. Methods that are routinely used in practical applications of Rasch measurement theory can be broadly classified into two approaches: (1) Comparison of group-specific item estimates, and (2) Interaction analyses between item locations and examinee subgroup indicators. In recent methodological work, several researchers have proposed other methods for detecting DIF within the Rasch framework, such as methods based on analysis of variance with model residuals (e.g., Hagquist & Andrich, 2018), and tree-based methods (e.g., XXXX). However, these methods are relatively less common in current applied literature. We encourage interested readers to explore these approaches as well as those that we present here in order to develop a more complete understanding of Rasch-based methods for identifying DIF. 
+Researchers have proposed several methods for identifying DIF within the framework of Rasch measurement theory. Methods that are routinely used in practical applications of Rasch measurement theory can be broadly classified into two approaches: (1) Comparison of group-specific item estimates, and (2) Interaction analyses between item locations and examinee subgroup indicators. In recent methodological work, several researchers have proposed other methods for detecting DIF within the Rasch framework, such as methods based on analysis of variance with model residuals (e.g., Hagquist & Andrich, 2018), and tree-based methods (e.g., Komboz et al., 2018). However, these methods are relatively less common in current applied literature. We encourage interested readers to explore these approaches as well as those that we present here in order to develop a more complete understanding of Rasch-based methods for identifying DIF. 
 
 In addition to methods based on Rasch measurement theory, there are numerous other approaches to detecting DIF that are beyond the scope of this volume. We encourage readers who are interested in learning more about DIF to consult the resources that we have listed at the end of this chapter.
 
@@ -272,7 +272,6 @@ The interaction estimates are reported on the same logit scale as the item and p
 
 We can examine the results and see that the largest interaction terms were observed for Task 2 and Task 6. Task 2 was more difficult for Lower Elementary students compared to Upper Elementary students. The opposite pattern was true for Task 6, which was easier for Lower Elementary Students compared to Upper Elementary students.
 
-
 ## Detecting Differential Item Functioning in R for Polytomous Items
 
 In this section, we demonstrate some basic procedures for detecting DIF with item responses that are scored in more than two categories (i.e., polytomous items). Specifically, we will illustrate DIF analyses based on the Partial Credit Model (Masters, 1982; See Chapter 5). To do this, we will use the style ratings data that we used in the first illustration in Chapter 6. Most of the procedures for the analyses in this section mirror those from the illustrations with the dichotomous Rasch model earlier in this chapter. As a result, we provide relatively less detail in this section except where information is needed to highlight important differences.
@@ -476,6 +475,13 @@ plot(interaction.estimates$xsi[1:21], main = "Interaction Effects for Language O
 ```{r}
 plot(interaction.estimates$xsi[22:42], main = "Interaction Effects for English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number")
 ```
+## Exercise
+
+There are two exercises for this chapter. The first exercise uses dichotomous data, and the second exercise uses polytomous data. 
+
+The Exercise 7A data include responses from 350 students in two subgroups (group 1 and group 2) who responded to a multiple-choice assessment with 20 items. The items were scored such that x=1 indicates a correct response and x=2 indicates an incorrect response. Try analyzing the data for evidence of DIF.
+
+The Exercise 7B data include responses from 400 participants from two subgroups (group 1 and group 2) to a survey with 25 items. Participants used a four-category rating scale (x = 0, 1, 2, 3) to respond to each item. Try analyzing the data for evidence of DIF.
 
 ## References [these need to be updated!]
 
