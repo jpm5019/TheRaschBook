@@ -495,6 +495,26 @@ Mair, P., Hatzinger, R., & Maier M. J. (2020). eRm: Extended Rasch Modeling. 1.0
 
 Wright, B. D., & Masters, G. N. (1982). Rating Scale Analysis: Rasch Measurement. MESA Press.
 
-## Resources for further study [need to add]
+## Resources for further study
 
+The following introductory texts include chapters dedicated to DIF that readers may find helpful for learning more about this topic:
 
+    Andrich, D., & Marais, I. (2019). A Course in Rasch Measurement Theory: Measuring in the Educational, Social and Health Sciences. Springer Singapore. https://doi.org/10.1007/978-981-13-7496-8
+    
+    Bond, T. G., Yan, Z., & Heene, M. (2020). Applying the Rasch Model: Fundamental Measurement in the Human Sciences (4th ed.). Routledge.
+    
+    DeAyala, R. J. (2009). The Theory and Practice of Item Response Theory. The Guilford Press.
+
+Interested readers may also benefit from the following articles and chapters, which use a relatively didactic approach to exploring issues related to DIF:
+
+    Andrich, D., & Hagquist, C. (2012). Real and Artificial Differential Item Functioning. Journal of Educational and Behavioral Statistics, 37(3), 387–416. https://doi.org/10.3102/1076998611411913
+    
+    Draba, R. E. (1977). The identification and interpretation of item bias (No. 25; Research Memorandum). Statistical Laboratory, Department of Education, University of Chicago.
+    
+    Gamerman, D., Goncalves, F. B., & Soares, T. M. (2018). Differential item functioning. In W. J. van der Linden (Ed.), Handbook of item response theory (Vol. 3, pp. 67–86). CRC Press.
+    
+    Smith, R. M. (1996). A Comparison of the Rasch Separate Calibration and between-Fit Methods of Detecting Item Bias. Educational and Psychological Measurement, 56(3), 403–418. https://doi.org/10.1177/0013164496056003003
+    
+    Wright, B. D., Mead, R., & Draba, R. E. (1976). Detecting and correcting test item bias with a logistic response model (No. 22; Research Memorandum). Statistical Laboratory, Department of Education, University of Chicago.
+    
+    Zumbo, B. D. (2007). Three Generations of DIF Analyses: Considering Where It Has Been, Where It Is Now, and Where It Is Going. Language Assessment Quarterly, 4(2), 223–233. https://doi.org/10.1080/15434300701375832
