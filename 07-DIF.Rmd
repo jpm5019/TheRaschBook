@@ -328,7 +328,7 @@ responses.g2 <- subset(responses.g, responses.g$subgroups == 2)
 
 subgroup_diffs <- Waldtest(PC_model, splitcr = subgroups)
 
-for(item.number in 1:ncol(responses)){
+for(item.number in 1:ncol(ratings)){
   
   n.thresholds.g1 <-  length(table(responses.g1[, item.number+1]))-1
   
@@ -363,7 +363,7 @@ responses.g2 <- subset(responses.g, responses.g$subgroups == 2)
 subgroup_diffs <- Waldtest(PC_model, splitcr = subgroups)
 
 
-for(item.number in 1:ncol(responses)){
+for(item.number in 1:ncol(ratings)){
   
   n.thresholds.g1 <-  length(table(responses.g1[, item.number+1]))-1
   
@@ -375,7 +375,6 @@ for(item.number in 1:ncol(responses)){
   group2_item.se.overall[item.number] <- mean(subgroup_diffs$se.beta2[((item.number*(n.thresholds.g2))-(n.thresholds.g2-1)): 
                                                                         (item.number*(n.thresholds.g2))])
 }
-
 ```
 
 Then, we will calculate test statistics (z) for the differences in overall item difficulties. We will print the results to the console.

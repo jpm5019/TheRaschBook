@@ -51,6 +51,7 @@ The transitive reasoning items varied in terms of the property students were ask
   |9|Length|YA = YB = YC = YD|Sticks|12.5, 12.5, 13, 13 (cm)|
   |10|Weight|YA = YB < YC = YD|Balls|60, 60, 100, 100 (g)|
   
+  
 ## Dichotomous Rasch Model Analysis with Conditional Maximum Likelihood Estimation in eRm
 
 In the next section, we provide a step-by-step demonstration of a dichotomous Rasch model analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
@@ -62,8 +63,7 @@ We selected eRm for the first illustration in the current chapter because it inc
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 ```{r}
 citation("eRm")
-# install.packages("eRm")
-#install.packages("eRm")
+install.packages("eRm")
 library("eRm")
 ```
 
@@ -262,7 +262,8 @@ Briefly, the *item reliability of separation statistic* describes the degree to 
 
 ### Person Fit
 
-Next, we will conduct a brief exploration of person fit. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a dataframe for easy manipulation and exporting. Then, we request summaries of the infit MSE and outfit MSE statistics using *summary()*.
+Next, we will conduct a brief exploration of person fit. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a data.frame for easy manipulation and exporting. Then, we request summaries of the infit MSE and outfit MSE statistics using *summary()*.
+
 ```{r}
 person.fit <- personfit(student.locations)
 summary(person.fit$p.infitMSQ)
@@ -391,6 +392,7 @@ Table3[, -1] <- round(Table3[,-1], digits = 2)
 head(Table3)
 ```
   
+
 ## Dichotomous Rasch Model Analysis with Marginal Maximum Likelihood Estimation in TAM
 
 Next, we will use the *"Test Analysis Modules"*, or "TAM" package (Robitzsch et al. 2020) to run the dichotomous Rasch model analyses. By default, the TAM package applies marginal maximum likelihood estimation (MMLE) to estimate the dichotomous Rasch model. Please keep this estimation approach in mind when comparing the results between TAM and other R packages or software programs that use other estimation techniques, such as Winsteps (Linacre 2020a) or Facets (Linacre 2020b).
@@ -425,7 +427,7 @@ If you have not already imported the Transitive Reasoning data and prepared it f
 Now, we are ready to run the dichotomous Rasch model on the transitive reasoning response data. We will use the *tam.mml()* function to run the model and store the results in an object called *dichot.transreas*. We specified "constraint = items" in order to obtain item locations that are centered at zero logits for ease of interpretation.
 
 ```{r results='hide'}
-dichot.transreas_MMLE <- tam.mml(transreas.responses, constraint = "items")
+dichot.transreas_MMLE <- tam.mml(transreas.responses, constraint = "items", verbose = FALSE)
 ```
 For brevity, we do not include all of the output from the model function in this book. However, after you run the model, you should see some output in the R console that includes information about each iteration in the estimation process.
 
@@ -445,6 +447,7 @@ Because we ran a Rasch model, the *alpha* (discrimination) parameters are fixed 
 A useful feature of Rasch models is that when there is acceptable fit between the model and the data (discussed in detail in in Chapter 3), it is possible to visualize and compare item and person locations on a single linear continuum. Professor Bejamin D. Wright popularized an approach to displaying Rasch model results on a linear continuum, and this technique has been widely adopted by Rasch measurement researchers across disciplines. In his honor, these displays are often called *Wright Maps.* In the literature, researchers also refer to these displays as *Variable Maps*. Please see Wilson (2011) for a discussion of the term *Wright Map*.
 
 As the next step in our analysis, we will use the WrightMap package to create a Wright Map from our model results. We will create the plot using the function *IRT.WrightMap()* on the model object (*dichot.transreas*). We will set the option for displaying threshold labels as *FALSE*, because we are working with dichotomous data. We also used the *main.title=* option to customize the title of the plot.
+
 ```{r}
 IRT.WrightMap(dichot.transreas_MMLE, show.thr.lab=FALSE, main.title = "Transitive Reasoning Wright Map (MMLE)")
 ```
@@ -462,14 +465,15 @@ A quick glance at the Wright Map suggests that, on average, the persons are loca
 
 ### Item Parameters
 
-As the next step in our analysis, we will examine the item parameters in detail. We will use the *$* operator to request the item location estimates that are stored in the *item_irt* table within the *dichot.transreas_MMLE* object. Then, we will save the item location estimates in a new object called *difficulty_MMLE*:
+As the next step in our analysis, we will examine the item parameters in detail. We will use the *$* operator to request the item location estimates that are stored in the *item_irt* table within the *dichot.transreas_MMLE* object. Then, we will save the item location estimates in a new object called *difficulty_MMLE*.
+
 ```{r}
 difficulty_MMLE <- as.data.frame(dichot.transreas_MMLE$item_irt$beta)
 difficulty_MMLE$se <- dichot.transreas_MMLE$se.AXsi
 names(difficulty_MMLE) <- c("item_difficulty", "item_se")
 ```
 
-By running this code, we have created a dataframe object that includes two variables: item difficulty estimates, and standard errors. The row labels show the item numbers from our response matrix. The item difficulty parameters and standard errors are interpreted in the same way as in the eRm analysis presented earlier in this chapter.
+By running this code, we have created a data.frame object that includes two variables: item difficulty estimates, and standard errors. The row labels show the item numbers from our response matrix. The item difficulty parameters and standard errors are interpreted in the same way as in the eRm analysis presented earlier in this chapter.
 
 Next, let's calculate descriptive statistics to better understand the distribution of the item locations and standard errors. We will do so using the *summary()* function and the *sd()* function:
 ```{r}
@@ -478,7 +482,8 @@ sd(difficulty_MMLE$item_difficulty)
 sd(difficulty_MMLE$item_se)
 ```
 
-We can also visualize the item difficulty estimates using a simple histogram by using the *hist()* function. In our plot, we specified a custom title using *main =* and a custom x-axis label using *xlab =*:
+We can also visualize the item difficulty estimates using a simple histogram by using the *hist()* function. In our plot, we specified a custom title using *main =* and a custom x-axis label using *xlab =*.
+
 ```{r}
 hist(difficulty_MMLE$item_difficulty, main = "Histogram of Item Difficulty Estimates for the Transitive Reasoning Data \n (MMLE)",
      xlab = "Item Difficulty Estimates in Logits") 
@@ -486,7 +491,8 @@ hist(difficulty_MMLE$item_difficulty, main = "Histogram of Item Difficulty Estim
 
 ### Item Fit
 
-To calculate numeric item fit statistics, we will use the function *tam.fit()* from TAM on the model object (*dichot.transreas_MMLE*). We will store the item fit results in a new object called *item.fit_MMLE*, and then format this object as a dataframe for easy manipulation and exporting:
+To calculate numeric item fit statistics, we will use the function *tam.fit()* from TAM on the model object (*dichot.transreas_MMLE*). We will store the item fit results in a new object called *item.fit_MMLE*, and then format this object as a data.frame for easy manipulation and exporting.
+
 ```{r results='hide'}
 item.fit_MMLE <- tam.fit(dichot.transreas_MMLE) 
 item.fit_MMLE <- as.data.frame(item.fit_MMLE$itemfit)
@@ -499,9 +505,10 @@ summary(item.fit_MMLE)
 
 The *item.fit_MMLE* object includes mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. TAM also reports a *p* value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*).
 
-With the item centering constraint that we used, the TAM package does not report fit statistics for all ten items. We can find approximate item fit statistics for all ten items by running the model without the centering constraint and saving the fit statistics:
+With the item centering constraint that we used, the TAM package does not report fit statistics for all ten items. We can find approximate item fit statistics for all ten items by running the model without the centering constraint and saving the fit statistics.
+
 ```{r results='hide'}
-dichot.transreas_MMLE2 <- tam(transreas.responses)
+dichot.transreas_MMLE2 <- tam(transreas.responses, verbose = FALSE)
 item.fit_MMLE2 <- tam.fit(dichot.transreas_MMLE2) 
 item.fit_MMLE2 <- as.data.frame(item.fit_MMLE2$itemfit)
 ```
@@ -510,7 +517,8 @@ item.fit_MMLE2 <- as.data.frame(item.fit_MMLE2$itemfit)
 
 When the default MMLE method is used to estimate the dichotomous Rasch model in TAM, person parameters are calculated after the item locations are estimated. As a result, the person estimation procedure for this model requires additional iterations.
 
-In the following code, we calculate person locations that correspond to our model using the *tam.wle()* function with the dichotomous Rasch model object (*dichot.transreas_MMLE*). We stored the results in a new data frame called *achievement_MMLE*, and then requested a summary of the estimation results using *summary()*:
+In the following code, we calculate person locations that correspond to our model using the *tam.wle()* function with the dichotomous Rasch model object (*dichot.transreas_MMLE*). We stored the results in a new data frame called *achievement_MMLE*, and then requested a summary of the estimation results using *summary()*.
+
 ```{r results='hide'}
 achievement_MMLE <- as.data.frame(tam.wle(dichot.transreas_MMLE))
 ``` 
@@ -524,12 +532,14 @@ The *achievement_MMLE* data frame includes the following variables:
 •	*error*: Standard error for person location estimate, as described earlier in this chapter.
 •	*WLE.rel*: Reliability of person separation statistic, as described earlier in this chapter.
 
-Next, we will calculate descriptive statistics to better understand the distribution of the person estimates. We will do so using the *summary()* function with the *achievement_MMLE* object:
+Next, we will calculate descriptive statistics to better understand the distribution of the person estimates. We will do so using the *summary()* function with the *achievement_MMLE* object.
+
 ```{r}
 summary(achievement_MMLE)
 ```
 
-We can also visualize the person location estimates using a simple histogram by using the *hist()* function. In our plot, we specified a custom title using *main =* and a custom x-axis label using *xlab =*:
+We can also visualize the person location estimates using a simple histogram by using the *hist()* function. In our plot, we specified a custom title using *main =* and a custom x-axis label using *xlab =*.
+
 ```{r}
 hist(achievement_MMLE$theta, main = "Histogram of Person Achievement Estimates \nfor the Transitive Reasoning Data \n (MMLE)",
      xlab = "Person Achievement Estimates in Logits", cex.main = .8) 
@@ -539,12 +549,14 @@ hist(achievement_MMLE$theta, main = "Histogram of Person Achievement Estimates \
 
 As a final step in our preliminary person analysis, we will conduct a brief exploration of person fit statistics. We explore person fit in more detail in Chapter 3.
 
-To calculate numeric person fit statistics, we will use the function *tam.personfit()* from TAM on the model object (*dichot.transreas_MMLE*). We will store the person fit results in a new object called *person.fit_MMLE*, which is a data.frame object:
+To calculate numeric person fit statistics, we will use the function *tam.personfit()* from TAM on the model object (*dichot.transreas_MMLE*). We will store the person fit results in a new object called *person.fit_MMLE*, which is a data.frame object.
+
 ```{r}
-person.fit_MMLE <- tam.personfit(dichot.transreas_MMLE) 
+person.fit_MMLE <- tam.personfit(dichot.transreas_MMLE)
 ```
 
-Next, we will request a summary of the numeric person fit statistics using the *summary()* function:
+Next, we will request a summary of the numeric person fit statistics using the *summary()* function.
+
 ```{r}
 summary(person.fit_MMLE)
 ```
@@ -559,9 +571,10 @@ With the exception of the model estimation code, most of the code for the JMLE a
 
 ### Estimate the Dichotomous Rasch Model using JMLE
 
-We already prepared the transitive reasoning data for analysis when we checked the data and isolated the item response matrix (*transreas.responses*) earlier in this chapter. We can begin our analysis using the *tam.jml()* function with this response matrix:
+We already prepared the transitive reasoning data for analysis when we checked the data and isolated the item response matrix (*transreas.responses*) earlier in this chapter. We can begin our analysis using the *tam.jml()* function with this response matrix.
+
 ```{r results='hide'}
-dichot.transreas_JMLE <- tam.jml(transreas.responses, constraint = "items")
+dichot.transreas_JMLE <- tam.jml(transreas.responses, constraint = "items", verbose = FALSE)
 ```
 
 ### Overall Model Summary
@@ -574,9 +587,10 @@ summary(dichot.transreas_JMLE)
 
 When the JMLE estimation method is used, we need to specify the item location estimates and the person location estimates as vectors in the plotting function for the Wright Map. We will also use a different function to plot the Wright Map: *wrightMap()*, which takes arguments for the item and person locations.
 
-In the following code, we saved the item locations in a vector called *difficulty_JMLE*, and the person locations in a vector called *theta_JMLE*. Then, we used these vectors as arguments in the *wrightMap()* function to create the Wright Map:
+In the following code, we saved the item locations in a vector called *difficulty_JMLE*, and the person locations in a vector called *theta_JMLE*. Then, we used these vectors as arguments in the *wrightMap()* function to create the Wright Map.
+
 ```{r}
-difficulty_JMLE <- dichot.transreas_JMLE$item1$AXsi_.Cat1
+difficulty_JMLE <- dichot.transreas_JMLE$item$xsi.item
 theta_JMLE <- dichot.transreas_JMLE$theta
 wrightMap(thetas = theta_JMLE, thresholds = difficulty_JMLE, show.thr.lab=FALSE, main.title = "Transitive Reasoning Wright Map: JMLE")
 ```
@@ -584,6 +598,7 @@ wrightMap(thetas = theta_JMLE, thresholds = difficulty_JMLE, show.thr.lab=FALSE,
 ### Item Parameters
 
 When we plotted the Wright Map, we created an object with the item difficulty parameters. We can find the standard errors for the item estimates by using the *$* operator to extract *errorP* from the model results. 
+
 ```{r}
 jmle.item.se <- dichot.transreas_JMLE$errorP
 jmle.item.se
@@ -595,7 +610,8 @@ Because of the item centering constraint that we included in our analysis, the s
 
 Unlike the MMLE estimation approach, the JMLE approach calculates item parameters and person parameters in the same step. As a result, we do not need to use a separate function to find the person parameter estimates from our model. 
 
-When we plotted the Wright Map, we already saved the theta estimates in a vector called *theta_JMLE*. We can find the standard errors for the person estimates by using the *$* operator to extract *errorWLE* from the model results:
+When we plotted the Wright Map, we already saved the theta estimates in a vector called *theta_JMLE*. We can find the standard errors for the person estimates by using the *$* operator to extract *errorWLE* from the model results.
+
 ```{r}
 jmle.person.se <- dichot.transreas_JMLE$errorWLE
 ```
@@ -603,18 +619,21 @@ jmle.person.se <- dichot.transreas_JMLE$errorWLE
 ### Item and Person Fit
 
 When JMLE is used, TAM calculates both person and item fit using a single function: *tam.jml.fit()*. 
+
 ```{r}
 jmle.fit <- tam.jml.fit(dichot.transreas_JMLE)
 ```
 
-Now that we have calculated fit statistics for items and persons, we will save the item fit statistics in a data frame called *jmle.item.fit*. We can examine the item fit statistics in more detail by printing the *jmle.item.fit* object to the console or preview window and calculating summary statistics:
+Now that we have calculated fit statistics for items and persons, we will save the item fit statistics in a data frame called *jmle.item.fit*. We can examine the item fit statistics in more detail by printing the *jmle.item.fit* object to the console or preview window and calculating summary statistics.
+
 ```{r}
 jmle.item.fit <- as.data.frame(jmle.fit$fit.item)
 jmle.item.fit
 summary(jmle.item.fit)
 ```
 
-Next, we will save the person fit statistics in a data frame called *jmle.person.fit*. We can examine the person fit statistics in more detail by viewing it in the preview window and calculating summary statistics:
+Next, we will save the person fit statistics in a data frame called *jmle.person.fit*. We can examine the person fit statistics in more detail by viewing it in the preview window and calculating summary statistics.
+
 ```{r}
 jmle.person.fit <- as.data.frame(jmle.fit$fit.person)
 summary(jmle.person.fit)

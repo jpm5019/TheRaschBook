@@ -8,7 +8,6 @@ The MFRM (-[Done] Cheng please add reference to Linacre, 1989) is an extension o
 
 A general equation for the MFRM is:
 
-
 \begin{equation}\tag{6.1}\ln\left(\frac{P_{n(x=k)}}{P_{n(x=k-1)}}\right)=\theta_{n}-\sum_{\text {facets }}\varepsilon-\tau_{k}\end{equation}
 
 
@@ -39,7 +38,7 @@ citation("TAM")
 library("TAM")
 ```
 
-We will also use the *WrightMap* package (Torres Irribarra & Freund, 2014):
+We will also use the *WrightMap* package (Torres Irribarra & Freund, 2014).
 
 ```{r}
 citation("WrightMap")
@@ -47,7 +46,7 @@ citation("WrightMap")
 library("WrightMap")
 ```
 
-Finally, we will use the *psych* package (Revelle, 2016):
+Finally, we will use the *psych* package (Revelle, 2016).
 
 ```{r}
 citation("psych")
@@ -61,7 +60,7 @@ Now that we have installed and loaded the packages to our R session, we are read
 
 Please note that if you use *read.csv()* to import the data, you will need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
 
-First, we will import the data using *read.csv()* and store it in an object called *style*:
+First, we will import the data using *read.csv()* and store it in an object called *style*.
 
 ```{r}
 style <- read.csv("style_ratings.csv")
@@ -81,14 +80,14 @@ summary(style)
 
 From the summary of *style*, we can see there are no missing data. In addition, we can get a general sense of the scales, range, and distribution of each variable in the data set. For example, we can see that the data include student identification numbers, a language subgroup variable, and ratings from 21 raters. We can see that student identification numbers range from 3 to 1574. There are two language subgroups: Subgroup 1 (language = 1) indicates that students' best language is a language other than English, and subgroup 2 (language = 2) indicates that students' best language is English. The minimum rating from each rater was *x* = 0, and the maximum rating was *x* = 3.
 
-Please note that the TAM package requires that the lowest observation for item responses is equal to zero. In our data, this property is already present. If the lowest category is something other than zero, the analyst will need to recode the responses as we have done in previous chapters.
+Please note that the TAM package requires that the lowest observation for item responses is equal to zero. In our data, this property is already present. If the lowest category is something other than zero, the analyst will need to re-code the responses as we have done in previous chapters.
 
 ### Specify the components of the MFRM
 
 Now, we are ready to run the MFRM on the style ratings. Because the MFRM equation is researcher-specified, we need to define the components of the model. To do this, we will create an object called *facets* in which we specify the facets in the model. By default, the TAM package treats the variables that make up the columns of our item response matrix as an "item" facet. In our example, raters function as pseudo-items. Accordingly, raters make up the first facet in our analysis. Our second facet will be student language subgroups. We specify this facet and save it in a data frame object called *facets*. We specified "drop = FALSE" because the data frame only includes one column.
 
 ```{r}
-facets <- style[,"language", drop=FALSE]
+facets <- style[ , "language", drop=FALSE]
 ```
 
 Next we need to identify the indicator variable for the object of measurement (i.e., subject). In our example, students are the object of measurement. We will save the student identification numbers in a vector called *students*:
@@ -100,7 +99,7 @@ students <- style$student
 Finally, we need to specify the response matrix. We do so by extracting the raters' scores for each student to a data frame object called *ratings*:
 
 ```{r}
-ratings <- style[, -c(1:2)]
+ratings <- subset(style, select = -c(student, language))
 ```
 
 Next, we need to specify the formula for our MFRM. For the first example will use a rating scale model specification of the MFRM. This means that we will constrain the threshold parameters to be equal across raters. The model is specified as follows:
@@ -141,7 +140,9 @@ For easier reference, we will now create objects in which we store the location 
 
 ```{r}
 rater.estimates <- subset(facet.estimates, facet.estimates$facet == "item")
+
 subgroup.estimates <- subset(facet.estimates, facet.estimates$facet == "language")
+
 threshold.estimates <- subset(facet.estimates, facet.estimates$facet == "step")
 ```
 
@@ -153,14 +154,14 @@ Next, we will request a summary of the rater facet estimates.
 summary(rater.estimates)
 ```
 
-From the summary of rater locations, we can see that rater severity estimates range from $\lambda$ = -0.87 for the most lenient rater to $\lambda$ = 1.12 for the most severe rater.
+From the summary of rater locations, we can see that rater severity estimates range from $\lambda$ = -0.87 for the most lenient rater to $\lambda$ = 1.12 for the most severe rater. The average rater severity location is set to zero logits.
 
 #### Student subgroup facet results
+
 Next, we will examine the language subgroup estimates using the *summary()* function. Because there are only two subgroups in our analysis.
 
 ```{r}
 summary(subgroup.estimates$xsi)
-
 ```
 
 We can also print the locations to our console to inspect them.
@@ -185,8 +186,11 @@ Next, we will examine the student location estimates from the RS-MFRM. We qill a
 
 ```{r results='hide'}
 student.ach <- tam.wle(RS_MFR_model)
+
 student.locations_RSMFR <- cbind.data.frame(student.ach$pid, student.ach$theta, student.ach$error)
+
 names(student.locations_RSMFR) <- c("id", "theta", "se")
+
 summary(student.locations_RSMFR)
 ```
 
@@ -377,11 +381,13 @@ As needed, researchers can also examine model-data fit statistics specific to su
 fit_with_subgroups <- cbind.data.frame(style$language, student.fit)
 
 fit_group_1 <- subset(fit_with_subgroups, fit_with_subgroups$`style$language` == 1)
+
 summary(fit_group_1)
 ```
 
 ```{r}
 fit_group_2 <- subset(fit_with_subgroups, fit_with_subgroups$`style$language` == 2)
+
 summary(fit_group_2)
 ```
 
@@ -707,13 +713,14 @@ Compared to the first example in this chapter, our description of the second exa
 Before proceeding with the analysis, readers should ensure that they have installed and loaded all three of the packages described earlier in this chapter: *TAM*, *WrightMap*, and *psych*.
 
 ### Prepare the data for analysis
+
 Next, we will import the data for our analysis. The data for this example are stored in the file named *writing.csv*. We will save these data in an object called *writing*.
 
 ```{r}
 writing <- read.csv("writing.csv")
 ```
 
-Note that the writing data are in *long* format: This means that there are multiple rows for each element within the object of measurement. In the case of our example data, this means that there are multiple rows for each student. Each row includes one rater's ratings of one student on all four of the domains in the assessment: Style, Organization, Conventions, and Sentence Formation. We can see this structure by printing the first six rows of the data frame object using the *head()* function.
+Note that the writing data are in *long* format: This means that there are multiple rows for each element within the object of measurement. In the case of our example data, there are multiple rows for each student. Each row includes one rater's ratings of one student on all four of the domains in the assessment: Style, Organization, Conventions, and Sentence Formation. We can see this structure by printing the first six rows of the data frame object using the *head()* function.
 
 ```{r}
 head(writing)
@@ -750,7 +757,7 @@ In Equation 6.3, $\theta_n$ and $\lambda_i$ are defined as in Equation 6.1 and E
 With long format data, we need to ensure that the person identification numbers (in this case, student ids) are sorted from low to high before we can run the analysis.
 
 ```{r}
-writing <- writing[order(writing$student),]
+writing <- writing[order(writing$student), ]
 ```
 
 Next, we specify the components of the PC-MFRM. In this long-format data analysis, the TAM package will treat domains as "items" because they make up the columns of the response matrix. Therefore, our facets object includes raters.
@@ -764,14 +771,14 @@ Next, we identify the object of measurement as students:
 
 ```{r}
 # identify the object of measurement:
-writing.pid <- writing$student 
+writing.pid <- writing$student
 ```
 
 The response matrix includes students' ratings on the four domains:
 
 ```{r}
 # identify the response matrix:
-writing.resp <- writing[,-c(1:3)]
+writing.resp <- subset(writing, select = -c(student, language, rater))
 ```
 
 We specify the PC-MFRM from Equation 6.3 in an object for use with TAM as follows. First, we specify a name for the model object (*writing_PC_MFRM*), which is defined using the tilde symbol (~), followed by the facet names. As a reminder, the model must include a facet named *item*; in our example, the item facet is made up of domains, because the domains make up the columns in our long-format response matrix. We also include raters as a facet. Finally, we use *item:step* to indicate the PC model.
@@ -786,8 +793,7 @@ We run the PC-MFR model using the tam.mml.mfr() function:
 ```{r}
 # Run the PC-MFR model:
 writing_PC_MFRM.model <- tam.mml.mfr(resp=writing.resp, facets=writing.facets,
-                             formulaA=PC.writing.formula, pid=writing.pid, verbose = FALSE,
-                             constraint = "items")
+                             formulaA=PC.writing.formula, pid=writing.pid, verbose = FALSE, constraint = "items")
 ```
 
 Analysts who are interested in overall model-fit indices or other details that are included in the summary of the MFRM may request it using the summary() function:
@@ -870,6 +876,7 @@ names(student.locations_PCMFR) <- c("id", "theta", "se")
 ```
 
 Next, we will examine the student location estimates using the *summary()* function.
+
 ```{r}
 summary(student.locations_PCMFR$theta)
 ```
@@ -937,7 +944,7 @@ VR <- var(residuals.vector)
 ((VO - VR)/VO) * 100
 ```
 
-Our analysis indicates that approximately 71.61% of the variance in ratings can be explained by the PC-MFRM estimates of student, domain, and rater locations on the logit scale that represents the latent variable. 
+Our analysis indicates that approximately 71.44% of the variance in ratings can be explained by the PC-MFRM estimates of student, domain, and rater locations on the logit scale that represents the latent variable. 
 
 ### Principal Components Analysis of Standardized Residual Correlations
 
@@ -1096,6 +1103,7 @@ summary(rater.fit_results)
 ***Graphical displays of residuals***
 
 Next we will construct plots of standardized residuals associated with individual raters within each domain. 
+
 ```{r}
 # Before constructing the plots, find the maximum and minimum values of the standardized residuals to set limits for the axes:
 max.resid <- ceiling(max(std.resid.matrix))
@@ -1328,7 +1336,7 @@ PC_MFRM_Table4[, -1] <- round(PC_MFRM_Table4[,-1], digits = 2)
 head(PC_MFRM_Table4)
 ```
 
-## Notes on formulations for MFR Models
+## Notes on formulations for Many-Facet Rasch Models
 
 In this chapter, we included two examples that demonstrated some basic principles for applying the MFRM using the TAM package. Example 1 used a Rating Scale (RS) model formulation with one explanatory person-related facet, and Example 2 used a Partial Credit (PC) formulation with one explanatory item-related facet.
 
