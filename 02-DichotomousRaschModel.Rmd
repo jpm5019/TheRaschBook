@@ -63,7 +63,7 @@ We selected eRm for the first illustration in the current chapter because it inc
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 ```{r}
 citation("eRm")
-install.packages("eRm")
+#install.packages("eRm")
 library("eRm")
 ```
 
@@ -86,7 +86,8 @@ Specifically, we can see that Student ID numbers range from 1 to 425, student gr
 
 ### Run the Dichotomous Rasch Model
 
-To run the dichotomous Rasch Model using the eRm package, need to isolate the item response matrix from the other variables in the data (student IDs and grade level). To do this, we will create an object made up of only the item responses by removing the first two variables from the data. We will remove the descriptive variables using the *subset()* function with the *select=* option. We will save the response matrix in a new object called *transreas.responses*:
+To run the dichotomous Rasch Model using the eRm package, need to isolate the item response matrix from the other variables in the data (student IDs and grade level). To do this, we will create an object made up of only the item responses by removing the first two variables from the data. We will remove the descriptive variables using the *subset()* function with the *select=* option. We will save the response matrix in a new object called *transreas.responses*.
+
 ```{r}
 transreas.responses <- subset(transreas, select = -c(Student, Grade))
 ```

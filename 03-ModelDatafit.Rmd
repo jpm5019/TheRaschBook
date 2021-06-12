@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Evaluating the Quality of Measures {#MD_fit}
 
 This chapter provides an overview of several popular analyses that researchers can use to evaluate the quality of Rasch model results. Within the framework of Rasch measurement theory (Rasch 1960), evaluating the quality of measures primarily involves exploring the degree to which the observed data (e.g., item responses) reflect fundamental measurement properties, as expressed in Rasch model requirements.
@@ -349,7 +354,7 @@ Where:
     Calculated by subtracting error variance for persons from total person variance: \begin{equation}\tag{3.6} SA_{P}^{2} = SD_{P}^{2} - SE_{P}^{2} \end{equation}
 	  *SD^2^~P~* : Total person variance
 	  
-The "eRm" package includes the function *SepRel()* to calculate the person separation reliability statistic. This function is applied to the person parameter object. We apply the *SepRel()* function to our *student.locations* object::
+The "eRm" package includes the function *SepRel()* to calculate the person separation reliability statistic. This function is applied to the person parameter object. We apply the *SepRel()* function to our *student.locations* object:
 
 ```{r}
 summary(SepRel(student.locations))
