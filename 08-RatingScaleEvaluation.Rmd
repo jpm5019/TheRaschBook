@@ -1,13 +1,11 @@
 # Rating Scale Evaluation {#RS_Eval}
 
-## R-lab purpose
+This chapter provides a basic overview of procedures for evaluating rating scales with Rasch models using R. We will use the eRm package (Mair et al., 2020) and the TAM package (Robitzch et al., 2020) for the analyses in this chapter. We use example data from an attitude survey to demonstrate procedures for evaluating rating scales using the Partial Credit Model (see Chapter 5).
 
-The purpose of this lab is to give students experience running some basic rating scale analyses using Rasch models. From Blackboard, please download and save these files to a convenient location on your computer. 
+## What is Rating Scale Evaluation?
 
-> ratings.csv
-pain_cleaned_numeric.csv
+When researchers evaluate rating scales, they examine the degree to which ordinal rating scales (e.g., Likert-type rating scales or rubrics in performance assessments) exhibit useful measurement characteristics. Essentially, rating scale evaluation involves examining rating scales for evidence that the categories are ordered as expected on the construct and that each category reflects a unique range of person locations on the construct. Several researchers (XXXX) have proposed practical guidelines for evaluating rating scales that analysts can use to identify issues and improve their rating scales. For example, Linacre (XXXX) presented a set of X guidelines for rating scales that can 
 
-We will use "eRm" package for this analysis.
 
 ```{r}
 ## Install & load the eRm package:
