@@ -22,11 +22,11 @@ Because it is a Rasch model, the RSM is based on the same requirements of unidim
 
 The example data for this chapter is a group of 75 children's responses to the 25-item *Liking for Science* questionnaire, which was designed to measure their attitudes toward science activities. The data were published in Wright and Masters (1982). Each item stem included a science activity, and three response options: 0 = *Dislike*, 1 = *Not Sure/Don't Care*, and 2 = *Like*, such that responses in higher categories indicated more-favorable attitudes toward science activities.
 
-## RSM Analysis with Conditional Maximum Likelihood Estimation
+## RSM Analysis with CMLE in eRm
 
-In the next section, we provide a step-by-step demonstration of a RSM analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al. 2020). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
+In the next section, we provide a step-by-step demonstration of a RSM analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al. 2020), which uses Conditional Maximum Likelihood Estimation (CMLE). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 
 We selected eRm for the first illustration in the current chapter because it includes functions for applying the RSM that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. 
 
@@ -62,7 +62,7 @@ We can see that Student ID numbers range from 1 to 75, and that the maximum rati
 science_drop_i12 <- subset(science, select = -i12)
 ```
 
-### Run the Rating Scale Model
+***Run the Rating Scale Model***
 
 Next we need to isolate the item response matrix from the descriptive variables in the data (in this case, student IDs). To do this, we will create an object made up of only the item responses by removing the first variable (*student*) from the data.
 
@@ -76,16 +76,23 @@ We will use *summary()* to calculate descriptive statistics for the *science.res
 summary(science.responses)
 ```
 
-Now, we are ready to run the RSM on the Liking for Science response data. We will use the *RSM()* function to run the model and store the results in an object called *RSM.science*. Then, we will request a summary of the model results using the *summary()* function.
+Now, we are ready to run the RSM on the Liking for Science response data. We will use the *RSM()* function to run the model and store the results in an object called *RSM.science*. 
 
 ```{r}
 RSM.science <- RSM(science.responses, se = TRUE)
+```
+
+***Overall Model Summary***
+
+Next, we will request a summary of the model results using the *summary()* function.
+
+```{r}
 summary(RSM.science)
 ```
 
 The summary of the RSM output includes the Conditional Log-likelihood statistic, details about the number of iterations and model parameters, and a table with item parameters, their standard errors, and confidence intervals. It is important to note that the item parameters included in this preliminary output are *item easiness* parameters--*not* item difficulty parameters. We will examine item difficulty parameters in detail later in our analysis.
 
-### Wright Map
+***Wright Map***
 
 Next, we will create a Wright Map (see Chapter 2) from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the eRm package function *plotPImap* on the model object (*RSM.science*). 
 
@@ -101,7 +108,7 @@ The central panel of the figure shows item difficulty locations on the logit sca
 
 The upper panel of the figure shows a histogram of person (in this case, children) location estimates on the logit scale. Small vertical lines on the x-axis of this histogram show the points on the logit scale at which information (variance) is maximized for the sample of persons and items in the analysis. These lines can be omitted by adding "irug = FALSE" as an argument in the *plotPImap()* call.
 
-### Item Parameters
+***Item Parameters***
 
 Next, we will examine the item difficulty location and rating scale category threshold estimates. The eRm package provides several options with which analysts can find and examine item and rating scale category threshold parameters. For example, one way to obtain the overall item location parameters ($\delta$) is to extract the *eta parameters* from the model object using the $ operator. We extract these parameters, print them to the console, and calculate summary statistics for them with the following code.
 
@@ -164,7 +171,7 @@ delta.se <- RSM.science$se.eta
 summary(delta.se)
 ```
 
-### Item Response Functions (Rating Scale Category Probability Plots)
+***Item Response Functions***
 
 We will examine graphical displays of item difficulty using item response functions. With the RSM, the eRm package creates plots of the probability for a rating in each rating scale category, conditional on person locations on the latent variable. In the following code, we use *plotICC()* from eRm to create rating scale category probability plots for the 24 items in our analysis. We included "ask = FALSE" in our function call in order to generate all of the plots at once. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the *items.to.plot* object.
 
@@ -175,11 +182,11 @@ plotICC(RSM.science, ask = FALSE, item.subset = items.to.plot)
 
 This code generates plots of rating scale category probabilities for each item. In each item-specific plot, the x-axis is the logit scale that represents the latent variable; this scale represents favorability toward science activities in our example. The y-axis is the probability for a rating in each category, conditional on person locations on the latent variable. Separate lines in different colors show the conditional probability for each category of responses observed for the item of interest. Because we used the RSM, the overall shape of the curves and the relative distance between the curves is consistent across items--reflecting the common set of rating scale category thresholds. However, the location of the curves on the logit scale shifts across the individual items--reflecting each item's unique overall difficulty location ($\delta$).
 
-### Person Parameters and Item Fit
+***Person Parameters and Item Fit***
 
 In the eRm package, it is necessary to calculate person parameters *before* item fit statistics can be calculated. Accordingly, we will proceed with a brief examination of person parameters before we conduct item fit analyses. In practice, we recommend examining item fit before examining and interpreting item locations in detail.
 
-***Examine Person Parameters***
+**_Examine Person Parameters_**
 
 The next step in our analysis is to calculate and examine person location parameters (i.e., person achievement or ability estimates). With the CMLE method that is used in eRm, person parameters are calculated *after* the item locations are estimated.
 
@@ -200,7 +207,7 @@ summary(person.locations)
 
 The estimation procedure in eRm does not directly produce parameter estimates for persons with extreme scores. In our example, extreme scores would result from a child giving a response of *x* = 0 to all items or a child giving a response of *x* = 2 to all items. For these students, a standard error is not calculated. In our example, Child 2 had an extreme score because they gave a rating in category 2 to all items.
 
-***Examine Item Fit***
+**_Examine Item Fit_**
 
 Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the same procedures in that chapter to examine item fit in detail for the RSM.
 
@@ -254,7 +261,7 @@ item.separation.reliability <- (SSD.ItemScores-Item.MSE) / SSD.ItemScores
 item.separation.reliability
 ```
 
-### Person Fit
+***Person Fit***
 
 Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function *personfit()* from eRm on the person parameter object (*person.locations.estimate*). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called *person.fit*, and then format this object as a dataframe for easier manipulation and exporting.
 
@@ -276,7 +283,7 @@ summary(person.fit)
 
 The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of person fit.
 
-### Summarize the Results in Tables
+***Summarize the Results in Tables***
 
 As a final step, we will create tables that summarize the calibrations of the persons, items, and rating scale category thresholds.
 
@@ -394,13 +401,13 @@ RSM_Table3[, -1] <- round(RSM_Table3[,-1], digits = 2)
 head(RSM_Table3)
 ```
 
-## RSM Analysis with Marginal Maximum Likelihood Estimation
+## RSM Analysis with MMLE in TAM
 
 The next section of this chapter includes an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Marginal Maximum Likelihood Estimation (MMLE). After this illustration, we also demonstrate the use of TAM to estimate the RSM with Joint Maximum Likelihood Estimation (JMLE). These illustrations use the Liking for Science data set that we described earlier in this chapter.
 
 Except where there are significant differences between the eRm and TAM procedures, we provide fewer details about the analysis procedures and interpretations in this section compared to the first illustration.
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 
 To get started with the TAM package, view the citation information, and then install and load it into your R environment using the following code:
 
@@ -419,11 +426,9 @@ citation("WrightMap")
 library("WrightMap")
 ```
 
-### Prepare Data for Analysis
-
 If you have not already imported the Liking for Science data and prepared it for analysis as described earlier in this chapter by dropping item 12 and isolating the response matrix, please do so before continuing with the TAM analyses.  
 
-### Run the Rating Scale Model
+***Run the Rating Scale Model***
 
 In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds) from our analysis, we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*.
 
@@ -431,17 +436,23 @@ In order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories threshold
 design.matrix <- designMatrices(resp=science.responses, modeltype="RSM", constraint = "items")$A
 ```
 
-Now we can run the RSM with our design matrix using the *tam.mml()* function with several specifications. After we run the model, we will request a summary of the model results using the *summary()* function.
+Now we can run the RSM with our design matrix using the *tam.mml()* function with several specifications. 
 
 ```{r results="hide"}
 RSM.science_MMLE <- tam.mml(science.responses, irtmodel="RSM", A = design.matrix, constraint = "items", verbose = FALSE) 
+```
 
+***Overall Model Summary***
+
+After we run the model, we will request a summary of the model results using the *summary()* function.
+
+```{r results="hide"}
 summary(RSM.science_MMLE)
 ```
 
 The summary of the RSM output includes details about the number of iterations, global model fit statistics, a summary of the model parameters, and several other statistics. 
 
-### Item Parameters
+***Item Parameters***
 
 Next, we will examine the overall item difficulty location and rating scale category threshold estimates. First, we need to extract the item location estimates from the model object (*RSM.science_MMLE*). The item locations are labeled as *xsi* parameters. We will save the overall item location parameter estimates and their standard errors for our 24 Liking for Science Items by selecting the first 24 rows of the xsi results in an object called *items_MMLE*.
 
@@ -470,7 +481,7 @@ tau.estimates_MMLE <- RSM.science_MMLE$item_irt[1, c(4: (4 + (n.thresholds - 1))
 tau.estimates_MMLE
 ```
 
-### Item Response Functions (Rating Scale Category Probability Plots)
+***Item Response Functions***
 
 Next, we will examine rating scale category probability plots for the items in our analysis. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the *items.to.plot* object.
 
@@ -482,7 +493,7 @@ plot(RSM.science_MMLE, type="items", items = items.to.plot)
 
 This code generates plots of rating scale category probabilities for each item. These plots have the same interpretation as the rating scale category probability plots that we generated using eRm, where the x-axis is the logit scale that represents the latent variable, the y-axis is the probability for a rating in each category, and individual lines show the conditional probability for a rating in each category.
 
-### Item Fit
+***Item Fit***
 
 Next, we will examine numeric item fit indices using the *itemfit()* function from TAM. We will save the results in an object called *item.fit_MMLE* and then view summary statistics for the fit statistics.
 
@@ -494,7 +505,7 @@ summary(item.fit_MMLE)
 
 As in the dichotomous Rasch model analysis with TAM (see Chapter 2), the *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. The *Outfit* and *Infit* statistics are the *MSE* versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics. TAM also reports a *p* value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*). Please see Chapter 3 for a detailed consideration of procedures for evaluating item fit in detail, including the use of graphical tools to evaluate item fit.
 
-### Person Paramters
+***Person Paramters***
 
 Now we will examine person parameter estimates. With the MMLE procedure in TAM, person parameters are calculated after the item estimates using the *tam.wle()* function. The following code calculates person parameter estimates and saves them in an object called person.locations_MMLE.
 
@@ -512,7 +523,7 @@ names(person.locations_MMLE) <- c("theta", "SE")
 summary(person.locations_MMLE)
 ```
 
-### Person Fit
+***Person Fit***
 
 We can evaluate person fit using the *tam.personfit()* function from TAM. This function uses the model object as an argument and it produces infit and outfit statistics, as well as standardized versions of these statistics, for each person in the response matrix.
 
@@ -521,7 +532,7 @@ person.fit.results_MMLE <- tam.personfit(RSM.science_MMLE)
 summary(person.fit.results_MMLE)
 ```
 
-### Wright Map:
+***Wright Map***
 
 Next, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the WrightMap package function *IRT.WrightMap* on the model object (*RSM.science_MMLE*). The following code prepares the parameter estimates and plots the Wright Map using them.
 
@@ -557,15 +568,15 @@ Even though it is not appropriate to fully interpret item and person locations o
 
 A quick glance at the Wright Map suggests that, on average, the persons are located higher on the logit scale compared to the average item threshold locations. In addition, there appears to be a relatively wide spread of person and item locations on the logit scale, such that the Liking for Science questionnaire appears to be a useful tool for identifying differences in children's attitudes toward science activities as well as the difficulty to find each of the activities as favorable.
 
-## RSM Analysis with Joint Maximum Likelihood Estimation
+## RSM Analysis with JMLE in TAM
 
 In the following section, we provide an illustration of RSM analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al., 2020) with Joint Maximum Likelihood Estimation (JMLE). Except where there are significant differences between the MMLE and JMLE procedures, we provide fewer details about the analysis procedures and interpretations compared to the eRm and TAM MMLE illustrations.
 
-### Prepare for the Analyses
+***Prepare for the Analyses***
 
 Before beginning the JMLE RSM analysis, please ensure that you have installed the TAM and WrightMap packages and loaded them into your working environment. In addition, please ensure that you have imported the Liking for Science data, removed item 12, and isolated the response matrix as described earlier in the chapter.
 
-### Run the Rating Scale Model
+***Run the Rating Scale Model***
 
 We will use the *tam.jml()* function to run the RSM with JMLE and store the results in an object called *RSM.science_JMLE*. As with the MMLE procedure, in order to obtain Rasch-Andrich thresholds (i.e., adjacent-categories thresholds), we need to generate a design matrix for the model that includes specifications for those parameters. We will do this using the *designMatrices()* function from TAM and save the result in a new object called *design.matrix*.
 
@@ -573,18 +584,25 @@ We will use the *tam.jml()* function to run the RSM with JMLE and store the resu
 design.matrix <- designMatrices(resp=science.responses, modeltype="RSM", constraint = "items")$A
 ```
 
-Now we can run the RSM with our design matrix. We have also added a few other specifications to maximize the comparability of the interpretation of the results from this analysis with results from the Winsteps and Facets software programs. After we run the model, we will request a summary of the model results using the *summary()* function.
+Now we can run the RSM with our design matrix. We have also added a few other specifications to maximize the comparability of the interpretation of the results from this analysis with results from the Winsteps and Facets software programs.
 
 ```{r results="hide"}
 RSM.science_JMLE <- tam.jml(science.responses, A = design.matrix, constraint = "items",
                          control=list(maxiter=500), version=2, verbose = FALSE)
+```
 
+
+***Overall Model Summary***
+
+After we run the model, we will request a summary of the model results using the *summary()* function.
+
+```{r results="hide"}
 summary(RSM.science_JMLE)
 ```
 
 The summary of the RSM output includes details about the number of iterations, global model fit statistics, a summary of the model parameters, and several other statistics. 
 
-### Item Parameters
+***Item Parameters***
 
 Next, we will examine the item difficulty location and rating scale category threshold estimates. First, we need to extract the item location estimates from the model object (*RSM.science_MMLE*). The item locations are stored in the *item* table within the model object. The item locations are stored in the *xsi.item* column of this table. First, we will view the item table by printing it to the console. Then, we will save the overall item location parameter estimates in an object called *items_MMLE*.
 
@@ -620,7 +638,7 @@ tau.estimates_JMLE[n.thresholds] <- -(sum(tau.estimates_JMLE))
 tau.estimates_JMLE
 ```
 
-### Item Response Functions (Rating Scale Category Probability Plots)
+***Item Response Functions***
 
 Next, we will examine rating scale category probability plots for the items in our analysis. As before, we only create plots for the first three items wuth this code.
 
@@ -632,7 +650,7 @@ plot(RSM.science_JMLE, type="items", items = items.to.plot)
 
 This code generates plots of rating scale category probabilities for each item. These plots have the same interpretation as the rating scale category probability plots presented earlier in this chapter.
 
-### Item Fit
+***Item Fit***
 
 Next, we will examine numeric item fit indices using the *tam.fit()* function from TAM. We will save the results in an object called *item.fit_JMLE* and then view summary statistics for the fit statistics.
 
@@ -645,7 +663,7 @@ summary(item.fit_JMLE)
 
 The *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each item estimate.
 
-### Person Parameters
+***Person Parameters***
 
 Now we will examine person parameter estimates. With the JMLE procedure in TAM, person parameters are calculated at the same time as the item parameters. This means that we can extract the person parameter estimates from the model object without any additional iterations. The following code calculates person parameter estimates and saves them in an object called person.locations_JMLE.
 
@@ -660,7 +678,7 @@ names(person.locations_JMLE) <- c("theta", "SE")
 summary(person.locations_JMLE)
 ```
 
-### Person Fit
+***Person Fit***
 
 Next, we will examine numeric person fit indices using the *tam.fit()* function from TAM. We will save the results in an object called *person.fit_JMLE* and then view summary statistics for the fit statistics.
 
@@ -673,7 +691,7 @@ summary(person.fit_JMLE)
 
 The *tam.fit()* function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each person location estimate.
 
-### Wright Map:
+***Wright Map***
 
 Finally, we will create a Wright Map from our model results. This display will provide us with an overview of the distribution of person, item, and threshold parameters. We will create the plot using the WrightMap package function *IRT.WrightMap* on the model object (*RSM.science_JMLE*). The following code prepares the parameter estimates and plots the Wright Map using them.
 
@@ -700,7 +718,7 @@ wrightMap(thetas = person.locations_JMLE$theta,
 
 In this *Wright Map* display, the results from the RSM analysis of the Liking for Science data are summarized graphically. The figure is organized in the same way as we described for the MMLE RSM analysis earlier in this chapter.
 
-## Example Results Section based on the eRm CMLE Results:
+## Example Results Section
 
 Table 1 presents a summary of the results from the analysis of the Liking for Science data (Wright & Masters, 1982) using the Rating Scale Model (RSM; Andrich, 1978). One item was excluded (item 12) because the responses to this item did not include any observations in the lowest rating scale category (*x* = 0). In addition, one child was excluded from the analysis (Child 2), who gave extreme responses to all of the items (*x* = 2).
 

@@ -2,7 +2,7 @@
 
 This chapter provides a basic overview of differential item functioning (DIF) along with methods for detecting DIF with Rasch models using R. We will use the eRm package (Mair et al., 2020) and the TAM package (Robitzch et al., 2020) for the analyses in this chapter. We have included demonstrations for exploring DIF with dichotomous data and polytomous data using the dichotomous Rasch Model and the Partial Credit Model, respectively.
 
-## What is Differential Item Functioning (DIF)?
+***What is Differential Item Functioning (DIF)?***
 
 DIF occurs when examinees who are members of different groups (e.g., demographic subgroups) who have the *same location* on the latent variable have *different probabilities for a response* in a given category (e.g., a correct response or a rating of "agree") on an item. In the context of Rasch measurement theory (Rasch, 1960), DIF means that an item has a different location (i.e., a different level of difficulty) across subgroups by more than the standard error. Rasch analyses of DIF typically focus on detecting *uniform DIF*, which occurs when the distance between item response functions (IRFs) is constant between subgroups.
 
@@ -33,7 +33,7 @@ It is also important to note that when DIF occurs, it does not always imply a th
 
 In this chapter, we demonstrate two techniques that analysts can use to identify DIF within the Rasch measurement theory framework. Our presentation is not exhaustive and there are many other methods that can be used to supplement those that we demonstrate here. We encourage interested readers to consult the resources listed throughout the chapter, as well as the resource list at the end of this chapter, to learn more about best practices for identifying DIF within the context of Rasch measurement theory, as well as in other measurement frameworks.
 
-## Popular Methods for Identifying DIF with Rasch models
+***Popular Methods for Identifying DIF with Rasch models***
 
 From the perspective of Rasch measurement theory, DIF poses a threat to measurement quality because it implies a lack of invariance. When DIF occurs, the requirements for invariant measurement are not met (see Chapter 1). Accordingly, DIF can be interpreted as not only a potential threat to fairness, but also as a violation of Rasch model requirements (Hagquist & Andrich, 2017).
 
@@ -41,7 +41,7 @@ Researchers have proposed several methods for identifying DIF within the framewo
 
 In addition to methods based on Rasch measurement theory, there are numerous other approaches to detecting DIF that are beyond the scope of this volume. We encourage readers who are interested in learning more about DIF to consult the resources that we have listed at the end of this chapter.
 
-***Comparing Group-Specific Item Estimates***
+**_Comparing Group-Specific Item Estimates_**
 
 A popular method for identifying DIF within the framework of Rasch measurement theory is to calculate group-specific estimates of item difficulty, and compare those estimates to see if they are meaningfully different. In order to meaningfully compare item difficulty estimates between two groups, it is necessary to adjust (i.e., equate) the item difficulty measures for one group so that they are on the same scale as the item difficulty measures for the second group. The equated differences in item difficulty estimates  reflect the distance between group-specific IRFs (Raju, 1988).
 
@@ -67,7 +67,7 @@ In Equation 7.3, s1 is the standard error of estimate for $/delta_i1$, s2 is the
 
 When more than two groups are of interest, it is possible to apply the t-test method to compare pairs of groups (e.g., Group A compared to Group B; Group B compared to Group C; Group C compared to Group A). As needed, corrections such as Bonferroni adjustments can be used to reduce the chance of Type 1 errors from multiple comparisons.
 
-***Interaction Analyses***
+**_Interaction Analyses_**
 
 Another method for identifying DIF is to examine interactions between item difficulty and examinee subgroup identifiers using the Many-Facet Rasch Model (MFRM; Linacre, 1989; See Chapter 6). Including interaction terms in MFRMs allows researchers to test the null hypothesis that the calibrations of elements within one facet (e.g., items) are invariant across levels of another facet (e.g., subgroups). For the purpose of identifying DIF, researchers can examine the magnitude of the interaction effect between individual items and relevant examinee subgroups, where larger interaction terms indicate larger differences in item difficulty parameters for the subgroup of interest.
 
@@ -85,7 +85,7 @@ In this section, we provide a step-by-step demonstration of the two approaches t
 
 The example data for this section is the Transitive Reasoning Data that we used in Chapter 2. The data include a group of 425 children's scored responses to assessment items designed to measure their ability to reason about the relationships among physical objects. Along with student responses, the Transitive Reasoning data file includes students' grade levels, ranging from Grade 2 to Grade 6. We will use students' grade level as the basis for our DIF analyses. Please see Chapter 2 for additional details about these data.
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 
 We will use the *Extended Rasch Modeling* or *eRm* package (Mair et al., 2020) and the *Test Analysis Modules* or *TAM* package (Robitzsch et al., 2020) to demonstrate DIF analyses in this chapter. 
 
@@ -102,8 +102,6 @@ citation("TAM")
 #install.packages("eRm")
 library("TAM")
 ```
-
-### Getting Started
 
 Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function *read.csv()* to import the comma-separated values (.csv) file that contains the Transitive Reasoning assessment data. We encourage readers to use their preferred method for importing data files into R or R Studio.
 
@@ -125,7 +123,7 @@ transreas.grade.group <- ifelse(transreas$Grade <= 4, 1, 2)
 table(transreas.grade.group)
 ```
 
-### DIF Method 1: Compare Item Locations between Subgroups
+***DIF Method 1: Compare Item Locations between Subgroups***
 
 First, we will conduct a DIF analysis by comparing the difficulty estimate of each Transitive Reasoning item between our two student subgroups. We will use the dichotomous Rasch model (see Chapter 2) to estimate item difficulty locations.
 
@@ -160,6 +158,7 @@ We can examine the differences between the subgroup-specific item difficulties b
 ```{r}
 subgroup_1_diffs - subgroup_2_diffs
 ```
+
 From these results, we can see that there are some items that were easier for Lower Elementary students (positive differences) and other items that were easier for Upper Elementary students (negative differences). In addition, the difference in logit-scale locations for two items (Task 2 and Task 6) exceed the "half-logit" rule, suggesting potentially meaningful DIF. The difference for Task 3 approximates this value as well.
 
 To better understand the significance of differences in item difficulty between subgroups, we will examine the results from the statistical hypothesis test for the item difficulty comparisons. In the eRm package, item comparisons are reported using z-statistics instead of the Wright and Stone t-test statistics that we discussed earlier. With large sample sizes, t statistics approximate z statistics. Let's create an object called "comparisons" in which we store these results.
@@ -221,9 +220,10 @@ lines(lower$lower.group.1, lower$lower.group.2, lty = 2, col = "red")
 legend("bottomright", c("Item Location", "Identity Line", "95% Confidence Band"),
        pch = c(1, NA, NA), lty = c(NA, 1, 2), col = c("black", "purple", "red"), cex = .8)
 ```
+
 In this scatterplot, item difficulty estimates for the Lower Elementary group are plotted along the x-axis, and item difficulty estimates for the Upper Elementary group are plotted along the y-axis. Dashed lines show a 95% confidence interval beyond which the differences in item difficulty esitmates are statistically significant. Items that are located above the identity line have higher locations (i.e., are more difficult) for students in the Upper Elementary group, and items that are located below the identity line are more difficult for students in the Lower Elementary group.
 
-### DIF Method 2: Interaction Analysis
+***DIF Method 2: Interaction Analysis***
 
 Next, we will conduct a DIF analysis with the Transitive Reasoning data using the interaction analysis approach based on the Many-Facet Rasch Model (MFRM; see Chapter 6). To do this, we will use the TAM package (Robitzsch et al., 2020) to specify a MFRM that includes an interaction term between item difficulty and student subgroup membership.
 
@@ -282,11 +282,9 @@ The example data for this section are 21 rater judgments of the style of 372 stu
 
 For the sake of illustration, we will treat the raters as "pseudo-items" in our analysis. DIF indicators will highlight individual raters who exhibit systematic differences in severity between student subgroups, after controlling for students' location on the latent variable. 
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 
 As we did in the first example, we will use two packages for our polytomous DIF analyses: eRm (Mair et al., 2020) and TAM (Robitzsch et al., 2020). Please ensure that these packages have been installed and loaded into the R enviornment before proceeding with the analyses. 
-
-### Getting Started
 
 Next, we will import the style ratings and prepare for the analysis. We will isolate the response matrix and identify the subgroup variable (language).
 
@@ -296,7 +294,7 @@ style <- read.csv("style_ratings.csv")
 ratings <- subset(style, select = -c(student, language))
 ```
 
-### DIF Method 1: Compare Item Locations between Subgroups
+***DIF Method 1: Compare Item Locations between Subgroups***
 
 It is possible to use the same approach to compare item difficulty between subgroups with polytomous data as with dichotomous data. The major difference is that, with polytomous data, item difficulty estimates include rating scale category thresholds. In this illustration, we will demonstrate how to compare the difficulty of rating scale category thresholds between subgroups, and how to compare overall item difficulty estimates.
 
@@ -347,9 +345,11 @@ We can view the group-specific item difficulty (rater severity) estimates by pri
 ```{r}
 group1_item.diffs.overall
 ```
+
 ```{r}
 group2_item.diffs.overall
 ```
+
 To compare these values, we need to calculate overall standard errors for each item (rater). In the following code, we save these values in objects called *group1_item.se.overall* and *group2_item.se.overall*.
 
 ```{r}
@@ -428,7 +428,7 @@ legend("bottomright", c("Item Location", "Identity Line", "95% Confidence Band")
        pch = c(1, NA, NA), lty = c(NA, 1, 2), col = c("black", "purple", "red"))
 
 ```
-### DIF Method 2: Interaction Analysis
+***DIF Method 2: Interaction Analysis***
 
 Next, we will conduct a DIF analysis with the style ratings data using the interaction analysis approach based on the Many-Facet Rasch Model (MFRM; see Chapter 6). We will use the TAM package (Robitzsch et al., 2020) to specify a MFRM that includes an interaction term between rater severity and student subgroup membership.
 
@@ -474,6 +474,7 @@ plot(interaction.estimates$xsi[1:21], main = "Interaction Effects for Language O
 ```{r}
 plot(interaction.estimates$xsi[22:42], main = "Interaction Effects for English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number")
 ```
+
 ## Exercise
 
 There are two exercises for this chapter. The first exercise uses dichotomous data, and the second exercise uses polytomous data. 
@@ -494,7 +495,7 @@ Mair, P., Hatzinger, R., & Maier M. J. (2020). eRm: Extended Rasch Modeling. 1.0
 
 Wright, B. D., & Masters, G. N. (1982). Rating Scale Analysis: Rasch Measurement. MESA Press.
 
-## Resources for further study
+## Resources for Further Study
 
 The following introductory texts include chapters dedicated to DIF that readers may find helpful for learning more about this topic:
 

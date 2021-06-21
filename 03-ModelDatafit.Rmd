@@ -51,11 +51,11 @@ We do not focus on global fit statistics that are typically reported in IRT anal
 
 We are going to practice evaluating model-data fit using the Transitive Reasoning assessment data that we explored in Chapter 2; these data were originally presented by Sijtsma and Molenaar (2002). Please see Chapter 2 for a detailed description of the data. 
 
-## Rasch Model Fit Analysis with Conditional Maximum Likelihood Estimation in eRm
+## Rasch Model Fit Analysis with CMLE in eRm
 
 We will use the "eRm" package [(Mair and Hatzinger 2007)](https://cran.r-project.org/web/packages/eRm/eRm.pdf) as the first package with which we demonstrate model-data fit analyses for Rasch models. We selected eRm as the primary package for the analyses in the current chapter because it includes functions for evaluating model-data fit that are relatively straightforward to apply and interpret. Please note that the "eRm" package uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods.
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 
 To get started with the eRm package, view the citation information, and then install and load it into your R environment using the following code:
 
@@ -83,7 +83,7 @@ transreas <- read.csv("transreas.csv")
 
 In Chapter 2, we provided code to calculate descriptive statistics for the transitive reasoning data. We encourage readers to briefly explore their data using descriptive statistics before examining model-data fit.
 
-### Rasch Model Analysis
+***Rasch Model Analysis***
 
 Because model-data fit analyses within the Rasch framework are based on residuals, the first step in the model-data fit analysis is to analyze the data with a Rasch model. These estimates are needed in order to calculate residuals.
 
@@ -117,7 +117,7 @@ The summary of the model results includes information about global model-data fi
 
 At this point in the analysis, we will not explore the item and student calibrations in great detail. Instead, we will focus on evaluating model-data fit. After we confirm adequate adherence to the Rasch model requirements, we can proceed to examine item and student estimates with confidence.
 
-### Evaluate Unidimensionality
+***Evaluate Unidimensionality***
 
 As a first step in our analysis of the degree to which the transitive reasoning data adhere to the dichotomous Rasch model requirements, we will examine evidence of adherence to the Rasch model requirement of *unidimensionality*, or the degree to which there is evidence that one latent variable is sufficient to explain most of the variation in the responses.
 
@@ -173,7 +173,7 @@ VR <- var(residuals.vector)
 
 Our analysis indicates that approximately 41.16% of the variance in student responses to the transitive reasoning tasks can be explained by the Rasch model estimates of student and item locations on the logit scale that represents the latent variable. 
 
-### Principal Components Analysis of Standardized Residual Correlations
+***Principal Components Analysis of Standardized Residual Correlations***
 
 It is also somewhat common in Rasch analysis to examine correlations among standardized residuals for evidence of potentially meaningful additional dimensions (i.e., factors, constructs, latent variables) beyond the primary latent variable that may be contributing to variance in responses (Linacre 1998). When researchers use Rasch measurement theory to guide their analyses, they use these exploratory techniques as a tool for *evaluating* the degree to which the construct of interest can be represented as a unidimensional latent variable (Boorsboom and Mellenbergh 2004; Maul 2020; Michell 1999). Deviations from unidimensionality provide information that is valuable for a variety of purposes. For example, deviations from unidimensionality might indicate that the guiding theory about the construct needs to be reconsidered or revised, that revisions are needed to ensure that the measurement procedure reflects the intended construct as a quantitative unidimensional variable, or both. In other cases, researchers might use dimensionality assessment tools as a method for evaluating a theory that there are multiple distinct constructs related to a particular domain, as reflected in responses to an assessment procedure.
 
@@ -216,23 +216,23 @@ plot(contrasts, ylab = "Eigenvalues for Contrasts", xlab = "Contrast Number", ma
 
 In this example, all of the contrasts have eigenvalues that are smaller than Linacre's (2016) critical value of 2.00. This result suggests that the correlations among the model residuals primarily reflect randomness (i.e., noise)--thus providing evidence that the responses adhere to the Rasch model requirement of unidimensionality.
 
-### Summaries of Residuals: Infit & Outfit Statistics
+***Summaries of Residuals: Infit & Outfit Statistics***
 
 As a next step in evaluating the quality of our measurement procedure, we will calculate numeric fit statistics for the individual elements in the assessment procedure: items and persons. The most popular Rasch fit statistics for practical purposes are based on sums of squared residuals. There are two major categories of residual summary statistics: Unweighted (Outfit) and Weighted (Infit) mean square error (MSE) statistics. Unstandardized ($χ^2$) & standardized versions (Z) are available in most Rasch software programs. In this analysis, we will focus on the Unstandardized ($χ^2$) versions of these statistics.
 
-***Outfit Mean Square Error***
+**_Outfit Mean Square Error_**
 
 Outfit MSE statistics are “unweighted fit” statistics. For items, outfit MSE is the sum of squared residuals for an item divided by the number of persons who responded to the item. For persons, outfit MSE is sum of squared residuals for a person divided by the number of items encountered by the person.
 
 Because it is an unweighted mean, the outfit statistic is sensitive to extreme departures from model expectations. For example, an extreme departure from model expectations would occur when an otherwise high-achieving student provided an incorrect response to a very easy item, or when an otherwise low-achieving student provided a correct response to a very difficult item.
 
-***Infit Mean Square Error***
+**_Infit Mean Square Error_**
 
 Infit stands for "information-weighted fit", where "information" means *variance*, such as larger variance for well-targeted observations, or smaller variance for extreme observations. For items, infit MSE statistics are calculated as the sum of squared standardized *item residuals*, weighted by variance, divided by the number of persons who responded to the item. For persons, infit MSE is the sum of squared standardized *person residuals*, weighted by variance, divided by the number of items the person encountered.
 
 Infit MSE is sensitive to less-extreme unexpected responses compared to outfit MSE. Examples of less-extreme unexpected responses include a student providing an incorrect response to an item that is just below their achievement level, or a student providing a correct response to an item that is just above their achievement level.
 
-***Expected Values for MSE Fit Statistics***
+**_Expected Values for MSE Fit Statistics_**
 
 There is considerable disagreement among measurement scholars about how to classify an infit or outfit MSE statistic as evidence of "misfit" or "fit." Nonetheless, readers may find it useful to be aware of commonly agreed-upon principles for interpreting these statistics:
 
@@ -244,7 +244,7 @@ There is considerable disagreement among measurement scholars about how to class
 
 - Some variation is expected, but noisy responses are usually considered more cause for concern than muted responses
 
-***Item Fit Statistics***
+**_Item Fit Statistics_**
 
 In practice, researchers usually begin individual Rasch fit analyses by examining fit statistics for items, rather than persons. There are two main reasons for this order. First, there is usually more data available with which to evaluate each item compared to each person, so the interpretation of fit statistics is less likely to be influenced by random fluctuations (i.e., noise). Second, it is usually easier to manage item misfit during a routine analysis compared to person misfit. For example, content validity concerns notwithstanding, in the case of severe item misfit, it may be possible to remove an item from an analysis and re-estimate parameters; removing persons from an analysis may warrant relatively more consideration. Alternatively, evidence of item misfit could signal data quality issues such as scoring or coding errors that could be resolved prior to additional analysis. 
 
@@ -256,7 +256,7 @@ item.fit
 
 The resulting table includes infit MSE and outfit MSE statistics for each item (labeled as "MSQ" statistics in the eRm package). The table also includes standardized versions of infit and outfit in the form of *t* statistics, along with an estimate of item discrimination (i.e., item slope). Item discrimination is not a parameter in the Rasch model, but it is calculated here as an additional indicator of fit to the Rasch model for individual items. 
 
-***Person Fit Statistics***
+**_Person Fit Statistics_**
 
 Next we will calculate numeric person fit statistics in the form of infit MSE and outfit MSE. In the eRm package, *personfit()* can be applied to the object with person parameter estimates to calculate these statistics. In our example, we will apply *personfit()* to the *student.locations* object and save the results in an object called *person.fit*. Because we have a relatively large sample, we will use the *summary()* function to explore the infit and outfit statistics rather than printing the results to the console like we did for the item fit statistics.
 
@@ -282,7 +282,7 @@ Next, we will use some graphical displays to examine model-data fit in more deta
 
 Graphical displays are useful for exploring deviations from model expectations in more detail than is possible using the summary-level numeric fit statistics. In practice, many researchers use numeric fit statistics to identify individual items, persons, or other elements with notable misfit, and then use graphical displays to explore the nature of the misfit in more detail.
 
-### Plots of Standardized Residuals
+***Plots of Standardized Residuals***
 
 First, we will create plots that show the standardized residuals for the responses associated with individual items across persons. These plots can demonstrate patterns in unexpected and expected responses that can be useful for understanding responses and interpreting results specific to individual items and persons.
 
@@ -314,7 +314,7 @@ A separate plot is produced for each item. In each plot, the y-axis shows values
 
 Horizontal lines are used to assist in the interpretation of the values of the standardized residuals. First, a solid line is plotted at a value of 0; standardized residuals equal to zero indicate that the observed response was equal to the model-expected response given person and item locations. Standardized residuals that are greater than zero indicate unexpected positive responses, and standardized residuals that are less than zero indicate unexpected negative responses. Dashed lines are plotted at values of +2 and -2 to indicate standardized residuals that are two standard deviations above or below model expectations, respectively. Researchers often interpret standardized residuals that exceed +/- 2 as indicating statistically significant unexpected responses. 
 
-### Empirical Item Response Functions
+***Empirical Item Response Functions***
 
 A second useful graphical display for evaluating model-data fit is a plot of model-expected item response functions (IRFs) overlaid with empirical (observed) IRFs. IRFs are sometimes called item characteristic curves (ICCs); these plots illustrate the relationship between the latent variable and the probability for a certain response (e.g., a correct response). Plotting the model-expected IRFs in the same display as the empirical IRFs provides insight into the frequency, magnitude, direction, and logit-scale location of expected an unexpected responses associated with individual items. To create these plots, we will apply the *plotICC()* function from the eRm package in a for-loop so that we can create plots for multiple items. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the *items.to.plot* object.
 
@@ -345,7 +345,8 @@ Where:
     Calculated by subtracting error variance for Item from total Item          variance: \begin{equation}\tag{3.4} SA_{I}^{2} = SD_{I}^{2} - SE_{I}^{2} \end{equation}
 	  *SD^2^~I~* : Total Item variance
 	  
-### Reliability of Person Separation
+**_Reliability of Person Separation_**
+
 The reliability of person separation statistic is calculated using a ratio of true (adjusted) variance to observed variance for persons:
 
 \begin{equation}\tag{3.5} Rel_{p}=\left(SA_{P}^{2}\right) /\left(SD_{P}^{2}\right) \end{equation}
@@ -360,23 +361,23 @@ The "eRm" package includes the function *SepRel()* to calculate the person separ
 summary(SepRel(student.locations))
 ```
 
-## Rasch Model Fit Analysis with Marginal Maximum Likelihood Estimation in TAM
+## Rasch Model Fit Analysis with MMLE in TAM
 
 Next, we demonstrate model-data fit analyses using the TAM package (Robitzsch et al. 2020) with Marginal Maximum Likelihood Estimation (MMLE). The procedures for evaluating model-data fit with TAM are quite similar to those that we presented earlier in this chapter with eRm. As a result, we do not provide detailed annotations or discussions of the results from these analyses.
 
-### Prepare for the Analyses: Install and Load Packages
+***Prepare for the Analyses***
 ```{r}
 citation("TAM")
 # install.packages("TAM")
 library("TAM")
 ```
 
-## Run the Rasch Model
+***Run the Rasch Model***
 ```{r results='hide'}
 dichot.transreas_MMLE <- tam.mml(transreas.responses, constraint = "items", verbose = FALSE)
 ```
 
-## Evaluate Unidimensionality
+***Evaluate Unidimensionality***
 ```{r results='hide'}
 ## Isolate the response matrix used in estimation:
 resp <- dichot.transreas_MMLE$resp
@@ -406,7 +407,7 @@ VR <- var(residuals.vector)
 ((VO - VR)/VO) * 100
 ```
 
-### Principal Components Analysis of Standardized Residual Correlations
+***Principal Components Analysis of Standardized Residual Correlations***
 ```{r}
 pca <- pca(resids$stand_residuals, nfactors = ncol(transreas.responses), rotate = "none")
 
@@ -414,7 +415,7 @@ contrasts <- c(pca$values[1], pca$values[2], pca$values[3], pca$values[4], pca$v
 plot(contrasts, ylab = "Eigenvalues for Contrasts", xlab = "Contrast Number", main = "Contrasts from PCA of Standardized Residual Correlations")
 ```
 
-### Numeric Fit Statistics
+***Numeric Fit Statistics***
 ```{r}
 # Calculate numeric item fit statistics:
 item.fit_MMLE <- tam.fit(dichot.transreas_MMLE) 
@@ -426,7 +427,7 @@ person.fit_MMLE <- tam.personfit(dichot.transreas_MMLE)
 summary(person.fit_MMLE)
 ```
 
-### Graphical Fit Analysis
+***Graphical Fit Analysis***
 ```{r}
 std.resids <- resids$stand_residuals
 
@@ -451,7 +452,7 @@ for(item.number in items.to.plot){
 }
 ```
 
-### Reliability of Separation
+***Reliability of Separation***
 ```{r}
 ## Person separation reliability:
 dichot.transreas_MMLE$WLEreliability
@@ -477,16 +478,16 @@ item.separation.reliability <- (SSD.ItemScores-Item.MSE) / SSD.ItemScores
 item.separation.reliability
 ```
 
-## Rasch Model Fit Analysis with Joint Maximum Likelihood Estimation in TAM
+## Rasch Model Fit Analysis with JMLE in TAM
 
 Finally, we demonstrate model-data fit analyses using the TAM package (Robitzsch, Kiefer, & Wu, 2020) with Joint Maximum Likelihood Estimation (JMLE). As in the previous section, we do not provide detailed annotations or discussions of the results from these analyses because they are quite similar to those that we have already presented in this chapter.
 
-### Run the Rasch Model
+***Run the Rasch Model***
 ```{r results='hide'}
 dichot.transreas_JMLE <- tam.jml(transreas.responses, verbose = FALSE)
 ```
 
-### Evaluate Unidimensionality
+***Evaluate Unidimensionality***
 ```{r results='hide'}
 ## Isolate the response matrix used in estimation:
 resp <- dichot.transreas_JMLE$resp
@@ -516,7 +517,7 @@ VR <- var(residuals.vector)
 ((VO - VR)/VO) * 100
 ```
 
-### Principal Components Analysis of Standardized Residual Correlations
+***Principal Components Analysis of Standardized Residual Correlations***
 ```{r}
 pca <- pca(resids$stand_residuals, nfactors = ncol(transreas.responses), rotate = "none")
 
@@ -524,7 +525,7 @@ contrasts <- c(pca$values[1], pca$values[2], pca$values[3], pca$values[4], pca$v
 plot(contrasts, ylab = "Eigenvalues for Contrasts", xlab = "Contrast Number", main = "Contrasts from PCA of Standardized Residual Correlations")
 ```
 
-### Item and Person Fit
+***Item and Person Fit***
 ```{r}
 fit.results <- tam.fit(dichot.transreas_JMLE)
 
@@ -558,7 +559,7 @@ for(item.number in items.to.plot){
 }
 ```
 
-### Reliability of Separation
+***Reliability of Separation***
 
 ```{r}
 ## Person separation reliability:
@@ -585,7 +586,7 @@ item.separation.reliability <- (SSD.ItemScores-Item.MSE) / SSD.ItemScores
 item.separation.reliability
 ```
 
-## Exericise
+## Exercise
 
 Try to evaluate model-data fit for the Exercise 1 data using any of the estimation procedures used in this chapter.
 
