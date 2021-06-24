@@ -56,7 +56,7 @@ The transitive reasoning items varied in terms of the property students were ask
 
 In the next section, we provide a step-by-step demonstration of a dichotomous Rasch model analysis using the *Extended Rasch Modeling*, or *eRm* package (Mair et al., 2020), which uses Conditional Maximum Likelihood Estimation (CMLE). We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
-***Prepare for the Analyses: Install and Load Packages***
+***Prepare for the Analyses***
 
 We selected eRm for the first illustration in the current chapter because it includes functions for applying the dichotomous Rasch model that are relatively straightforward to use and interpret. Please note that the "eRm" package  uses the Conditional Maximum Likelihood Estimation (CMLE) method to estimate Rasch model parameters. As a result, estimates from the eRm package are not directly comparable to estimates obtained using other estimation methods. Later in this chapter, we have included illustrations of dichotomous Rasch model analyses with the *Test Analysis Modules* or TAM package (Robitzsch et al. 2020) with Marginal Maximum Likelihood Estimation (MMLE). We also provide an illustration with TAM using Joint Maximum Likelihood Estimation (JMLE), which produces comparable estimates to some popular standalone Rasch software programs, such as Winsteps (Linacre 2020a) and Facets (Linace 2020b). 
 
@@ -400,7 +400,7 @@ Next, we will use the *"Test Analysis Modules"*, or "TAM" package (Robitzsch et 
 
 Except where there are significant differences between the eRm and TAM procedures, we provide fewer details about the analysis procedures and interpretations in this section compared to the first illustration.
 
-***Prepare for the Analyses: Install and Load Packages***
+***Prepare for the Analyses***
 
 To get started with the TAM package, install and load it into your R environment using the following code:
 
