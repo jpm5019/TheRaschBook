@@ -71,7 +71,7 @@ citation("eRm")
 library("eRm")
 ```
 
-We will also use the "psych" package [@psych] to perform a principal components analysis (PCA) of Rasch model standardized residual correlations. To get started with the psych package, view the citation information, and then install and load it into your R environment using the following code:
+We will also use the *psych* package [@psych] to perform a principal components analysis (PCA) of Rasch model standardized residual correlations. To get started with the *psych* package, view the citation information, and then install and load it into your R environment using the following code:
 
 ```{r results='hide',message=FALSE}
 citation("psych")
@@ -503,7 +503,7 @@ item.separation.reliability
 
 ## Rasch Model Fit Analysis with JMLE in TAM
 
-Finally, we demonstrate model-data fit analyses using the TAM package [@TAM] with Joint Maximum Likelihood Estimation (JMLE). As in the previous section, we do not provide detailed annotations or discussions of the results from these analyses because they are quite similar to those that we have already presented in this chapter.
+Finally, we demonstrate model-data fit analyses using the *TAM* package [@TAM] with Joint Maximum Likelihood Estimation (JMLE). As in the previous section, we do not provide detailed annotations or discussions of the results from these analyses because they are quite similar to those that we have already presented in this chapter.
 
 ***Run the Rasch Model***
 ```{r results='hide'}
