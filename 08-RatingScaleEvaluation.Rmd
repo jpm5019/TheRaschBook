@@ -1,19 +1,19 @@
 # Rating Scale Evaluation {#RS_Eval}
 
-This chapter provides a basic overview of procedures for evaluating rating scales with Rasch models using R. We will use the eRm package (Mair et al., 2020) and the TAM package (Robitzch et al., 2020) for the analyses in this chapter. We use example data from an attitude survey to demonstrate procedures for evaluating rating scales using the Partial Credit Model (see Chapter 5).
+This chapter provides a basic overview of procedures for evaluating rating scales with Rasch models using R [@R-base]. We will use the *eRm* package [@eRm] and the *TAM* package [@TAM] for the analyses in this chapter. We use example data from an attitude survey to demonstrate procedures for evaluating rating scales using the Partial Credit Model (see Chapter 5).
 
 ## What is Rating Scale Evaluation?
 
 When researchers evaluate rating scales, they examine the degree to which ordinal rating scales (e.g., Likert-type rating scales or rubrics in performance assessments) exhibit useful measurement characteristics. Essentially, rating scale evaluation involves examining rating scales for evidence that the categories are ordered as expected on the construct and that each category reflects a unique range of person locations on the construct. Several researchers (XXXX) have proposed practical guidelines for evaluating rating scales that analysts can use to identify issues and improve their rating scales. For example, Linacre (XXXX) presented a set of X guidelines for rating scales that can 
 
 
-```{r}
-## Install & load the eRm package:
+```{r message=FALSE,results='hide'}
+##] Install & load the eRm package:
 # install.packages("eRm")  # Install the pacakage if you do not have it
 library("eRm")
 ```
 
-## R-lab: Rating Scale Analysis on Example Survey Data
+## Rating Scale Analysis on Example Survey Data
 
 For our first analysis, we will try conducting basic rating scale functioning analyses using some example survey data.
 
@@ -118,7 +118,7 @@ The code above will produce category probability plots in the Plots window.
 
 ## Example APA-format Results section for rating scale analysis
 
-  We analyzed 350 participants’ responses to a 15-item survey that included items with five ordered categories ($X$ = 0, 1, 2, 3, or 4) for evidence of useful rating scale category functioning. Specifically, following Linacre (2002) and Engelhard and Wind (2018), we examined the survey item responses for evidence of directional orientation with the latent variable and distinct categories on the construct. So that we could consider category functioning specific to each item with the most diagnostic utility, we used the Partial Credit Model (Masters, 1982) to analyze the data. We conducted the analyses using the Extended Rasch Models (“eRm”) package (Mair, Hatzinger, & Maier, 2020) for R. 
+  We analyzed 350 participants’ responses to a 15-item survey that included items with five ordered categories ($X$ = 0, 1, 2, 3, or 4) for evidence of useful rating scale category functioning. Specifically, following @Optimizing_RS and @Invar_measurement, we examined the survey item responses for evidence of directional orientation with the latent variable and distinct categories on the construct. So that we could consider category functioning specific to each item with the most diagnostic utility, we used the Partial Credit Model [@PCM] to analyze the data. We conducted the analyses using the Extended Rasch Models (“eRm”) package [@eRm] for R. 
 
 ![Table1:Item and Threshold Location Estimates from the Partial Credit Model](RSA_Table1.png)
 
@@ -126,22 +126,8 @@ The code above will produce category probability plots in the Plots window.
   
 ![Figure 1:Threshold Locations for Item3](RSA_Figure1.png)  
   
-  First, we examined the estimated threshold locations for each item for evidence of directional orientation with the latent variable (i.e., non-decreasing locations as categories increase). Because all of the items included responses in five categories, there were four threshold estimates for each item (τi1, τi2, τi3, τi4). Accordingly, we examined whether τi1 ≤ τi2, τi2 ≤ τi3, and τi3 ≤ τi4 for each item. Table 1 includes the threshold estimates for each item, along with the overall item location estimate. For Item 3, the first and second threshold were disordered (τ3,1 = -1.46, τ3,2 = -1.68; see Figure 1). For all of the other items, the thresholds were ordered as expected given the ordinal rating scale categories.
+  First, we examined the estimated threshold locations for each item for evidence of directional orientation with the latent variable (i.e., non-decreasing locations as categories increase). Because all of the items included responses in five categories, there were four threshold estimates for each item ($τ_{i1}$,$τ_{i2}$,$τ_{i3}$,$τ_{i4}$). Accordingly, we examined whether $τ_{i1}$ ≤$ τ_{i2}$, $τ_{i2}$ ≤ $τ_{i3}$, and $τ_{i3}$ ≤ $τ_{i4}$ for each item. Table 1 includes the threshold estimates for each item, along with the overall item location estimate. For Item 3, the first and second threshold were disordered ($τ_{3,1}$ = -1.46,$τ_{3,2}$ = -1.68; see Figure 1). For all of the other items, the thresholds were ordered as expected given the ordinal rating scale categories.
   
 ![Figure 2: Category Probability Curves for Item 3](RSA_Figure2.png)    
   
   Next, we examined category probability curves for evidence that the rating scale categories were ordered as expected (non-decreasing threshold locations over increasing categories) and distinct for each item. Distinct categories imply that each rating scale category describes a meaningful range of locations on the logit scale that represents the construct. The categories appeared to function as expected for all of the items except Item 3 (see Figure 2). For this item, the first and second rating scale categories were disordered.
-
-## References
-
-Andrich, D. A. (1978). A rating formulation for ordered response categories. Psychometrika, 43(4), 561–573. https://doi.org/10.1007/BF02293814
-
-Engelhard, G., & Wind, S. A. (2018). Invariant measurement with raters and rating scales: Rasch models for rater-mediated assessments. Taylor & Francis.
-
-Linacre, J. M. (2002). Optimizing rating scale category effectiveness. Journal of Applied Measurement, 3(1), 85–106.
-
-Masters, G. N. (1982). A Rasch model for partial credit scoring. Psychometrika, 47(2), 149–174. https://doi.org/10.1007/BF02296272
-
-Mair, P., Hatzinger, R., & Maier M. J. (2020). eRm: Extended Rasch Modeling. 1.0-1.   https://cran.r-project.org/package=eRm
-
-
