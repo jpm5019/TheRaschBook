@@ -232,23 +232,23 @@ In this example, all of the contrasts have eigenvalues that are smaller than @PC
 
 ***Summaries of Residuals: Infit & Outfit Statistics***
 
-As a next step in evaluating the quality of our measurement procedure, we will calculate numeric fit statistics for the individual elements in the assessment procedure: items and persons. We will use popular Rasch fit statistics for practical purposes that are based on sums of squared residuals: Unweighted (Outfit) and Weighted (Infit) mean square error (MSE) statistics. Unstandardized ($χ^2$) & standardized versions (Z or t) are available in most Rasch software programs. In this analysis, we will focus on the Unstandardized ($χ^2$) versions of these statistics.
+As a next step in evaluating the quality of our measurement procedure, we will calculate numeric fit statistics for the individual elements in the assessment procedure: items and persons. We will use popular Rasch fit statistics for practical purposes that are based on sums of squared residuals: Unweighted (outfit) and Weighted (infit) mean square error ($MSE$) statistics. Unstandardized ($χ^2$) & standardized versions ($Z$ or$t$) are available in most Rasch software programs. In this analysis, we will focus on the Unstandardized ($χ^2$) versions of these statistics.
 
 **_Outfit Mean Square Error_**
 
-Outfit MSE statistics are “unweighted fit” statistics. For items, outfit MSE is the sum of squared residuals for an item divided by the number of persons who responded to the item. For persons, outfit MSE is sum of squared residuals for a person divided by the number of items encountered by the person.
+Outfit $MSE$ statistics are “unweighted fit” statistics. For items, outfit $MSE$ is the sum of squared residuals for an item divided by the number of persons who responded to the item. For persons, outfit $MSE$ is sum of squared residuals for a person divided by the number of items encountered by the person.
 
 Because it is an unweighted mean, the outfit statistic is sensitive to extreme departures from model expectations. For example, an extreme departure from model expectations would occur when an otherwise high-achieving student provided an incorrect response to a very easy item, or when an otherwise low-achieving student provided a correct response to a very difficult item.
 
 **_Infit Mean Square Error_**
 
-Infit stands for "information-weighted fit", where "information" means *variance*, such as larger variance for well-targeted observations, or smaller variance for extreme observations. For items, infit MSE statistics are calculated as the sum of squared standardized *item residuals*, weighted by variance, divided by the number of persons who responded to the item. For persons, infit MSE is the sum of squared standardized *person residuals*, weighted by variance, divided by the number of items the person encountered.
+Infit stands for "information-weighted fit", where "information" means *variance*, such as larger variance for well-targeted observations, or smaller variance for extreme observations. For items, infit $MSE$ statistics are calculated as the sum of squared standardized *item residuals*, weighted by variance, divided by the number of persons who responded to the item. For persons, infit $MSE$ is the sum of squared standardized *person residuals*, weighted by variance, divided by the number of items the person encountered.
 
-Infit MSE is sensitive to less-extreme unexpected responses compared to outfit MSE. Examples of less-extreme unexpected responses include a student providing an incorrect response to an item that is just below their achievement level, or a student providing a correct response to an item that is just above their achievement level.
+Infit $MSE$ is sensitive to less-extreme unexpected responses compared to outfit $MSE$ Examples of less-extreme unexpected responses include a student providing an incorrect response to an item that is just below their achievement level, or a student providing a correct response to an item that is just above their achievement level.
 
 **_Expected Values for MSE Fit Statistics_**
 
-There is considerable disagreement among measurement scholars about how to classify an infit or outfit MSE statistic as evidence of "misfit" or "fit." Nonetheless, readers may find it useful to be aware of commonly agreed-upon principles for interpreting these statistics:
+There is considerable disagreement among measurement scholars about how to classify an infit or outfit $MSE$ statistic as evidence of "misfit" or "fit." Nonetheless, readers may find it useful to be aware of commonly agreed-upon principles for interpreting these statistics:
 
 - The expected value is 1.00 when data fit the model
 
@@ -262,17 +262,17 @@ There is considerable disagreement among measurement scholars about how to class
 
 In practice, researchers usually begin individual Rasch fit analyses by examining fit statistics for items, rather than persons. There are two main reasons for this sequence. First, there is usually more data available with which to evaluate each item compared to each person, so the interpretation of fit statistics is less likely to be influenced by random fluctuations (i.e., noise). Second, it is usually easier to manage item misfit during a routine analysis compared to person misfit. For example, content validity concerns notwithstanding, in the case of severe item misfit, it may be possible to remove an item from an analysis and re-estimate parameters; removing persons from an analysis would likely warrant relatively more consideration. Alternatively, evidence of item misfit could signal data quality issues such as scoring or coding errors that could be resolved prior to additional analysis. 
 
-The *eRm* package includes the `itemfit()` function, which calculates Rasch model infit MSE and outfit MSE statistics for items. This function is applied to the object that includes person parameters. Earlier in this chapter, we applied `itemfit()` to the `student.locations` object and we stored the results in an object called `item.fit`. We will examine the `item.fit` object in more detail now by printing the results to our console:
+The *eRm* package includes the `itemfit()` function, which calculates Rasch model infit $MSE$ and outfit $MSE$ statistics for items. This function is applied to the object that includes person parameters. Earlier in this chapter, we applied `itemfit()` to the `student.locations` object and we stored the results in an object called `item.fit`. We will examine the `item.fit` object in more detail now by printing the results to our console:
 
 ```{r}
 item.fit
 ```
 
-The resulting table includes infit MSE and outfit MSE statistics for each item (labeled as "MSQ" statistics in the *eRm* package). The table also includes standardized versions of infit and outfit in the form of *t* statistics, along with an estimate of item discrimination (i.e., item slope). Item discrimination is not a parameter in the Rasch model, but it is calculated here as an additional indicator of fit to the Rasch model for individual items. 
+The resulting table includes infit $MSE$ and outfit $MSE$ statistics for each item (labeled as "MSQ" statistics in the *eRm* package). The table also includes standardized versions of infit and outfit in the form of $t$ statistics, along with an estimate of item discrimination (i.e., item slope). Item discrimination is not a parameter in the Rasch model, but it is calculated here as an additional indicator of fit to the Rasch model for individual items. 
 
 **_Person Fit Statistics_**
 
-Next we will calculate numeric person fit statistics in the form of infit MSE and outfit MSE. In the *eRm* package, `personfit()` can be applied to the object with person parameter estimates to calculate these statistics. In our example, we will apply `personfit()` to the `student.locations` object and save the results in an object called `person.fit`. Because we have a relatively large sample, we will use the `summary()` function to explore the infit and outfit statistics rather than printing the results to the console like we did for the item fit statistics.
+Next we will calculate numeric person fit statistics in the form of infit $MSE$ and outfit $MSE$ In the *eRm* package, `personfit()` can be applied to the object with person parameter estimates to calculate these statistics. In our example, we will apply `personfit()` to the `student.locations` object and save the results in an object called `person.fit`. Because we have a relatively large sample, we will use the `summary()` function to explore the infit and outfit statistics rather than printing the results to the console like we did for the item fit statistics.
 
 ```{r}
 person.fit <- personfit(student.locations)
@@ -286,7 +286,7 @@ summary(person.fit$p.infitMSQ)
 summary(person.fit$p.outfitMSQ)
 ```
 
-These results indicate some variability in person fit, with infit MSE statistics ranging from 0.41 to 2.25, and outfit MSE statistics ranging from 0.17 to 7.30.
+These results indicate some variability in person fit, with infit $MSE$ statistics ranging from 0.41 to 2.25, and outfit $MSE$ statistics ranging from 0.17 to 7.30.
 
 For discussions on interpreting person fit statistics in the context of Rasch measurement theory, we refer readers to the following resources:
 

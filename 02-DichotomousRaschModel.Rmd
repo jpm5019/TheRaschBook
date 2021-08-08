@@ -14,7 +14,7 @@ The equation for the dichotomous Rasch model can be expressed in log-odds form a
 
 \begin{equation}\tag{2.1}\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}\end{equation}
 
-The Rasch model predicts the probability that person *n* on item *i* provides a correct or positive ($x = 1$), rather than an incorrect or negative ($x = 0$) response, given person locations (i.e., ability, achievement, $\theta_n$) and item locations (i.e., difficulty, $\delta_i$), as expressed on the logit scale.
+The Rasch model predicts the probability that person $n$ on item $i$ provides a correct or positive ($x = 1$), rather than an incorrect or negative ($x = 0$) response, given person locations (i.e., ability, achievement, $\theta_n$) and item locations (i.e., difficulty, $\delta_i$), as expressed on the logit scale.
 
 ***Rasch Model Requirements***
 
@@ -129,9 +129,9 @@ In this *Wright Map* display, the results from the dichotomous Rasch model analy
 
 Starting at the bottom of the figure, the horizontal axis (labeled *Latent Dimension*) is the logit scale that represents the latent variable. In the application of the Transitive Reasoning data, lower numbers indicate less transitive reasoning ability, and higher numbers indicate more transitive reasoning ability.
 
-The central panel of the figure shows item difficulty locations on the logit scale for the 10 transitive reasoning tasks that were included in the analysis; the y-axis for this panel shows the item labels. By default in eRm, the items are ordered according to their original order in the response matrix. The items can be ordered by difficulty by adding "sorted = TRUE" as an argument in the `plotPImap()` call. For each item, a solid circle plotting symbol shows the location estimate.
+The central panel of the figure shows item difficulty locations on the logit scale for the 10 transitive reasoning tasks that were included in the analysis; the y-axis for this panel shows the item labels. By default in eRm, the items are ordered according to their original order in the response matrix. The items can be ordered by difficulty by adding `sorted = TRUE` as an argument in the `plotPImap()` call. For each item, a solid circle plotting symbol shows the location estimate.
 
-The upper panel of the figure shows a histogram of person (in this case, student) location estimates on the logit scale. Small vertical lines on the x-axis of this histogram show the points on the logit scale at which information (variance) is maximized for the sample of persons and items in the analysis. These lines can be omitted by adding "irug = FALSE" as an argument in the `plotPImap()` call.
+The upper panel of the figure shows a histogram of person (in this case, student) location estimates on the logit scale. Small vertical lines on the x-axis of this histogram show the points on the logit scale at which information (variance) is maximized for the sample of persons and items in the analysis. These lines can be omitted by adding `irug = FALSE` as an argument in the `plotPImap()` call.
 
 Even though it is not appropriate to fully interpret item and person locations on the logit scale until there is evidence of acceptable model-data fit, we recommend examining the Wright Map during the preliminary stages of an item analysis to get a general sense of the model results and to identify any potential scoring or data entry errors.
 
@@ -236,7 +236,7 @@ hist(achievement$`Person Parameter`, main = "Histogram of Person Achievement Est
 
 Next, we will conduct a brief exploration of item fit statistics. We explore item fit in more detail in [Chapter 3](#MD_fit).
 
-To calculate numeric item fit statistics, we will use the function `itemfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called `item.fit`, and then format this object as a data.frame object for easy manipulation and exporting.
+To calculate numeric item fit statistics, we will use the function `itemfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several item fit statistics, including infit mean square error ($MSE$), outfit $MSE$, and standardized infit and outfit $MSE$ statistics. We will store the item fit results in a new object called `item.fit`, and then format this object as a data.frame object for easy manipulation and exporting.
 
 ```{r}
 student.locations <- person.parameter(dichot.transreas)
@@ -253,7 +253,7 @@ summary(item.fit$i.outfitMSQ)
 summary(item.fit$i.outfitZ)
 ```
 
-The `item.fit` object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each item included in the analysis.These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to [Chapter 3](#MD_fit) for a more-detailed discussion of item fit.
+The `item.fit` object includes mean square error ($MSE$) and standardized ($Z$) versions of the outfit and infit statistics for each item included in the analysis.These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the $MSE$ versions of outfit and infit are expected to be close to 1.00 and the standardized versions of outfit and infit are expected to be around 0.00. Please refer to [Chapter 3](#MD_fit) for a more-detailed discussion of item fit.
 
 As a final step in examining item fit, we will calculate the *reliability of separation statistic for items* using the following procedure.
 
@@ -282,7 +282,7 @@ Briefly, the *item reliability of separation statistic* describes the degree to 
 
 ***Person Fit***
 
-Next, we will conduct a brief exploration of person fit. To calculate numeric person fit statistics, we will use the function `personfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called `person.fit`, and then format this object as a data.frame for easy manipulation and exporting. Then, we request summaries of the infit MSE and outfit MSE statistics using `summary()`.
+Next, we will conduct a brief exploration of person fit. To calculate numeric person fit statistics, we will use the function `personfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several person fit statistics, including infit mean square error ($MSE$), outfit $MSE$, and standardized infit and outfit $MSE$ statistics. We will store the person fit results in a new object called `person.fit`, and then format this object as a data.frame for easy manipulation and exporting. Then, we request summaries of the infit $MSE$ and outfit $MSE$ statistics using `summary()`.
 
 ```{r}
 person.fit <- personfit(student.locations)
@@ -463,7 +463,7 @@ Because we ran a Rasch model, the *alpha* (discrimination) parameters are fixed 
 
 ***Wright Map***
 
-As the next step in our analysis, we will use the WrightMap package to create a Wright Map from our model results. We will create the plot using the function `IRT.WrightMap()` on the model object (`dichot.transreas`). As before, we will set the option for displaying threshold labels as `FALSE`, because we are working with dichotomous data. We also used the `main.title=` option to customize the title of the plot.
+As the next step in our analysis, we will use the WrightMap package to create a Wright Map from our model results. We will create the plot using the function `IRT.WrightMap()` on the model object (`dichot.transreas`). As before, we will set the option for displaying threshold labels as `FALSE`, because we are working with dichotomous data. We also used the `main.title = ` option to customize the title of the plot.
 
 ```{r}
 IRT.WrightMap(dichot.transreas_MMLE, show.thr.lab=FALSE, main.title = "Transitive Reasoning Wright Map (MMLE)")
@@ -523,7 +523,7 @@ Next, we will request a summary of the numeric fit statistics using the `summary
 summary(item.fit_MMLE)
 ```
 
-The `item.fit_MMLE` object includes mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. TAM also reports a *p* value for the standardized fit statistics (`Outfit_p` and `Infit_p`), along with adjusted significance values (`Infit_pholm` and `Outfit_pholm`).
+The `item.fit_MMLE` object includes mean square error ($MSE$) and standardized ($t$) versions of the outfit and infit statistics for Rasch models. TAM also reports a $p$ value for the standardized fit statistics (`Outfit_p` and `Infit_p`), along with adjusted significance values (`Infit_pholm` and `Outfit_pholm`).
 
 With the item centering constraint that we used, the TAM package does not report fit statistics for all ten items. We can find approximate item fit statistics for all ten items by running the model without the centering constraint and saving the fit statistics.
 
@@ -582,7 +582,7 @@ Next, we will request a summary of the numeric person fit statistics using the `
 summary(person.fit_MMLE)
 ```
 
-The `person.fit_MMLE` object includes mean square error (*MSE*) and standardized (*t*) versions of the person Outfit and Infit statistics for Rasch models.
+The `person.fit_MMLE` object includes mean square error ($MSE$) and standardized ($t$) versions of the person outfit and infit statistics for Rasch models.
 
 ## Dichotomous Rasch Model Analysis with JMLE in TAM
 
@@ -663,7 +663,7 @@ summary(jmle.person.fit)
 
 ## Example Results Section
 
-Table 1 presents a summary of the results from the analysis of the transitive reasoning data [@Intro_nonparametric] (https://methods.sagepub.com/book/introduction-to-nonparametric-item-response-theory) [Dr.Wind: Is this need the real data link? -- No, it's fine as is]  using the dichotomous Rasch model [@Rasch_ori]. Specifically, the calibration of students (*N* = 425) and tasks (*N* = 10) are summarized using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale (*M* = 1.71, *SD* = 1.09), compared to tasks, whose locations were centered at zero logits (*M* = 0.00, *SD* = 1.58). This finding suggests that the items were relatively easy for the sample of students who participated in this transitive reasoning test. However, average values of the Standard Error (*SE*) were slightly larger for students (*M* = 0.95) compared to Tasks (*M* = 0.17), indicating that there may be some issues related to targeting for some of the students who participated in the assessment. Average values of model-data fit statistics indicate overall adequate fit to the model, with average Infit and Outfit mean square statistics around 1.00, and average standardized Infit and Outfit statistics near the expected value of 0.00 when data fit the model. This finding of overall adequate fit to the model supports the interpretation of item and person calibrations on the logit scale as indicators of their locations on the latent variable measured by the test.
+Table 1 presents a summary of the results from the analysis of the transitive reasoning data [@Intro_nonparametric] (https://methods.sagepub.com/book/introduction-to-nonparametric-item-response-theory) using the dichotomous Rasch model [@Rasch_ori]. Specifically, the calibration of students ($N = 425$) and tasks ($N = 10$) are summarized using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale ($M = 1.71$, $SD = 1.09$), compared to tasks, whose locations were centered at zero logits ($M = 0.00$, $SD = 1.58$). This finding suggests that the items were relatively easy for the sample of students who participated in this transitive reasoning test. However, average values of the Standard Error ($SE$) were slightly larger for students ($M = 0.95$) compared to Tasks ($M = 0.17$), indicating that there may be some issues related to targeting for some of the students who participated in the assessment. Average values of model-data fit statistics indicate overall adequate fit to the model, with average outfit and infit mean square statistics around 1.00, and average standardized outfit and infit statistics near the expected value of 0.00 when data fit the model. This finding of overall adequate fit to the model supports the interpretation of item and person calibrations on the logit scale as indicators of their locations on the latent variable measured by the test.
 
 ```{r}
 # Print Table 1:
@@ -673,7 +673,7 @@ knitr::kable(
 )
 ```
 
-Table 2 includes detailed results for the 10 tasks included in the Transitive Reasoning test. For each item, the proportion of correct responses is presented, followed by the logit-scale location ($\delta$), SE, and model-data fit statistics. Examination of these results indicates that Task 9 was the most difficult (*Proportion Correct* = 0.30; $\delta$ = 2.92 ; *SE* = 0.13), followed by Task 10 (Proportion Correct = 0.52; $\delta$ = 1.84; *SE* = 0.12). The easiest item was Task 6 (*Proportion Correct* = 0.97; $\delta$ = -2.18; *SE* = 0.29).
+Table 2 includes detailed results for the 10 tasks included in the Transitive Reasoning test. For each item, the proportion of correct responses is presented, followed by the logit-scale location ($\delta$), SE, and model-data fit statistics. Examination of these results indicates that Task 9 was the most difficult ($Proportion Correct = 0.30$; $\delta$ = 2.92 ; $SE = 0.13$), followed by Task 10 ($Proportion Correct = 0.52$; $\delta$ = 1.84; $SE = 0.12$). The easiest item was Task 6 ($Proportion Correct = 0.97$; $\delta$ = -2.18; $SE = 0.29$).
 
 ```{r}
 # Print Table 2:
@@ -683,7 +683,7 @@ knitr::kable(
 )
 ```
 
-Table 3 includes detailed results for first 10 students who participated in the Transitive Reasoning Test. For each student, the proportion of correct responses is presented, followed by their logit-scale location estimate ($\theta$), *SE*, and model-data fit statistics.
+Table 3 includes detailed results for first 10 students who participated in the Transitive Reasoning Test. For each student, the proportion of correct responses is presented, followed by their logit-scale location estimate ($\theta$), $SE$, and model-data fit statistics.
 
 ```{r}
 # Print the first 10 rows of Table 3:

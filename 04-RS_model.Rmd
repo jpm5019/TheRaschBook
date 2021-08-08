@@ -212,7 +212,7 @@ The estimation procedure in *eRm* does not directly produce parameter estimates 
 
 Next, we will conduct a brief exploration of item fit statistics for the Liking for Science items. We considered item fit in detail in Chapter 3; readers can use the procedures in that chapter to examine item fit in detail for the RSM.
 
-To calculate numeric item fit statistics, we will use the function `itemfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several item fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the item fit results in a new object called `item.fit`, and then format this object as a dataframe object for easy manipulation and exporting.
+To calculate numeric item fit statistics, we will use the function `itemfit()` from eRm on the person parameter object (`person.locations.estimate`). This function produces several item fit statistics, including infit mean square error ($MSE$), outfit $MSE$, and standardized infit and outfit $MSE$ statistics. We will store the item fit results in a new object called `item.fit`, and then format this object as a dataframe object for easy manipulation and exporting.
 
 ```{r}
 item.fit.results <- itemfit(person.locations.estimate)
@@ -229,7 +229,7 @@ Next, we will request a summary of the numeric item fit statistics using `summar
 summary(item.fit)
 ```
 
-The `item.fit` object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each item included in the analysis. These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of item fit.
+The `item.fit` object includes mean square error ($MSE$) and standardized ($Z$) versions of the outfit and infit statistics for each item included in the analysis. These statistics are summaries of the residuals associated with each item. When data fit Rasch model expectations, the $MSE$ versions of outfit and infit are expected to be close to 1.00 and the standardized versions of outfit and infit are expected to be around 0.00. Please refer to Chapter 3 for a more-detailed discussion of item fit.
 
 Then, we calculate the reliability of separation statistics using the procedure that we described in Chapter 3. 
 
@@ -264,7 +264,7 @@ item.separation.reliability
 
 ***Person Fit***
 
-Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function `personfit()` from *eRm* on the person parameter object (`person.locations.estimate`). This function produces several person fit statistics, including infit mean square error (MSE), outfit MSE, and standardized infit and outfit MSE statistics. We will store the person fit results in a new object called `person.fit`, and then format this object as a dataframe for easier manipulation and exporting.
+Next, we will conduct a brief exploration of person fit statistics. To calculate numeric person fit statistics, we will use the function `personfit()` from *eRm* on the person parameter object (`person.locations.estimate`). This function produces several person fit statistics, including infit mean square error ($MSE$), outfit $MSE$, and standardized infit and outfit $MSE$ statistics. We will store the person fit results in a new object called `person.fit`, and then format this object as a dataframe for easier manipulation and exporting.
 
 ```{r}
 person.fit.results <- personfit(person.locations.estimate)
@@ -282,7 +282,7 @@ Next, we will request a summary of the numeric person fit statistics using the `
 summary(person.fit)
 ```
 
-The *person.fit* object includes mean square error (*MSE*) and standardized (*Z*) versions of the Outfit and Infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the MSE versions of Outfit and Infit are expected to be close to 1.00 and the standardized versions of Outfit and Infit are expected to be around 0.00. Please refer to Chapter 3 for a more detailed discussion of person fit.
+The *person.fit* object includes mean square error ($MSE$) and standardized ($Z$) versions of the outfit and infit statistics for each person. These statistics are summaries of the residuals associated with each person. When data fit Rasch model expectations, the $MSE$ versions of outfit and infit are expected to be close to 1.00 and the standardized versions of outfit and infit are expected to be around 0.00. Please refer to Chapter 3 for a more detailed discussion of person fit.
 
 ***Summarize the Results in Tables***
 
@@ -506,7 +506,7 @@ item.fit_MMLE <- MMLE_fit$itemfit
 summary(item.fit_MMLE)
 ```
 
-As in the dichotomous Rasch model analysis with TAM (see Chapter 2), the `tam.fit()` function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models. The *Outfit* and *Infit* statistics are the *MSE* versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics. *TAM* also reports a *p* value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*). Please see Chapter 3 for a detailed consideration of procedures for evaluating item fit, including the use of graphical tools to evaluate item fit.
+As in the dichotomous Rasch model analysis with TAM (see Chapter 2), the `tam.fit()` function provides mean square error ($MSE$) and standardized ($t$) versions of the Outfit and Infit statistics for Rasch models. The *Outfit* and *Infit* statistics are the $MSE$ versions and the *Outfit_t* and *Infit_t* statistics are the standardized versions of the statistics. *TAM* also reports a $p$ value for the standardized fit statistics (*Outfit_p* and *Infit_p*), along with adjusted significance values (*Infit_pholm* and *Outfit_pholm*). Please see Chapter 3 for a detailed consideration of procedures for evaluating item fit, including the use of graphical tools to evaluate item fit.
 
 ***Person Paramters***
 
@@ -660,7 +660,7 @@ item.fit_JMLE <- JMLE_fit$fit.item
 summary(item.fit_JMLE)
 ```
 
-The `tam.fit()` function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each item estimate.
+The `tam.fit()` function provides mean square error ($MSE$) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each item estimate.
 
 ***Person Parameters***
 
@@ -688,7 +688,7 @@ person.fit_JMLE <- JMLE_fit$fit.person
 summary(person.fit_JMLE)
 ```
 
-The `tam.fit()` function provides mean square error (*MSE*) and standardized (*t*) versions of the Outfit and Infit statistics for Rasch models for each person location estimate.
+The `tam.fit()` function provides mean square error ($MSE$) and standardized ($t$) versions of the Outfit and Infit statistics for Rasch models for each person location estimate.
 
 ***Wright Map***
 
@@ -729,7 +729,7 @@ knitr::kable(
 )
 ```
 
-Specifically, Table 1 summarizes the calibration of the children with non-extreme responses ($N = 74$) and the items ($N = 24$) using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale ($M = 1.57$,$SD = 1.18$), compared to items, whose locations were centered at zero logits ($M = 0.00$, $SD = 1.33$). This finding suggests that the items were relatively easy to endorse among the sample of children who participated in this study. The average values of the Standard Error (*SE*) were comparable for children ($M = 0.38$) and items ($M = 0.22$). Average values of model-data fit statistics indicate overall adequate fit to the model, with average Infit and Outfit mean square error (*MSE*) statistics around 1.00, and average standardized Infit and Outfit statistics near the expected value of 0.00 when data fit the model. However, there was some variability in item fit and person fit, as indicated by relatively large standard errors for the fit statistics. Additional investigation into item fit and person fit is warranted.
+Specifically, Table 1 summarizes the calibration of the children with non-extreme responses ($N = 74$) and the items ($N = 24$) using average logit-scale calibrations, standard errors, and model-data fit statistics. Examination of the results indicates that, on average, the students were located higher on the logit scale ($M = 1.57$,$SD = 1.18$), compared to items, whose locations were centered at zero logits ($M = 0.00$, $SD = 1.33$). This finding suggests that the items were relatively easy to endorse among the sample of children who participated in this study. The average values of the Standard Error (*SE*) were comparable for children ($M = 0.38$) and items ($M = 0.22$). Average values of model-data fit statistics indicate overall adequate fit to the model, with average Infit and Outfit mean square error ($MSE$) statistics around 1.00, and average standardized Infit and Outfit statistics near the expected value of 0.00 when data fit the model. However, there was some variability in item fit and person fit, as indicated by relatively large standard errors for the fit statistics. Additional investigation into item fit and person fit is warranted.
 
 ```{r}
 # Print Table 2:
