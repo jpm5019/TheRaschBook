@@ -8,13 +8,13 @@ This chapter provides a basic overview of the dichotomous Rasch model, along wit
 
 ***Overview of the Dichotomous Rasch Model***
 
-The *dichotomous Rasch model* [@Rasch_ori] is the simplest model in the Rasch family of models [@Overview_RM]. It was designed for use with ordinal data that are scored in two categories (usually 0 or 1). The dichotomous Rasch model uses sum scores from these ordinal responses to calculate interval-level estimates that represent person locations (i.e., person ability or person achievement) and item locations (i.e., the difficulty to provide a correct or positive response) on a linear scale that represents the latent variable (the log-odds or "logit" scale). The difference between person and item locations can be used to calculate the probability for a correct or positive response (x = 1), rather than an incorrect or negative response (x = 0).
+The *dichotomous Rasch model* [@Rasch_ori] is the simplest model in the Rasch family of models [@Overview_RM]. It was designed for use with ordinal data that are scored in two categories (usually 0 or 1). The dichotomous Rasch model uses sum scores from these ordinal responses to calculate interval-level estimates that represent person locations (i.e., person ability or person achievement) and item locations (i.e., the difficulty to provide a correct or positive response) on a linear scale that represents the latent variable (the log-odds or "logit" scale). The difference between person and item locations can be used to calculate the probability for a correct or positive response ($x = 1$), rather than an incorrect or negative response ($x = 0$).
 
 The equation for the dichotomous Rasch model can be expressed in log-odds form as follows:
 
 \begin{equation}\tag{2.1}\ln_{}{}\left[\frac{\phi_{n i 1}}{\phi_{n i 0}}\right]=\theta_{n}-\delta_{i}\end{equation}
 
-The Rasch model predicts the probability that person *n* on item *i* provides a correct or positive (x = 1), rather than an incorrect or negative (x = 0) response, given person locations (i.e., ability, achievement, $\theta_n$) and item locations (i.e., difficulty, $\delta_i$), as expressed on the logit scale.
+The Rasch model predicts the probability that person *n* on item *i* provides a correct or positive ($x = 1$), rather than an incorrect or negative ($x = 0$) response, given person locations (i.e., ability, achievement, $\theta_n$) and item locations (i.e., difficulty, $\delta_i$), as expressed on the logit scale.
 
 ***Rasch Model Requirements***
 
@@ -162,7 +162,7 @@ difficulty2 <- dichot.transreas$betapar * -1
 difficulty2
 ```
 
-The item difficulty parameters (`xsi`) are the item location estimates on the logit scale that represents the latent variable. Assuming that the responses are scored such that lower scores (x = 0) indicate lower locations on the latent variable (e.g., incorrect, negative, or absent responses), *lower* item estimates on the logit scale indicate items that are *more difficult* or require persons to have relatively *higher locations* on the construct to provide a correct response. On the other hand, *higher* item estimates on the logit scale indicate items that are *easier* or require persons to have relatively *lower locations* on the construct to provide a correct response. In our analysis, Task 9 is the most difficult item ($\delta$ = 2.92), whereas Task 6 is the easiest item ($\delta$ = -2.18).
+The item difficulty parameters (`xsi`) are the item location estimates on the logit scale that represents the latent variable. Assuming that the responses are scored such that lower scores ($x = 0$) indicate lower locations on the latent variable (e.g., incorrect, negative, or absent responses), *lower* item estimates on the logit scale indicate items that are *more difficult* or require persons to have relatively *higher locations* on the construct to provide a correct response. On the other hand, *higher* item estimates on the logit scale indicate items that are *easier* or require persons to have relatively *lower locations* on the construct to provide a correct response. In our analysis, Task 9 is the most difficult item ($\delta$ = 2.92), whereas Task 6 is the easiest item ($\delta$ = -2.18).
 
 Next, we will examine item standard errors. The standard errors are reported for all of the items as part of the beta (item easiness) parameters.
 
@@ -190,7 +190,7 @@ hist(difficulty.all, main = "Histogram of Item Difficulty Estimates for the \nTr
 
 ***Item Response Functions***
 
-We will examine graphical displays of item difficulty using item response functions (IRFs). With the dichotomous Rasch model, the eRm package creates plots of the probability for a correct or positive response (x = 1), conditional on person locations on the latent variable. In the following code, we use `plotICC()` from eRm to create IRF plots for the items in our analysis. We included `ask = FALSE` in our function call to generate all of the plots at once. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the `items.to.plot` object.
+We will examine graphical displays of item difficulty using item response functions (IRFs). With the dichotomous Rasch model, the eRm package creates plots of the probability for a correct or positive response ($x = 1$), conditional on person locations on the latent variable. In the following code, we use `plotICC()` from eRm to create IRF plots for the items in our analysis. We included `ask = FALSE` in our function call to generate all of the plots at once. For brevity, we have only included plots for the first three items in this book. The specific items to be plotted can be controlled by changing the items included in the `items.to.plot` object.
 
 ```{r}
 items.to.plot <- c(1:3)
