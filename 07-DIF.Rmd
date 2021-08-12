@@ -4,9 +4,9 @@ This chapter provides a basic overview of differential item functioning (DIF) al
 
 ***What is Differential Item Functioning (DIF)?***
 
-DIF occurs when examinees who are members of different groups (e.g., demographic subgroups) who have the *same location* on the latent variable have *different probabilities for a response* in a given category (e.g., a correct response or a rating of "agree") on an item. In the context of Rasch measurement theory [@Rasch_ori], DIF means that an item has a different location (i.e., a different level of difficulty) across subgroups by more than the standard error. Rasch analyses of DIF typically focus on detecting *uniform DIF*, which occurs when the distance between item response functions (IRFs) is constant between subgroups.
+DIF occurs when examinees who are members of different groups (e.g., demographic subgroups) who have the *same location* on the latent variable have *different probabilities for a response* in a given category (e.g., a correct response or a rating of *Agree*) on an item. In the context of Rasch measurement theory [@Rasch_ori], DIF means that an item has a different location (i.e., a different level of difficulty) between subgroups by more than the standard error. Rasch analyses of DIF typically focus on detecting *uniform DIF*, which occurs when the distance between item response functions (IRFs) is constant between subgroups.
 
-Figure 7.1 illustrates uniform DIF between two groups of examinees for a dichotomous item (x = 0, 1). The x-axis shows examinee locations on the latent variable, and the y-axis shows the probability for a correct or positive response (*P*(x=1)). The dashed line shows the IRF for Group 1, and the dashed line shows IRF for Group 2. This item shows DIF because examinees who have the same location on the latent variable have different probabilities for a correct or positive response.
+Figure 7.1 illustrates uniform DIF between two groups of examinees for a dichotomous item ($x = 0, 1$). The x-axis shows examinee locations on the latent variable, and the y-axis shows the probability for a correct or positive response (*P*(x=1)). The dashed line shows the IRF for Group 1, and the dashed line shows IRF for Group 2. This item shows DIF because examinees who have the same location on the latent variable have different probabilities for a correct or positive response.
 
 ![Figure 7.1: Uniform DIF betweem twp groups of examinees](uniform DIF between two groups of examinees.png)
 
@@ -30,19 +30,19 @@ The interpretation and use of DIF indices varies along with the individual purpo
 
 It is also important to note that when DIF occurs, it does not always imply a threat to fairness from a psychometric perspective [@AERA]. Instead, evidence of DIF is a *starting place* for additional research, such as qualitative analyses of item content or the assessment context, to evaluate whether DIF may reflect a threat to fairness. Some authors (e.g., Myers et al., 2006) [Wind]Please help me to find this reference. refer to this distinction as *statistical DIF*, which occurs when an item is flagged for DIF based on statistical criteria versus *substantive DIF*, which occurs when an item has been flagged for DIF based on statistical criteria *and* substantive review of the item indicates that a construct other than the construct of interest for the assessment is responsible for differences in item difficulty between subgroups.
 
-In this chapter, we demonstrate two techniques that analysts can use to identify DIF within the Rasch measurement theory framework. Our presentation is not exhaustive and there are many other methods that can be used to supplement those that we demonstrate here. We encourage interested readers to consult the resources listed throughout the chapter, as well as the resource list at the end of this chapter, to learn more about best practices for identifying DIF within the context of Rasch measurement theory, as well as in other measurement frameworks.
+In this chapter, we demonstrate two techniques that analysts can use to identify DIF within the Rasch measurement theory framework. Our presentation is not exhaustive and there are many other methods that can be used to supplement those that we demonstrate here. We encourage interested readers to consult the resources listed throughout the chapter as well as the resource list at the end of this chapter to learn more about best practices for identifying DIF within the context of Rasch measurement theory, as well as in other measurement frameworks.
 
 ***Popular Methods for Identifying DIF with Rasch models***
 
 From the perspective of Rasch measurement theory, DIF poses a threat to measurement quality because it implies a lack of invariance. When DIF occurs, the requirements for invariant measurement are not met (see Chapter 1). Accordingly, DIF can be interpreted as not only a potential threat to fairness, but also as a violation of Rasch model requirements [@Recent_advances].
 
-Researchers have proposed several methods for identifying DIF within the framework of Rasch measurement theory. Methods that are routinely used in practical applications of Rasch measurement theory can be broadly classified into two approaches: (1) Comparison of group-specific item estimates, and (2) Interaction analyses between item locations and examinee subgroup indicators. In recent methodological work, several researchers have proposed other methods for detecting DIF within the Rasch framework, such as methods based on analysis of variance with model residuals (e.g., Hagquist & Andrich, 2018) [wind]Please help me to find this reference as well., and tree-based methods [@tree_based]. However, these methods are relatively less common in current applied literature. We encourage interested readers to explore these approaches as well as those that we present here in order to develop a more complete understanding of Rasch-based methods for identifying DIF. 
+Researchers have proposed several methods for identifying DIF within the framework of Rasch measurement theory. Methods that are routinely used in practical applications of Rasch measurement theory can be broadly classified into two approaches: (1) Comparison of group-specific item estimates, and (2) Interaction analyses between item locations and examinee subgroup indicators. In recent methodological work, several researchers have proposed other methods for detecting DIF within the Rasch framework, such as methods based on analysis of variance with model residuals (e.g., Hagquist & Andrich, 2017) [wind]Please help me to find this reference as well., and tree-based methods [@tree_based]. However, these methods are relatively less common in current applied literature. We encourage interested readers to explore these approaches as well as those that we present here in order to develop a more complete understanding of Rasch-based methods for identifying DIF. 
 
 In addition to methods based on Rasch measurement theory, there are numerous other approaches to detecting DIF that are beyond the scope of this volume. We encourage readers who are interested in learning more about DIF to consult the resources that we have listed at the end of this chapter.
 
 **_Comparing Group-Specific Item Estimates_**
 
-A popular method for identifying DIF within the framework of Rasch measurement theory is to calculate group-specific estimates of item difficulty, and compare those estimates to see if they are meaningfully different. In order to meaningfully compare item difficulty estimates between two groups, it is necessary to adjust (i.e., equate) the item difficulty measures for one group so that they are on the same scale as the item difficulty measures for the second group. The equated differences in item difficulty estimates  reflect the distance between group-specific IRFs [@Area_bet].
+A popular method for identifying DIF within the framework of Rasch measurement theory is to calculate group-specific estimates of item difficulty, and compare those estimates to see if they are meaningfully different. In order to meaningfully compare item difficulty estimates between two groups, it is necessary to adjust (i.e., equate) the item difficulty measures for one group so that they are on the same scale as the item difficulty measures for the second group. The equated differences in item difficulty estimates reflect the distance between group-specific IRFs [@Area_bet].
 
 Some software programs, including the *eRm* package [@eRm], perform this adjustment procedure automatically as part of their DIF functions. In other cases, the analyst needs to perform the adjustment procedure manually before item locations can be compared. For a discussion of the adjustment procedure, please see [@Compar_mea].
 
@@ -74,11 +74,11 @@ For example, the following formulation of the MFRM could be used to evaluate DIF
 
 \begin{equation}\tag{7.4}\ln \left(\frac{P_{n i g(x=k)}}{P_{n i g(x=k-1)}}\right)=\left(\theta_{n}-\delta_{i}-\gamma_{g}-\tau_{k}\right)-\delta_{i} \gamma_{g}\end{equation}
 
-In Equation 7.4, $\theta_n$ is the location of Examinee n, $\delta_i$ is the location of item i, $\gamma_g$ is the location of examinee subgroup G, and $\tau_k$ is the rating scale category threshold between category k and category k - 1. The model also includes the interaction between item locations and subgroup locations: $\delta_i$*$\gamma_g$. The interaction term tests the null hypothesis that item locations are invariant across examinee subgroups, against the alternative hypothesis that item locations are different across examinee subgroups, which would be evidence of DIF.
+In Equation 7.4, $\theta_n$ is the location of Examinee $n$, $\delta_i$ is the location of item $i$, $\gamma_g$ is the location of examinee subgroup $g$, and $\tau_k$ is the rating scale category threshold between category $k$ and category $k - 1$. The model also includes the interaction between item locations and subgroup locations: $\delta_i$*$\gamma_g$. The interaction term tests the null hypothesis that item locations are invariant across examinee subgroups, against the alternative hypothesis that item locations are different across examinee subgroups, which would be evidence of DIF.
 
 ## Detecting Differential Item Functioning in R for Dichotomous Items
 
-In this section, we provide a step-by-step demonstration of the two approaches to DIF analyses using R for dichotomous item response data. We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
+In this section, we provide a step-by-step demonstration of the two approaches to DIF analyses for dichotomous item response data. We encourage readers to use the example data set that is provided in the online supplement to conduct the analysis along with us.
 
 ### Example Data: Transitive Reasoning
 
@@ -88,25 +88,19 @@ The example data for this section is the Transitive Reasoning Data that we used 
 
 We will use the *Extended Rasch Modeling* or *eRm* package [@eRm] and the *Test Analysis Modules* or *TAM* package [@TAM] to demonstrate DIF analyses in this chapter. 
 
-We will get started with these packages by viewing the citation information, and then installing and loading them into the R environment.
-
 ```{r message=FALSE,results='hide'}
-citation("eRm")
 # install.packages("eRm")
-#install.packages("eRm")
 library("eRm")
 
-citation("TAM")
 # install.packages("eRm")
-#install.packages("eRm")
 library("TAM")
 ```
 
 Now that we have installed and loaded the packages to our R session, we are ready to import the data. We will use the function `read.csv()` to import the comma-separated values (.csv) file that contains the Transitive Reasoning assessment data. We encourage readers to use their preferred method for importing data files into R or R Studio.
 
-Please note that if you use `read.csv()` to import the data, you will need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
+Please note that if you use `read.csv()` to import the data, you will first need to specify the file path to the location at which the data file is stored on your computer or set your working directory to the folder in which you have saved the data.
 
-First, we will import the data using `read.csv()` and store it in an object called `transreas`:
+We will import the data using `read.csv()` and store it in an object called `transreas`.
 
 ```{r}
 transreas <- read.csv("transreas.csv")
@@ -126,7 +120,7 @@ table(transreas.grade.group)
 
 First, we will conduct a DIF analysis by comparing the difficulty estimate of each Transitive Reasoning item between our two student subgroups. We will use the dichotomous Rasch model (see Chapter 2) to estimate item difficulty locations.
 
-The eRm package includes a function that allows researchers to calculate group-specific item difficulty estimates *after* the item responses have been analyzed for the complete sample. Accordingly, we will begin our analysis by estimating item and person locations for the complete sample of students who completed the Transitive Reasoning assessment using the Rasch model.
+The *eRm* package includes a function that allows researchers to calculate group-specific item difficulty estimates *after* the item responses have been analyzed for the complete sample. Accordingly, we will begin our analysis by estimating item and person locations for the complete sample of students who completed the Transitive Reasoning assessment using the Rasch model.
 
 To get started with the DIF analysis in *eRm*, we need to isolate the response matrix from our data and then apply the dichotomous Rasch model to the responses. The following code completes these steps. Please refer to Chapter 2 for a detailed description of procedures for applying and interpreting the results from the dichotomous Rasch model.
 
@@ -144,7 +138,7 @@ Next, we will calculate subgroup-specific item difficulty values using the `Wald
 subgroup_diffs <- Waldtest(transreas.RM, splitcr = transreas.grade.group)
 ```
 
-This analysis saves numerous details to the object called “subgroup_diffs”. Let’s create new objects with the group-specific item difficulties:
+This analysis saves numerous details to the object called `subgroup_diffs`. Let’s create new objects with the group-specific item difficulties:
 
 ```{r}
 subgroup_1_diffs <- subgroup_diffs$betapar1
@@ -157,9 +151,9 @@ We can examine the differences between the subgroup-specific item difficulties b
 subgroup_1_diffs - subgroup_2_diffs
 ```
 
-From these results, we can see that there are some items that were easier for Lower Elementary students (positive differences) and other items that were easier for Upper Elementary students (negative differences). In addition, the difference in logit-scale locations for two items (Task 2 and Task 6) exceed the "half-logit" rule, suggesting potentially meaningful DIF. The difference for Task 3 approximates this value as well.
+We can see that there are some items that were easier for Lower Elementary students (positive differences) and other items that were easier for Upper Elementary students (negative differences). In addition, the difference in logit-scale locations for two items (Task 2 and Task 6) exceed the "half-logit" rule, suggesting potentially meaningful DIF. The difference for Task 3 approximates this value as well.
 
-To better understand the significance of differences in item difficulty between subgroups, we will examine the results from the statistical hypothesis test for the item difficulty comparisons. In the *eRm* package, item comparisons are reported using z-statistics instead of the Wright and Stone t-test statistics that we discussed earlier. With large sample sizes, t statistics approximate z statistics. Let's create an object called "comparisons" in which we store these results.
+To better understand the significance of differences in item difficulty between subgroups, we will examine the results from the statistical hypothesis test for the item difficulty comparisons. In the *eRm* package, item comparisons are reported using z-statistics instead of the Wright and Stone t-test statistics that we discussed earlier. With large sample sizes, t statistics approximate z statistics. Let's create an object called `comparisons` in which we store these results.
 
 ```{r}
 comparisons <- as.data.frame(subgroup_diffs$coef.table)
@@ -178,9 +172,9 @@ names(comparison.results) <- c("Subgroup_1_Difficulty", "Subgroup_1_SE",
 comparison.results
 ```
 
-From these results, we see that there is one item with a statistically significant difference between subgroups based on p < 0.05: Task 2.
+From these results, we see that there is one item with a statistically significant difference between subgroups based on $p < 0.05$: Task 2.
 
-As an additional interpretation aid, we will construct a scatterplot that shows the alignment between item difficlty estimates for the two subgroups in our analysis. Because the procedure that we used to calculate item difficulties specific to each subgroup has already adjusted the difficulties to be on the same scale, we don’t need to apply any transformation. The following code will create a scatterplot with 95% confidence bands to highlight items that are significantly different between the subgroups.
+As an additional interpretation aid, we will construct a scatterplot that shows the alignment between item difficulty estimates for the two subgroups in our analysis. Because the procedure that we used to calculate item difficulties specific to each subgroup has already adjusted the difficulties to be on the same scale, we don’t need to apply any transformation. The following code will create a scatterplot with 95% confidence bands to highlight items that are significantly different between the subgroups.
 
 ```{r}
 ## Calculate values for constructing the confidence bands:
@@ -257,14 +251,14 @@ subgroup.estimates <- subset(facet.estimates, facet.estimates$facet == "transrea
 interaction.estimates <- subset(facet.estimates, facet.estimates$facet == "item:transreas.grade.group")
 ```
 
-For the current analysis, our main focus is on the interaction results. We can examine the relative magnitude of each interaction term by plotting the values in a simple scatterplot. The first ten values in the `interaction.estimates` object show the interaction between each item and group 1 (Lower Elementary), and the second ten values show the interaction between each item and group 2 (Upper Elementary). We will construct separate plots for each subgroup.
+Our main focus is on the interaction results. We can examine the relative magnitude of each interaction term by plotting the values in a simple scatterplot. The first ten values in the `interaction.estimates` object show the interaction between each item and group 1 (Lower Elementary), and the second ten values show the interaction between each item and group 2 (Upper Elementary). We will construct separate plots for each subgroup.
 
 ```{r}
-plot(interaction.estimates$xsi[1:10], main = "Interaction Effects for Lower Elementary Students", ylab = "Interaction Estimate in Logits", xlab = "Item Number")
+plot(interaction.estimates$xsi[1:10], main = "Interaction Effects for Lower Elementary Students", ylab = "Interaction Estimate in Logits", xlab = "Item Number", ylim = c(-0.5, 0.5))
 ```
 
 ```{r}
-plot(interaction.estimates$xsi[11:20], main = "Interaction Effects for Upper Elementary Students", ylab = "Interaction Estimate in Logits", xlab = "Item Number")
+plot(interaction.estimates$xsi[11:20], main = "Interaction Effects for Upper Elementary Students", ylab = "Interaction Estimate in Logits", xlab = "Item Number", ylim = c(-0.5, 0.5))
 ```
 
 The interaction estimates are reported on the same logit scale as the item and person estimates. Values equal to zero indicate no interaction between item difficulty and subgroup membership. Positive values indicate that an item was relatively easier for a given subgroup compared to its overall location estimate. Negative values indicate that an item was relatively more difficult for a given subgroup compared to its overall location estimate.
@@ -277,7 +271,7 @@ In this section, we demonstrate some basic procedures for detecting DIF with ite
 
 ### Example Data: Style Ratings
 
-The example data for this section are 21 rater judgments of the style of 372 students' written compositions that were collected during a middle-grades writing assessment in the United States. We analyzed these data in Chapter 6. The minimum rating from each rater was *x* = 0, and the maximum rating was *x* = 3. The example data include two demographic subgroups related to students' language background: Subgroup 1 (language = 1) indicates that students' best language is a language other than English, and subgroup 2 (language = 2) indicates that students' best language is English. We will use students' language subgroup membership as the basis for our DIF analyses. 
+The example data for this section are 21 rater judgments of the style of 372 students' written compositions that were collected during a middle-grades writing assessment in the United States. We analyzed these data in Chapter 6. The minimum rating from each rater was $x = 0$, and the maximum rating was $x = 3$. The example data include two demographic subgroups related to students' language background: Subgroup 1 (*language* = 1) indicates that students' best language is a language other than English, and subgroup 2 (*language* = 2) indicates that students' best language is English. We will use students' language subgroup membership as the basis for our DIF analyses. 
 
 For the sake of illustration, we will treat the raters as "pseudo-items" in our analysis. DIF indicators will highlight individual raters who exhibit systematic differences in severity between student subgroups, after controlling for students' location on the latent variable. 
 
@@ -297,7 +291,7 @@ ratings <- subset(style, select = -c(student, language))
 
 It is possible to use the same approach to compare item difficulty between subgroups with polytomous data as with dichotomous data. The major difference is that, with polytomous data, item difficulty estimates include rating scale category thresholds. In this illustration, we will demonstrate how to compare the difficulty of rating scale category thresholds between subgroups, and how to compare overall item difficulty estimates.
 
-For the sake of illustration, we use the Partial Credit Model (PCM), [@PCM], See Chapter 5 for our DIF analyses. However, similar analyses can also be performed using the Rating Scale Model (RSM), [@Rating_Form], see Chapter 4.
+For the sake of illustration, we use the Partial Credit Model (PCM), [@PCM], (see Chapter 5) for our DIF analyses. However, similar analyses can also be performed using the Rating Scale Model (RSM), [@Rating_Form] (see Chapter 4).
 
 To get started with the DIF analysis, we need to apply the PCM to the style ratings.
 
@@ -376,7 +370,7 @@ for(item.number in 1:ncol(ratings)){
 }
 ```
 
-Then, we will calculate test statistics (*Z*) for the differences in overall item difficulties. We will print the results to the console.
+Then, we will calculate test statistics ($Z$) for the differences in overall item difficulties. We will print the results to the console.
   
 ```{r}
 z <- (group1_item.diffs.overall - group2_item.diffs.overall)/
@@ -468,18 +462,18 @@ interaction.estimates <- subset(facet.estimates, facet.estimates$facet == "item:
 We can examine the relative magnitude of each interaction term by plotting the values in a simple scatterplot. The first 21 values in the `interaction.estimates` object show the interaction between each rater and group 1 (language other than English), and the second ten values show the interaction between each rater and group 2 (English). We will construct separate plots for each subgroup.
 
 ```{r}
-plot(interaction.estimates$xsi[1:21], main = "Interaction Effects for Language Other than English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number")
+plot(interaction.estimates$xsi[1:21], main = "Interaction Effects for Language Other than English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number", ylim = c(-0.5, 0.5))
 ```
 
 ```{r}
-plot(interaction.estimates$xsi[22:42], main = "Interaction Effects for English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number")
+plot(interaction.estimates$xsi[22:42], main = "Interaction Effects for English", ylab = "Interaction Estimate in Logits", xlab = "Item (Rater) Number", ylim = c(-0.5, 0.5))
 ```
 
 ## Exercise
 
 There are two exercises for this chapter. The first exercise uses dichotomous data, and the second exercise uses polytomous data. 
 
-The Exercise 7A data include responses from 350 students in two subgroups (group 1 and group 2) who responded to a multiple-choice assessment with 20 items. The items were scored such that x=1 indicates a correct response and x=2 indicates an incorrect response. Try analyzing the data for evidence of DIF.
+The Exercise 7A data include responses from 350 students in two subgroups (group 1 and group 2) who responded to a multiple-choice assessment with 20 items. The items were scored such that $x=1$ indicates a correct response and $x=2$ indicates an incorrect response. Try analyzing the data for evidence of DIF.
 
-The Exercise 7B data include responses from 400 participants from two subgroups (group 1 and group 2) to a survey with 25 items. Participants used a four-category rating scale (x = 0, 1, 2, 3) to respond to each item. Try analyzing the data for evidence of DIF.
+The Exercise 7B data include responses from 400 participants from two subgroups (group 1 and group 2) to a survey with 25 items. Participants used a four-category rating scale ($x = 0, 1, 2, 3$) to respond to each item. Try analyzing the data for evidence of DIF.
 
