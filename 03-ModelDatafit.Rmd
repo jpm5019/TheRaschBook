@@ -632,4 +632,4 @@ item.separation.reliability
 
 ## Exercise
 
-Try to evaluate model-data fit for the Exercise 1 data using any of the estimation procedures used in this chapter.
+Try to evaluate model-data fit for the math data that we used for the Chapter 2 Exercise using any of the estimation procedures used in this chapter.
