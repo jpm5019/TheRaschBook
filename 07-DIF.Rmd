@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Basics of Differential Item Functioning {#DIF}
 
 This chapter provides a basic overview of differential item functioning (DIF) along with methods for detecting DIF with Rasch models using R. We will use the *eRm* package [@eRm] and the *TAM* package [@TAM] for the analyses in this chapter. We have included demonstrations for exploring DIF with dichotomous data and polytomous data using the dichotomous Rasch Model and the Partial Credit Model, respectively.

@@ -1,12 +1,7 @@
 bookdown::gitbook:
   css: style.css
   config:
-    toc:
-      before: |
-        <li><a href="./">The Rasch R Book</a></li>
-      after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/huacheng1985/bookdown-demo/edit/master/%s
+    toc: true
     download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:

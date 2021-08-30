@@ -1,5 +1,5 @@
 ---
-title: "Dichotomous Rasch Model"
+title: "Rasch Measurement Theory Analysis in R: Illustrations and Practical Guidance for Researchers and Practitioners"
 ---
 
 # Dichotomous Rasch Model {#Dich_Rasch_model}
