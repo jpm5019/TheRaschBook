@@ -4,7 +4,7 @@ This chapter provides a basic overview of the Many-Facet Rasch Model (MFRM) [@MF
 
 ***Overview of the Many-Facet Rasch Model***
 
-The MFRM [@MFRM] is an extension of the Rasch family of models that allows researchers to include additional variables of interest ("facets") besides items and persons. @Apply_RM defined facets as "aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (p. 145). Examples of variables that could be modeled as facets include raters in a constructed-response assessment, participant demographic variables (e.g., gender, race/ethnicity, best language), item type, or domains in an analytic scoring rubric for constructed-response items.
+The MFRM [@MFRM] is an extension of the Rasch family of models that allows researchers to include additional variables of interest ("facets") besides items and persons. @Applying_RM2019 defined facets as "aspects of the measurement process that “routinely and systematically interpose themselves between the ability of the candidates and the difficulty of the test” (p. 145). Examples of variables that could be modeled as facets include raters in a constructed-response assessment, participant demographic variables (e.g., gender, race/ethnicity, best language), item type, or domains in an analytic scoring rubric for constructed-response items.
 
 A general equation for the MFRM is:
 
